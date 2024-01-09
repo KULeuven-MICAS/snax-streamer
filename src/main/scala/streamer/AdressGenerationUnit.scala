@@ -23,6 +23,7 @@ class TemporalAdressGenUnitIO(
 
   // generated output address, decoupled interface for handshake
   // if ptr_o is ready, the current address is taken sucessfully, can generate next address
+  // if ptr_o is ready, the current address is taken sucessfully, can generate next address
   val ptr_o = Decoupled(UInt(addrWidth.W))
 
   // done signal indicating current transaction is done, ready for next config and transaction
@@ -71,6 +72,7 @@ class TemporalAdressGenUnit(
   )
 
   // signal indicating next address can be generated
+  // signal indicating next address can be generated
   val addr_gen_counter_inc = Wire(Bool())
 
   // State declaration
@@ -100,7 +102,6 @@ class TemporalAdressGenUnit(
     }
   }
 
-  // when the config is valid, store the configuration for address generation
   // when the config is valid, store the configuration for address generation
   config_valid := io.temporalLoopBounds_i.fire && io.temporalStrides_i.fire && io.ptr_i.fire
 
@@ -138,6 +139,7 @@ class TemporalAdressGenUnit(
     )
 
     // spatially unrolling the sub loop counter computation process
+    // spatially unrolling the sub loop counter computation process
     val addr_gen_counter_next_loop = WireInit(
       VecInit(
         Seq.fill(temporalLoopDim + 1)(
@@ -163,6 +165,7 @@ class TemporalAdressGenUnit(
     loop_counters
   }
 
+  // generating sub-loop counters using the addr_gen_counter
   // generating sub-loop counters using the addr_gen_counter
   loop_counters := genNestedLoopCounter(
     io.ptr_o.valid,

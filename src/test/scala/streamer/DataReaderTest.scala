@@ -8,6 +8,7 @@ import org.scalatest.matchers.should.Matchers
 import org.scalatest.Tag
 import scala.util.control.Breaks._
 
+// data reader initial test
 class DataReaderTest
     extends AnyFlatSpec
     with ChiselScalatestTester
@@ -17,6 +18,7 @@ class DataReaderTest
       Seq(WriteVcdAnnotation)
     ) { dut =>
       dut.clock.step(5)
+      // give valid config, give the proper unrolling strides so that is a aligned in one TCDM bank
       dut.io.unrollingStrides_csr_i.bits(0).poke(1)
       dut.io.unrollingStrides_csr_i.bits(1).poke(8)
       dut.io.unrollingStrides_csr_i.valid.poke(1)
@@ -31,6 +33,7 @@ class DataReaderTest
       dut.io.ptr_agu_i.bits.poke(100)
       dut.io.ptr_agu_i.valid.poke(1)
 
+      // wait for getting the enough address
       var ready_counter = 0
       breakable {
         while (true) {

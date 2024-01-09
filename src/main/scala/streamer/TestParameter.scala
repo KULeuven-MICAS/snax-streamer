@@ -27,3 +27,15 @@ object DataReaderTestParameters {
   def unrollingDim = unrollingFactor.length
 
 }
+
+object DataWriterTestParameters {
+  def dataWriterTcdmPorts = 32
+  def tcdmDataWidth = 64
+  def unrollingFactor = Seq(8, 8)
+  def addrWidth = 32
+  def fifoWidth = 2048
+  def elementWidth = 32
+
+  def unrollingDim = unrollingFactor.length
+
+}

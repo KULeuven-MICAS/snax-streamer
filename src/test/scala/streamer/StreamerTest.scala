@@ -25,6 +25,10 @@ class StreamerTest
         }
         dut.io.temporalStrides_i.valid.poke(1.B)
         dut.io.unrollingStrides_i.valid.poke(1.B)
+        // give the proper unrolling strides so that is a aligned in one TCDM bank
+        dut.io.unrollingStrides_i.bits(0)(0).poke(1)
+        dut.io.unrollingStrides_i.bits(1)(0).poke(1)
+        dut.io.unrollingStrides_i.bits(2)(0).poke(1)
         dut.io.ptr_i.valid.poke(1.B)
         dut.clock.step(1)
         dut.io.temporalLoopBounds_i.valid.poke(0.B)

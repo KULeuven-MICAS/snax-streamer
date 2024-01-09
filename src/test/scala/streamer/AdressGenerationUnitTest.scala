@@ -7,7 +7,7 @@ import scala.math.BigInt
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.Tag
 
-// manaul test for temporal adress generation unit
+// manual test for temporal adress generation unit
 // TODO: automated random configuration test and automated results check
 class TemporalAdressGenUnitTest
     extends AnyFlatSpec

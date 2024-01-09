@@ -12,7 +12,7 @@ class UnrollingAddrGenUintIO(
     addrWidth: Int = UnrollingAddrGenUintTestParameters.addrWidth
 ) extends Bundle {
 
-  // configurations for unrolling address geenration
+  // configurations for unrolling address generation
   val valid_i = Input(Bool())
   val start_ptr_i = Input(UInt(addrWidth.W))
   val unrollingStrides_i = Input(Vec(unrollingDim, UInt(addrWidth.W)))
@@ -103,7 +103,7 @@ class UnrollingAddrGenUint(
 
 }
 
-// Scala main function for generating system veriog file for the UnrollingAddrGenUint module
+// Scala main function for generating system verilog file for the UnrollingAddrGenUint module
 object UnrollingAddrGenUint extends App {
   emitVerilog(
     new (UnrollingAddrGenUint),

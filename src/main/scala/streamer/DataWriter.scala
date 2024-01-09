@@ -148,14 +148,16 @@ class DataWriter(
   unrolling_addr := unrolling_addr_gen_unit.io.unrolling_addr_o
 
   // address constraint check
-  for (i <- 0 until dataWriterTcdmPorts) {
-    for (j <- 0 until packed_addr_num - 1) {
-      assert(
-        unrolling_addr(i * packed_addr_num + j + 1) === unrolling_addr(
-          i * packed_addr_num + j
-        ),
-        "write address in not consecutive in the same bank!"
-      )
+  when(cstate === sBUSY) {
+    for (i <- 0 until dataWriterTcdmPorts) {
+      for (j <- 0 until packed_addr_num - 1) {
+        assert(
+          unrolling_addr(i * packed_addr_num + j + 1) === unrolling_addr(
+            i * packed_addr_num + j
+          ) + 1.U,
+          "write address in not consecutive in the same bank!"
+        )
+      }
     }
   }
 

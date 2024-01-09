@@ -9,3 +9,10 @@ object TemporalAdressGenUnitTestParameters {
   def addrWidth = 32
 
 }
+
+object UnrollingAddrGenUintTestParameters {
+  def unrollingFactor = Seq(8, 8)
+  def unrollingDim = unrollingFactor.length
+  def addrWidth = 32
+
+}

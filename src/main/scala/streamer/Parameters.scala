@@ -3,6 +3,27 @@ package streamer
 import chisel3._
 import chisel3.util._
 
+/**
+  * Parameter definitions
+  * fifoWidthReader - FIFO width for the data readers
+  * fifoDepthReader - FIFO depth for the data readers
+  * fifoWidthWriter - FIFO width for the data writers
+  * fifoDepthWriter - FIFO depth for the data writers
+  * dataReaderNum - number of data readers
+  * dataWriterNum - number of data writers
+  * dataReaderTcdmPorts - the number of connections to TCDM ports for each data reader
+  * dataWriterTcdmPorts - the number of connections to TCDM ports for each data writer
+  * readElementWidth - single data element width for each data reader, useful for generating unrolling addresses
+  * writeElementWidth - single data element width for each data writer, useful for generating unrolling addresses
+  * tcdmDataWidth - data width for each TCDm port
+  * unrollingFactorReader - spatial unrolling factors (your parfor) for each data reader
+  * unrollingFactorWriter - spatial unrolling factors (your parfor) for each data writer
+  * temporalLoopDim - the dimension of the temporal loop
+  * temporalLoopBoundWidth - the register width for storing the temporal loop bound
+  * addrWidth - the address width
+  * stationarity - accelerator stationarity feature for each data mover (data reader and data writer)
+  */
+
 // streamer parameters for the GEMM Accelerator
 object GeMMStreamerParameters {
   def fifoWidthReader = Seq(512, 512)

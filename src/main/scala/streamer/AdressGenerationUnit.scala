@@ -3,7 +3,7 @@ package streamer
 import chisel3._
 import chisel3.util._
 
-// input and output decleration for temporal adress generation unit
+// input and output declaration for temporal address generation unit
 class TemporalAdressGenUnitIO(
     temporalLoopDim: Int = TemporalAdressGenUnitTestParameters.temporalLoopDim,
     temporalLoopBoundWidth: Int =
@@ -11,8 +11,8 @@ class TemporalAdressGenUnitIO(
     addrWidth: Int = TemporalAdressGenUnitTestParameters.addrWidth
 ) extends Bundle {
 
-  // configurations for temporal address geenration, decoupled interface for handshake
-  // if the signals are not ready (busy with last transaction), config is not taken-in by the temporal adress generation unit
+  // configurations for temporal address generation, decoupled interface for handshake
+  // if the signals are not ready (busy with last transaction), config is not taken-in by the temporal address generation unit
   val temporalLoopBounds_i = Flipped(
     Decoupled(Vec(temporalLoopDim, UInt(temporalLoopBoundWidth.W)))
   )
@@ -22,14 +22,14 @@ class TemporalAdressGenUnitIO(
   val ptr_i = Flipped(Decoupled(UInt(addrWidth.W)))
 
   // generated output address, decoupled interface for handshake
-  // if ptr_o is ready, the current address is taken sucessfully, can geenrate next address
+  // if ptr_o is ready, the current address is taken successfully, can generate next address
   val ptr_o = Decoupled(UInt(addrWidth.W))
 
   // done signal indicating current transaction is done, ready for next config and transaction
   val data_move_done = Output(Bool())
 }
 
-// temporal adress generation unit module
+// temporal address generation unit module
 class TemporalAdressGenUnit(
     temporalLoopDim: Int = TemporalAdressGenUnitTestParameters.temporalLoopDim,
     temporalLoopBoundWidth: Int =
@@ -51,7 +51,7 @@ class TemporalAdressGenUnit(
   val addr_gen_finish = WireInit(0.B)
 
   // Assuming temporalLoopBounds and temporalStrides are of type Vec[UInt]
-  // configuration registers, when cofig valid, store the configuration for later address generation
+  // configuration registers, when config valid, store the configuration for later address generation
   val temporalLoopBounds = RegInit(
     VecInit(Seq.fill(temporalLoopDim)(0.U(temporalLoopBoundWidth.W)))
   )
@@ -70,7 +70,7 @@ class TemporalAdressGenUnit(
     VecInit(Seq.fill(temporalLoopDim)(0.U(temporalLoopBoundWidth.W)))
   )
 
-  // siganls indicating can generating next address
+  // signals indicating can generating next address
   val addr_gen_counter_inc = Wire(Bool())
 
   // State declaration
@@ -100,7 +100,7 @@ class TemporalAdressGenUnit(
     }
   }
 
-  // when cofig valid, store the configuration for later address generation
+  // when config valid, store the configuration for later address generation
   config_valid := io.temporalLoopBounds_i.fire && io.temporalStrides_i.fire && io.ptr_i.fire
 
   when(config_valid) {
@@ -136,7 +136,7 @@ class TemporalAdressGenUnit(
       VecInit(Seq.fill(temporalLoopDim)(0.U(temporalLoopBoundWidth.W)))
     )
 
-    // spatailly unrolling the sub loop counter compuration process
+    // spatially unrolling the sub loop counter computation process
     val addr_gen_counter_next_loop = WireInit(
       VecInit(
         Seq.fill(temporalLoopDim + 1)(
@@ -162,7 +162,7 @@ class TemporalAdressGenUnit(
     loop_counters
   }
 
-  // generating sub-loop counetrs using the addr_gen_counter
+  // generating sub-loop counters using the addr_gen_counter
   loop_counters := genNestedLoopCounter(
     io.ptr_o.valid,
     temporalLoopDim,
@@ -186,7 +186,7 @@ class TemporalAdressGenUnit(
   io.data_move_done := addr_gen_finish
 }
 
-// Scala main function for generating system veriog file for the TemporalAdressGenUnit module
+// Scala main function for generating system verilog file for the TemporalAdressGenUnit module
 object TemporalAdressGenUnit extends App {
   emitVerilog(
     new TemporalAdressGenUnit(),

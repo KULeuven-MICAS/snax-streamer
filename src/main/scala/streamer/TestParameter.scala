@@ -3,6 +3,8 @@ package streamer
 import chisel3._
 import chisel3.util._
 
+/* the meaning of these testing parameters can be found at Parameter.scala */
+
 object TemporalAdressGenUnitTestParameters {
   def temporalLoopDim = 3
   def temporalLoopBoundWidth = 8

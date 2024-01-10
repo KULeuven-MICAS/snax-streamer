@@ -25,7 +25,7 @@ class DataFromAcceleratorX(
   })
 }
 
-// input and output decleration for streamer generator
+// input and output declaration for streamer generator
 class StreamerIO(
     temporalLoopDim: Int = StreamerTestConstant.temporalLoopDim,
     temporalLoopBoundWidth: Int = StreamerTestConstant.temporalLoopBoundWidth,
@@ -66,7 +66,7 @@ class StreamerIO(
     new DataFromAcceleratorX(dataWriterNum, fifoWidthWriter)
 
   // specify the interface to the TCDM
-  // reqeust interface with q_valid and q_ready
+  // request interface with q_valid and q_ready
   val tcdm_req = (Vec(tcdmPortsNum, Decoupled(new TcdmReq())))
   // response interface with p_valid
   val tcdm_rsp = (Vec(tcdmPortsNum, Flipped(Valid(new TcdmRsp()))))
@@ -338,7 +338,7 @@ class Streamer(
   }
 
   // data writer <> TCDM write ports
-  // TCDM request port bais based on the read TCDM ports number
+  // TCDM request port bias based on the read TCDM ports number
   val write_flatten_seq = flattenSeq(dataWriterTcdmPorts)
   for ((dimIndex, innerIndex, flattenedIndex) <- write_flatten_seq) {
 
@@ -362,7 +362,7 @@ class Streamer(
 
 }
 
-// Scala main function for generating system veriog file for different acceleratros
+// Scala main function for generating system verilog file for different accelerators
 // including GEMM, Post-processing SIMD and MAC engine
 object Streamer extends App {
   emitVerilog(

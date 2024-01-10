@@ -195,7 +195,7 @@ class DataReader(
   }
 
   // deal with contention
-  // ensure all the read reqeust are sent successfully
+  // ensure all the read request are sent successfully
   for (i <- 0 until dataReaderTcdmPorts) {
     when(can_send_tcdm_read_req) {
       when(io.ptr_agu_i.fire) {
@@ -283,7 +283,7 @@ class DataReader(
 
 }
 
-// Scala main function for generating system veriog file for the DataReader module
+// Scala main function for generating system verilog file for the DataReader module
 object DataReader extends App {
   emitVerilog(
     new (DataReader),

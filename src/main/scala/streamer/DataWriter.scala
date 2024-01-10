@@ -169,7 +169,7 @@ class DataWriter(
   }
 
   // deal with contention
-  // ensure all the write reqeust are sent successfully
+  // ensure all the write request are sent successfully
   for (i <- 0 until dataWriterTcdmPorts) {
     when(can_send_tcdm_write_req) {
       when(io.ptr_agu_i.fire) {
@@ -224,7 +224,7 @@ class DataWriter(
 
 }
 
-// Scala main function for generating system veriog file for the DataWriter module
+// Scala main function for generating system verilog file for the DataWriter module
 object DataWriter extends App {
   emitVerilog(
     new (DataWriter),

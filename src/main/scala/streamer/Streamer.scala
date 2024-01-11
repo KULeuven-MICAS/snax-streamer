@@ -60,9 +60,9 @@ class StreamerIO(
   )
 
   // specify the interface to the accelerator
-  val data_accelerator_o =
+  val streamer2accelerator =
     new DataToAcceleratorX(dataReaderNum, fifoWidthReader)
-  val data_accelerator_i =
+  val accelerator2streamer =
     new DataFromAcceleratorX(dataWriterNum, fifoWidthWriter)
 
   // specify the interface to the TCDM
@@ -279,7 +279,7 @@ class Streamer(
   // with a queue between each data mover and accelerator data decoupled interface
   for (i <- 0 until dataMoverNum) {
     if (i < dataReaderNum) {
-      io.data_accelerator_o.data(i) <> Queue(
+      io.streamer2accelerator.data(i) <> Queue(
         data_reader(i).io.data_fifo_o,
         fifoDepthReader(i)
       )
@@ -287,7 +287,7 @@ class Streamer(
       data_writer(
         i - dataReaderNum
       ).io.data_fifo_i <> Queue(
-        io.data_accelerator_i.data(i - dataReaderNum),
+        io.accelerator2streamer.data(i - dataReaderNum),
         fifoDepthWriter(i - dataReaderNum)
       )
     }
@@ -362,9 +362,17 @@ class Streamer(
 
 }
 
+// Scala main function for generating test streamer system verilog file
+object StreamerTester extends App {
+  emitVerilog(
+    new Streamer(),
+    Array("--target-dir", "generated/streamer/tester")
+  )
+}
+
 // Scala main function for generating system verilog file for different accelerators
 // including GEMM, Post-processing SIMD and MAC engine
-object Streamer extends App {
+object GemmStreamer extends App {
   emitVerilog(
     new Streamer(
       GeMMStreamerParameters.temporalLoopDim,
@@ -392,7 +400,9 @@ object Streamer extends App {
     ),
     Array("--target-dir", "generated/streamer/gemm")
   )
+}
 
+object PostProcessingStreamer extends App {
   emitVerilog(
     new Streamer(
       PostProcessingStreamerParameters.temporalLoopDim,
@@ -420,6 +430,9 @@ object Streamer extends App {
     ),
     Array("--target-dir", "generated/streamer/pp")
   )
+}
+
+object MacStreamer extends App {
   emitVerilog(
     new Streamer(
       MACStreamerParameters.temporalLoopDim,

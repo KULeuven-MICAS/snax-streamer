@@ -9,31 +9,31 @@ import org.scalatest.Tag
 
 // manual test for temporal adress generation unit
 // TODO: automated random configuration test and automated results check
-class TemporalAdressGenUnitTest
+class TemporalAddrGenUnitTest
     extends AnyFlatSpec
     with ChiselScalatestTester
     with Matchers {
   "DUT" should "pass" in {
-    test(new TemporalAdressGenUnit).withAnnotations(
+    test(new TemporalAddrGenUnit).withAnnotations(
       Seq(WriteVcdAnnotation)
     ) { dut =>
       dut.clock.step(5)
       // random config generation
       val temporalLoopBounds =
-        Seq.fill(TemporalAdressGenUnitTestParameters.temporalLoopDim)(
+        Seq.fill(TemporalAddrGenUnitTestParameters.temporalLoopDim)(
           (
             4.U
           )
         )
       val temporalStrides =
-        Seq.fill(TemporalAdressGenUnitTestParameters.temporalLoopDim)(
+        Seq.fill(TemporalAddrGenUnitTestParameters.temporalLoopDim)(
           (
             scala.util.Random.nextInt(10).U
           )
         )
 
       // sending these configruation to the dut
-      for (i <- 0 until TemporalAdressGenUnitTestParameters.temporalLoopDim) {
+      for (i <- 0 until TemporalAddrGenUnitTestParameters.temporalLoopDim) {
         val lb = temporalLoopBounds(i)
         val ts = temporalStrides(i)
         dut.io.temporalLoopBounds_i.bits(i).poke(lb)

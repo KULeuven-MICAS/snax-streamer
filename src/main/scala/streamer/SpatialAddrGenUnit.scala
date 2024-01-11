@@ -3,13 +3,13 @@ package streamer
 import chisel3._
 import chisel3.util._
 
-// input and output declaration for unrolling adress generation unit
+// input and output declaration for spatial unrolling address generation unit
 // it's a submodule of a data mover
-class UnrollingAddrGenUintIO(
-    unrollingDim: Int = UnrollingAddrGenUintTestParameters.unrollingDim,
+class SpatialAddrGenUnitIO(
+    unrollingDim: Int = SpatialAddrGenUnitTestParameters.unrollingDim,
     unrollingFactor: Seq[Int] =
-      UnrollingAddrGenUintTestParameters.unrollingFactor,
-    addrWidth: Int = UnrollingAddrGenUintTestParameters.addrWidth
+      SpatialAddrGenUnitTestParameters.unrollingFactor,
+    addrWidth: Int = SpatialAddrGenUnitTestParameters.addrWidth
 ) extends Bundle {
 
   // configurations for unrolling address generation
@@ -24,16 +24,16 @@ class UnrollingAddrGenUintIO(
 }
 
 // unrolling adress generation unit module
-class UnrollingAddrGenUint(
-    unrollingDim: Int = UnrollingAddrGenUintTestParameters.unrollingDim,
+class SpatialAddrGenUnit(
+    unrollingDim: Int = SpatialAddrGenUnitTestParameters.unrollingDim,
     unrollingFactor: Seq[Int] =
-      UnrollingAddrGenUintTestParameters.unrollingFactor,
-    addrWidth: Int = UnrollingAddrGenUintTestParameters.addrWidth
+      SpatialAddrGenUnitTestParameters.unrollingFactor,
+    addrWidth: Int = SpatialAddrGenUnitTestParameters.addrWidth
 ) extends Module
     with RequireAsyncReset {
 
   val io = IO(
-    new UnrollingAddrGenUintIO(unrollingDim, unrollingFactor, addrWidth)
+    new SpatialAddrGenUnitIO(unrollingDim, unrollingFactor, addrWidth)
   )
 
   // a scala function to generate the nested indices of the unrolled loop counter for generating unrolling addresses
@@ -103,10 +103,10 @@ class UnrollingAddrGenUint(
 
 }
 
-// Scala main function for generating system verilog file for the UnrollingAddrGenUint module
-object UnrollingAddrGenUint extends App {
+// Scala main function for generating system verilog file for the SpatialAddrGenUnit module
+object SpatialAddrGenUnit extends App {
   emitVerilog(
-    new (UnrollingAddrGenUint),
+    new (SpatialAddrGenUnit),
     Array("--target-dir", "generated/streamer")
   )
 }

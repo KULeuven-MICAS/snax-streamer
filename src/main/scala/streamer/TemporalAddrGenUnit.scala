@@ -4,14 +4,16 @@ import chisel3._
 import chisel3.util._
 
 // input and output declaration for temporal address generation unit
-class TemporalAdressGenUnitIO(
-    temporalLoopDim: Int = TemporalAdressGenUnitTestParameters.temporalLoopDim,
+class TemporalAddrGenUnitIO(
+    temporalLoopDim: Int = TemporalAddrGenUnitTestParameters.temporalLoopDim,
     temporalLoopBoundWidth: Int =
-      TemporalAdressGenUnitTestParameters.temporalLoopBoundWidth,
-    addrWidth: Int = TemporalAdressGenUnitTestParameters.addrWidth
+      TemporalAddrGenUnitTestParameters.temporalLoopBoundWidth,
+    addrWidth: Int = TemporalAddrGenUnitTestParameters.addrWidth
 ) extends Bundle {
 
-  // configurations for temporal address generation, decoupled interface for handshake
+  // configurations for temporal address generation, including temporal loop bounds, strides, and base addresses
+  // they are defined by the temporal loop meaning...
+  // it is decoupled interface for handshake
   // if the signals are not ready (busy with last transaction), config is not taken-in by the temporal address generation unit
   val temporalLoopBounds_i = Flipped(
     Decoupled(Vec(temporalLoopDim, UInt(temporalLoopBoundWidth.W)))
@@ -30,16 +32,16 @@ class TemporalAdressGenUnitIO(
 }
 
 // temporal address generation unit module
-class TemporalAdressGenUnit(
-    temporalLoopDim: Int = TemporalAdressGenUnitTestParameters.temporalLoopDim,
+class TemporalAddrGenUnit(
+    temporalLoopDim: Int = TemporalAddrGenUnitTestParameters.temporalLoopDim,
     temporalLoopBoundWidth: Int =
-      TemporalAdressGenUnitTestParameters.temporalLoopBoundWidth,
-    addrWidth: Int = TemporalAdressGenUnitTestParameters.addrWidth
+      TemporalAddrGenUnitTestParameters.temporalLoopBoundWidth,
+    addrWidth: Int = TemporalAddrGenUnitTestParameters.addrWidth
 ) extends Module
     with RequireAsyncReset {
 
   val io = IO(
-    new TemporalAdressGenUnitIO(
+    new TemporalAddrGenUnitIO(
       temporalLoopDim,
       temporalLoopBoundWidth,
       addrWidth
@@ -193,10 +195,10 @@ class TemporalAdressGenUnit(
   io.data_move_done := addr_gen_finish
 }
 
-// Scala main function for generating system verilog file for the TemporalAdressGenUnit module
-object TemporalAdressGenUnit extends App {
+// Scala main function for generating system verilog file for the TemporalAddrGenUnit module
+object TemporalAddrGenUnit extends App {
   emitVerilog(
-    new TemporalAdressGenUnit(),
+    new TemporalAddrGenUnit(),
     Array("--target-dir", "generated/streamer")
   )
 }

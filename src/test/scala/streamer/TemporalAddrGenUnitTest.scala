@@ -22,7 +22,7 @@ class TemporalAdressGenUnitTest
       val temporalLoopBounds =
         Seq.fill(TemporalAdressGenUnitTestParameters.temporalLoopDim)(
           (
-            2.U
+            4.U
           )
         )
       val temporalStrides =
@@ -54,7 +54,7 @@ class TemporalAdressGenUnitTest
       dut.clock.step(1)
       dut.io.ptr_o.ready.poke(1.B)
 
-      dut.clock.step(50)
+      dut.clock.step(100)
 
     }
   }

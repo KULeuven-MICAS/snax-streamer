@@ -130,46 +130,40 @@ class TemporalAdressGenUnit(
   def genNestedLoopCounter(
       valid: Bool,
       temporalLoopDim: Int,
-      addr_gen_counter: UInt,
       temporalLoopBounds: Vec[UInt]
   ): Vec[UInt] = {
-    val loop_counters = WireInit(
-      VecInit(Seq.fill(temporalLoopDim)(0.U(temporalLoopBoundWidth.W)))
-    )
 
-    // spatially unrolling the sub loop counter computation process
-    // spatially unrolling the sub loop counter computation process
-    val addr_gen_counter_next_loop = WireInit(
-      VecInit(
-        Seq.fill(temporalLoopDim + 1)(
-          0.U((temporalLoopDim * temporalLoopBoundWidth).W)
-        )
-      )
-    )
+    val loop_counters = RegInit(VecInit(Seq.fill(temporalLoopDim)(0.U(temporalLoopBoundWidth.W))))
+    val loop_counters_next = WireInit(VecInit(Seq.fill(temporalLoopDim)(0.U(temporalLoopBoundWidth.W))))
+    val loop_counters_valid = WireInit(VecInit(Seq.fill(temporalLoopDim)(0.B)))
+    val loop_counters_last = WireInit(VecInit(Seq.fill(temporalLoopDim)(0.B)))
 
-    addr_gen_counter_next_loop(0) := addr_gen_counter
+    for (i <- 0 until temporalLoopDim) {
+      loop_counters_next(i) := loop_counters(i) + 1.U
+      loop_counters_last(i) := loop_counters_next(i) === temporalLoopBounds(i)
+    }
 
-    // Calculate sub loop counters
-    when(valid) {
-      for (i <- 0 until temporalLoopDim) {
-        loop_counters(i) := addr_gen_counter_next_loop(i) % temporalLoopBounds(
-          i
-        )
-        addr_gen_counter_next_loop(i + 1) := addr_gen_counter_next_loop(
-          i
-        ) / temporalLoopBounds(i)
+    loop_counters_valid(0) := valid
+    for (i <- 1 until temporalLoopDim) {
+      loop_counters_valid(i) := loop_counters_last(i - 1) && loop_counters_valid(i - 1)
+    }
+
+    for (i <- 0 until temporalLoopDim) {
+      when(loop_counters_valid(i)) {
+        loop_counters(i) := Mux(loop_counters_last(i), 0.U, loop_counters_next(i))
+      }.otherwise {
+        loop_counters(i) := loop_counters(i)
       }
     }
 
     loop_counters
+
   }
 
   // generating sub-loop counters using the addr_gen_counter
-  // generating sub-loop counters using the addr_gen_counter
   loop_counters := genNestedLoopCounter(
-    io.ptr_o.valid,
+    io.ptr_o.fire,
     temporalLoopDim,
-    addr_gen_counter,
     temporalLoopBounds
   )
 

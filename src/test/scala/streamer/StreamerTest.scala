@@ -19,22 +19,17 @@ class StreamerTest
         dut.clock.step(5)
 
         // give valid transaction config
-        dut.io.csr.temporalLoopBounds_i.valid.poke(1.B)
+        dut.io.csr.valid.poke(1.B)
         for (i <- 0 until StreamerTestConstant.temporalLoopDim) {
-          dut.io.csr.temporalLoopBounds_i.bits(i).poke(2)
+          dut.io.csr.bits.temporalLoopBounds_i(i).poke(2)
         }
-        dut.io.csr.temporalStrides_i.valid.poke(1.B)
-        dut.io.csr.unrollingStrides_i.valid.poke(1.B)
         // give the proper unrolling strides so that is a aligned in one TCDM bank
-        dut.io.csr.unrollingStrides_i.bits(0)(0).poke(1)
-        dut.io.csr.unrollingStrides_i.bits(1)(0).poke(1)
-        dut.io.csr.unrollingStrides_i.bits(2)(0).poke(1)
-        dut.io.csr.ptr_i.valid.poke(1.B)
+        dut.io.csr.bits.unrollingStrides_i(0)(0).poke(1)
+        dut.io.csr.bits.unrollingStrides_i(1)(0).poke(1)
+        dut.io.csr.bits.unrollingStrides_i(2)(0).poke(1)
         dut.clock.step(1)
-        dut.io.csr.temporalLoopBounds_i.valid.poke(0.B)
-        dut.io.csr.temporalStrides_i.valid.poke(0.B)
-        dut.io.csr.unrollingStrides_i.valid.poke(0.B)
-        dut.io.csr.ptr_i.valid.poke(0.B)
+        dut.io.csr.valid.poke(0.B)
+
         dut.clock.step(5)
 
         // give tcdm ports signals, no contention scene
@@ -67,8 +62,8 @@ class StreamerTest
 
         // mimic tcdm is ready for write request
         for (i <- 0 until StreamerTestConstant.dataWriterTcdmPorts.sum) {
-          dut.io
-            .data.tcdm_req(i + StreamerTestConstant.dataReaderTcdmPorts.sum)
+          dut.io.data
+            .tcdm_req(i + StreamerTestConstant.dataReaderTcdmPorts.sum)
             .ready
             .poke(1.B)
         }

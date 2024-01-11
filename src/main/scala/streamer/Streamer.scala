@@ -35,24 +35,19 @@ class StreamerCsrIO(
 ) extends Bundle {
 
   // configurations interface for a new data operation
-  val temporalLoopBounds_i = Flipped(
-    Decoupled(Vec(temporalLoopDim, UInt(temporalLoopBoundWidth.W)))
-  )
-  val temporalStrides_i = Flipped(
-    Decoupled(
-      Vec(dataMoverNum, Vec(temporalLoopDim, UInt(addrWidth.W)))
-    )
-  )
-  val unrollingStrides_i = Flipped(
-    Decoupled(
-      MixedVec((0 until unrollingDim.length).map { i =>
-        Vec(unrollingDim(i), UInt(addrWidth.W))
-      })
-    )
-  )
-  val ptr_i = Flipped(
-    Decoupled(Vec(dataMoverNum, UInt(addrWidth.W)))
-  )
+  val temporalLoopBounds_i =
+    Vec(temporalLoopDim, UInt(temporalLoopBoundWidth.W))
+
+  val temporalStrides_i =
+    Vec(dataMoverNum, Vec(temporalLoopDim, UInt(addrWidth.W)))
+
+  val unrollingStrides_i =
+    MixedVec((0 until unrollingDim.length).map { i =>
+      Vec(unrollingDim(i), UInt(addrWidth.W))
+    })
+
+  val ptr_i =
+    Vec(dataMoverNum, UInt(addrWidth.W))
 
 }
 
@@ -95,12 +90,16 @@ class StreamerIO(
     tcdmDataWidth: Int = StreamerTestConstant.tcdmDataWidth
 ) extends Bundle {
 
-  val csr = new StreamerCsrIO(
-    temporalLoopDim,
-    temporalLoopBoundWidth,
-    addrWidth,
-    unrollingDim,
-    dataMoverNum
+  val csr = Flipped(
+    Decoupled(
+      new StreamerCsrIO(
+        temporalLoopDim,
+        temporalLoopBoundWidth,
+        addrWidth,
+        unrollingDim,
+        dataMoverNum
+      )
+    )
   )
 
   val data = new StreamerDataIO(
@@ -237,7 +236,7 @@ class Streamer(
     }
   }
 
-  config_valid := io.csr.temporalLoopBounds_i.fire && io.csr.temporalStrides_i.fire && io.csr.unrollingStrides_i.fire && io.csr.ptr_i.fire
+  config_valid := io.csr.fire && io.csr.fire && io.csr.fire && io.csr.fire
 
   for (i <- 0 until dataMoverNum) {
     when(config_valid) {
@@ -250,10 +249,7 @@ class Streamer(
   // data streaming finish when all the data mover finished the data movement
   streamming_finish := !datamover_states.reduce(_ | _)
 
-  io.csr.temporalLoopBounds_i.ready := cstate === sIDLE
-  io.csr.temporalStrides_i.ready := cstate === sIDLE
-  io.csr.unrollingStrides_i.ready := cstate === sIDLE
-  io.csr.ptr_i.ready := cstate === sIDLE
+  io.csr.ready := cstate === sIDLE
 
   // signals connections for the instantiated modules
   // TODO: try to use case map to connect...
@@ -265,44 +261,44 @@ class Streamer(
           address_gen_unit(i).io.temporalLoopBounds_i.bits(j) := 1.U
         } else {
           address_gen_unit(i).io.temporalLoopBounds_i
-            .bits(j) := io.csr.temporalLoopBounds_i.bits(j)
+            .bits(j) := io.csr.bits.temporalLoopBounds_i(j)
         }
       }
     } else {
       address_gen_unit(
         i
-      ).io.temporalLoopBounds_i.bits := io.csr.temporalLoopBounds_i.bits
+      ).io.temporalLoopBounds_i.bits := io.csr.bits.temporalLoopBounds_i
     }
     address_gen_unit(
       i
-    ).io.temporalLoopBounds_i.valid := io.csr.temporalLoopBounds_i.valid
+    ).io.temporalLoopBounds_i.valid := io.csr.valid
     address_gen_unit(
       i
-    ).io.temporalStrides_i.bits := io.csr.temporalStrides_i.bits(
+    ).io.temporalStrides_i.bits := io.csr.bits.temporalStrides_i(
       i
     )
     address_gen_unit(
       i
-    ).io.temporalStrides_i.valid := io.csr.temporalStrides_i.valid
-    address_gen_unit(i).io.ptr_i.bits := io.csr.ptr_i.bits(i)
-    address_gen_unit(i).io.ptr_i.valid := io.csr.ptr_i.valid
+    ).io.temporalStrides_i.valid := io.csr.valid
+    address_gen_unit(i).io.ptr_i.bits := io.csr.bits.ptr_i(i)
+    address_gen_unit(i).io.ptr_i.valid := io.csr.valid
   }
 
   // data reader and data writer <> streamer IO
   for (i <- 0 until dataMoverNum) {
     if (i < dataReaderNum) {
-      data_reader(i).io.unrollingStrides_csr_i.bits := io.csr.unrollingStrides_i
-        .bits(i)
+      data_reader(i).io.unrollingStrides_csr_i.bits := io.csr.bits
+        .unrollingStrides_i(i)
       data_reader(
         i
-      ).io.unrollingStrides_csr_i.valid := io.csr.unrollingStrides_i.valid
+      ).io.unrollingStrides_csr_i.valid := io.csr.valid
     } else {
       data_writer(
         i - dataReaderNum
-      ).io.unrollingStrides_csr_i.bits := io.csr.unrollingStrides_i.bits(i)
+      ).io.unrollingStrides_csr_i.bits := io.csr.bits.unrollingStrides_i(i)
       data_writer(
         i - dataReaderNum
-      ).io.unrollingStrides_csr_i.valid := io.csr.unrollingStrides_i.valid
+      ).io.unrollingStrides_csr_i.valid := io.csr.valid
     }
   }
 

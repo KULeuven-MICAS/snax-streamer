@@ -133,8 +133,12 @@ class TemporalAdressGenUnit(
       temporalLoopBounds: Vec[UInt]
   ): Vec[UInt] = {
 
-    val loop_counters = RegInit(VecInit(Seq.fill(temporalLoopDim)(0.U(temporalLoopBoundWidth.W))))
-    val loop_counters_next = WireInit(VecInit(Seq.fill(temporalLoopDim)(0.U(temporalLoopBoundWidth.W))))
+    val loop_counters = RegInit(
+      VecInit(Seq.fill(temporalLoopDim)(0.U(temporalLoopBoundWidth.W)))
+    )
+    val loop_counters_next = WireInit(
+      VecInit(Seq.fill(temporalLoopDim)(0.U(temporalLoopBoundWidth.W)))
+    )
     val loop_counters_valid = WireInit(VecInit(Seq.fill(temporalLoopDim)(0.B)))
     val loop_counters_last = WireInit(VecInit(Seq.fill(temporalLoopDim)(0.B)))
 
@@ -145,12 +149,18 @@ class TemporalAdressGenUnit(
 
     loop_counters_valid(0) := valid
     for (i <- 1 until temporalLoopDim) {
-      loop_counters_valid(i) := loop_counters_last(i - 1) && loop_counters_valid(i - 1)
+      loop_counters_valid(i) := loop_counters_last(
+        i - 1
+      ) && loop_counters_valid(i - 1)
     }
 
     for (i <- 0 until temporalLoopDim) {
       when(loop_counters_valid(i)) {
-        loop_counters(i) := Mux(loop_counters_last(i), 0.U, loop_counters_next(i))
+        loop_counters(i) := Mux(
+          loop_counters_last(i),
+          0.U,
+          loop_counters_next(i)
+        )
       }.otherwise {
         loop_counters(i) := loop_counters(i)
       }

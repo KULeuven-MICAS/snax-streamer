@@ -3,8 +3,8 @@ package streamer
 import chisel3._
 import chisel3.util._
 
-// input and output decleration for unrolling adress generation unit
-// it's a submodule in side data mover
+// input and output declaration for unrolling adress generation unit
+// it's a submodule of a data mover
 class UnrollingAddrGenUintIO(
     unrollingDim: Int = UnrollingAddrGenUintTestParameters.unrollingDim,
     unrollingFactor: Seq[Int] =

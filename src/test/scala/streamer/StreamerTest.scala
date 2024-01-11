@@ -46,7 +46,7 @@ class StreamerTest
 
         // give accelerator signals
         for (i <- 0 until StreamerTestConstant.dataReaderNum) {
-          dut.io.data_accelerator_o.data(i).ready.poke(1.B)
+          dut.io.streamer2accelerator.data(i).ready.poke(1.B)
         }
 
         dut.clock.step(10)
@@ -58,11 +58,11 @@ class StreamerTest
         // mimic accelerator gives valid data
         dut.clock.step(10)
         for (i <- 0 until StreamerTestConstant.dataWriterNum) {
-          dut.io.data_accelerator_i.data(i).valid.poke(1.B)
+          dut.io.accelerator2streamer.data(i).valid.poke(1.B)
         }
         dut.clock.step(4)
         for (i <- 0 until StreamerTestConstant.dataWriterNum) {
-          dut.io.data_accelerator_i.data(i).valid.poke(0.B)
+          dut.io.accelerator2streamer.data(i).valid.poke(0.B)
         }
 
         // mimic tcdm is ready for write request

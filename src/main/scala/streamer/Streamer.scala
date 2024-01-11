@@ -25,18 +25,13 @@ class DataFromAcceleratorX(
   })
 }
 
-// input and output declaration for streamer generator
-class StreamerIO(
+// csr related io
+class StreamerCsrIO(
     temporalLoopDim: Int = StreamerTestConstant.temporalLoopDim,
     temporalLoopBoundWidth: Int = StreamerTestConstant.temporalLoopBoundWidth,
     addrWidth: Int = StreamerTestConstant.addrWidth,
     unrollingDim: Seq[Int] = StreamerTestConstant.unrollingDim,
-    dataMoverNum: Int = StreamerTestConstant.dataMoverNum,
-    dataReaderNum: Int = StreamerTestConstant.dataReaderNum,
-    dataWriterNum: Int = StreamerTestConstant.dataWriterNum,
-    fifoWidthReader: Seq[Int] = StreamerTestConstant.fifoWidthReader,
-    fifoWidthWriter: Seq[Int] = StreamerTestConstant.fifoWidthWriter,
-    tcdmPortsNum: Int = StreamerTestConstant.tcdmPortsNum
+    dataMoverNum: Int = StreamerTestConstant.dataMoverNum
 ) extends Bundle {
 
   // configurations interface for a new data operation
@@ -59,6 +54,18 @@ class StreamerIO(
     Decoupled(Vec(dataMoverNum, UInt(addrWidth.W)))
   )
 
+}
+
+// data related io
+class StreamerDataIO(
+    dataReaderNum: Int = StreamerTestConstant.dataReaderNum,
+    fifoWidthReader: Seq[Int] = StreamerTestConstant.fifoWidthReader,
+    dataWriterNum: Int = StreamerTestConstant.dataWriterNum,
+    fifoWidthWriter: Seq[Int] = StreamerTestConstant.fifoWidthWriter,
+    tcdmPortsNum: Int = StreamerTestConstant.tcdmPortsNum,
+    addrWidth: Int = StreamerTestConstant.addrWidth,
+    tcdmDataWidth: Int = StreamerTestConstant.tcdmDataWidth
+) extends Bundle {
   // specify the interface to the accelerator
   val streamer2accelerator =
     new DataToAcceleratorX(dataReaderNum, fifoWidthReader)
@@ -67,9 +74,44 @@ class StreamerIO(
 
   // specify the interface to the TCDM
   // request interface with q_valid and q_ready
-  val tcdm_req = (Vec(tcdmPortsNum, Decoupled(new TcdmReq())))
+  val tcdm_req =
+    (Vec(tcdmPortsNum, Decoupled(new TcdmReq(addrWidth, tcdmDataWidth))))
   // response interface with p_valid
-  val tcdm_rsp = (Vec(tcdmPortsNum, Flipped(Valid(new TcdmRsp()))))
+  val tcdm_rsp = (Vec(tcdmPortsNum, Flipped(Valid(new TcdmRsp(tcdmDataWidth)))))
+}
+
+// input and output declaration for streamer generator
+class StreamerIO(
+    temporalLoopDim: Int = StreamerTestConstant.temporalLoopDim,
+    temporalLoopBoundWidth: Int = StreamerTestConstant.temporalLoopBoundWidth,
+    addrWidth: Int = StreamerTestConstant.addrWidth,
+    unrollingDim: Seq[Int] = StreamerTestConstant.unrollingDim,
+    dataMoverNum: Int = StreamerTestConstant.dataMoverNum,
+    dataReaderNum: Int = StreamerTestConstant.dataReaderNum,
+    dataWriterNum: Int = StreamerTestConstant.dataWriterNum,
+    fifoWidthReader: Seq[Int] = StreamerTestConstant.fifoWidthReader,
+    fifoWidthWriter: Seq[Int] = StreamerTestConstant.fifoWidthWriter,
+    tcdmPortsNum: Int = StreamerTestConstant.tcdmPortsNum,
+    tcdmDataWidth: Int = StreamerTestConstant.tcdmDataWidth
+) extends Bundle {
+
+  val csr = new StreamerCsrIO(
+    temporalLoopDim,
+    temporalLoopBoundWidth,
+    addrWidth,
+    unrollingDim,
+    dataMoverNum
+  )
+
+  val data = new StreamerDataIO(
+    dataReaderNum,
+    fifoWidthReader,
+    dataWriterNum,
+    fifoWidthWriter,
+    tcdmPortsNum,
+    addrWidth,
+    tcdmDataWidth
+  )
 }
 
 // streamer generator module
@@ -195,7 +237,7 @@ class Streamer(
     }
   }
 
-  config_valid := io.temporalLoopBounds_i.fire && io.temporalStrides_i.fire && io.unrollingStrides_i.fire && io.ptr_i.fire
+  config_valid := io.csr.temporalLoopBounds_i.fire && io.csr.temporalStrides_i.fire && io.csr.unrollingStrides_i.fire && io.csr.ptr_i.fire
 
   for (i <- 0 until dataMoverNum) {
     when(config_valid) {
@@ -208,10 +250,10 @@ class Streamer(
   // data streaming finish when all the data mover finished the data movement
   streamming_finish := !datamover_states.reduce(_ | _)
 
-  io.temporalLoopBounds_i.ready := cstate === sIDLE
-  io.temporalStrides_i.ready := cstate === sIDLE
-  io.unrollingStrides_i.ready := cstate === sIDLE
-  io.ptr_i.ready := cstate === sIDLE
+  io.csr.temporalLoopBounds_i.ready := cstate === sIDLE
+  io.csr.temporalStrides_i.ready := cstate === sIDLE
+  io.csr.unrollingStrides_i.ready := cstate === sIDLE
+  io.csr.ptr_i.ready := cstate === sIDLE
 
   // signals connections for the instantiated modules
   // TODO: try to use case map to connect...
@@ -223,40 +265,44 @@ class Streamer(
           address_gen_unit(i).io.temporalLoopBounds_i.bits(j) := 1.U
         } else {
           address_gen_unit(i).io.temporalLoopBounds_i
-            .bits(j) := io.temporalLoopBounds_i.bits(j)
+            .bits(j) := io.csr.temporalLoopBounds_i.bits(j)
         }
       }
     } else {
       address_gen_unit(
         i
-      ).io.temporalLoopBounds_i.bits := io.temporalLoopBounds_i.bits
+      ).io.temporalLoopBounds_i.bits := io.csr.temporalLoopBounds_i.bits
     }
     address_gen_unit(
       i
-    ).io.temporalLoopBounds_i.valid := io.temporalLoopBounds_i.valid
-    address_gen_unit(i).io.temporalStrides_i.bits := io.temporalStrides_i.bits(
+    ).io.temporalLoopBounds_i.valid := io.csr.temporalLoopBounds_i.valid
+    address_gen_unit(
+      i
+    ).io.temporalStrides_i.bits := io.csr.temporalStrides_i.bits(
       i
     )
-    address_gen_unit(i).io.temporalStrides_i.valid := io.temporalStrides_i.valid
-    address_gen_unit(i).io.ptr_i.bits := io.ptr_i.bits(i)
-    address_gen_unit(i).io.ptr_i.valid := io.ptr_i.valid
+    address_gen_unit(
+      i
+    ).io.temporalStrides_i.valid := io.csr.temporalStrides_i.valid
+    address_gen_unit(i).io.ptr_i.bits := io.csr.ptr_i.bits(i)
+    address_gen_unit(i).io.ptr_i.valid := io.csr.ptr_i.valid
   }
 
   // data reader and data writer <> streamer IO
   for (i <- 0 until dataMoverNum) {
     if (i < dataReaderNum) {
-      data_reader(i).io.unrollingStrides_csr_i.bits := io.unrollingStrides_i
+      data_reader(i).io.unrollingStrides_csr_i.bits := io.csr.unrollingStrides_i
         .bits(i)
       data_reader(
         i
-      ).io.unrollingStrides_csr_i.valid := io.unrollingStrides_i.valid
+      ).io.unrollingStrides_csr_i.valid := io.csr.unrollingStrides_i.valid
     } else {
       data_writer(
         i - dataReaderNum
-      ).io.unrollingStrides_csr_i.bits := io.unrollingStrides_i.bits(i)
+      ).io.unrollingStrides_csr_i.bits := io.csr.unrollingStrides_i.bits(i)
       data_writer(
         i - dataReaderNum
-      ).io.unrollingStrides_csr_i.valid := io.unrollingStrides_i.valid
+      ).io.unrollingStrides_csr_i.valid := io.csr.unrollingStrides_i.valid
     }
   }
 
@@ -279,7 +325,7 @@ class Streamer(
   // with a queue between each data mover and accelerator data decoupled interface
   for (i <- 0 until dataMoverNum) {
     if (i < dataReaderNum) {
-      io.streamer2accelerator.data(i) <> Queue(
+      io.data.streamer2accelerator.data(i) <> Queue(
         data_reader(i).io.data_fifo_o,
         fifoDepthReader(i)
       )
@@ -287,7 +333,7 @@ class Streamer(
       data_writer(
         i - dataReaderNum
       ).io.data_fifo_i <> Queue(
-        io.accelerator2streamer.data(i - dataReaderNum),
+        io.data.accelerator2streamer.data(i - dataReaderNum),
         fifoDepthWriter(i - dataReaderNum)
       )
     }
@@ -317,24 +363,24 @@ class Streamer(
   val read_flatten_seq = flattenSeq(dataReaderTcdmPorts)
   for ((dimIndex, innerIndex, flattenedIndex) <- read_flatten_seq) {
     // read request to TCDM
-    io.tcdm_req(flattenedIndex).valid := data_reader(dimIndex).io
+    io.data.tcdm_req(flattenedIndex).valid := data_reader(dimIndex).io
       .read_tcmd_valid_o(innerIndex)
-    io.tcdm_req(flattenedIndex).bits.addr := data_reader(dimIndex).io
+    io.data.tcdm_req(flattenedIndex).bits.addr := data_reader(dimIndex).io
       .tcdm_req_addr(innerIndex)
-    io.tcdm_req(flattenedIndex).bits.data := 0.U
-    io.tcdm_req(flattenedIndex).bits.write := 0.B
+    io.data.tcdm_req(flattenedIndex).bits.data := 0.U
+    io.data.tcdm_req(flattenedIndex).bits.write := 0.B
 
     // request ready signals from TCDM
     data_reader(dimIndex).io
-      .tcdm_ready_i(innerIndex) := io.tcdm_req(flattenedIndex).ready
+      .tcdm_ready_i(innerIndex) := io.data.tcdm_req(flattenedIndex).ready
 
     // signals from TCDM responses
-    data_reader(dimIndex).io.data_tcdm_i(innerIndex).valid := io
+    data_reader(dimIndex).io.data_tcdm_i(innerIndex).valid := io.data
       .tcdm_rsp(flattenedIndex)
       .valid
     data_reader(dimIndex).io
       .data_tcdm_i(innerIndex)
-      .bits := io.tcdm_rsp(flattenedIndex).bits.data
+      .bits := io.data.tcdm_rsp(flattenedIndex).bits.data
   }
 
   // data writer <> TCDM write ports
@@ -343,19 +389,25 @@ class Streamer(
   for ((dimIndex, innerIndex, flattenedIndex) <- write_flatten_seq) {
 
     // write request to TCDM
-    io.tcdm_req(flattenedIndex + tcdm_read_ports_num).valid := data_writer(
+    io.data.tcdm_req(flattenedIndex + tcdm_read_ports_num).valid := data_writer(
       dimIndex
     ).io.write_tcmd_valid_o(innerIndex)
-    io.tcdm_req(flattenedIndex + tcdm_read_ports_num).bits.addr := data_writer(
+    io.data
+      .tcdm_req(flattenedIndex + tcdm_read_ports_num)
+      .bits
+      .addr := data_writer(
       dimIndex
     ).io.tcdm_req_addr(innerIndex)
-    io.tcdm_req(flattenedIndex + tcdm_read_ports_num).bits.data := data_writer(
+    io.data
+      .tcdm_req(flattenedIndex + tcdm_read_ports_num)
+      .bits
+      .data := data_writer(
       dimIndex
     ).io.tcdm_req_data(innerIndex)
-    io.tcdm_req(flattenedIndex + tcdm_read_ports_num).bits.write := 1.B
+    io.data.tcdm_req(flattenedIndex + tcdm_read_ports_num).bits.write := 1.B
 
     // request ready signals from TCDM
-    data_writer(dimIndex).io.tcdm_ready_i(innerIndex) := io
+    data_writer(dimIndex).io.tcdm_ready_i(innerIndex) := io.data
       .tcdm_req(flattenedIndex + tcdm_read_ports_num)
       .ready
   }

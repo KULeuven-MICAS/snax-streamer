@@ -14,7 +14,7 @@ class DataReaderIO(
 
   // signals for read request address generation
   val ptr_agu_i = Flipped(Decoupled(UInt(addrWidth.W)))
-  val unrollingStrides_csr_i = Flipped(
+  val spatialStrides_csr_i = Flipped(
     Decoupled(Vec(unrollingDim, UInt(addrWidth.W)))
   )
 
@@ -38,7 +38,7 @@ class DataReaderIO(
   )
 
   // from temporal address generation unit to indicate if the transaction is done
-  val data_move_done = Input(Bool())
+  val done = Input(Bool())
 
 }
 
@@ -137,7 +137,7 @@ class DataReader(
 
     }
     is(sBUSY) {
-      when(io.data_move_done) {
+      when(io.done) {
         nstate := sIDLE
       }.otherwise {
         nstate := sBUSY
@@ -147,10 +147,10 @@ class DataReader(
 
   // store them for later use
   when(config_valid) {
-    unrollingStrides := io.unrollingStrides_csr_i.bits
+    unrollingStrides := io.spatialStrides_csr_i.bits
   }
 
-  config_valid := io.unrollingStrides_csr_i.fire
+  config_valid := io.spatialStrides_csr_i.fire
 
   when(io.ptr_agu_i.fire) {
     ptr_agu := io.ptr_agu_i.bits
@@ -279,7 +279,7 @@ class DataReader(
   io.ptr_agu_i.ready := cstate === sBUSY && ready_for_new_tcdm_reqs
 
   // signal for indicating ready for new config
-  io.unrollingStrides_csr_i.ready := cstate === sIDLE
+  io.spatialStrides_csr_i.ready := cstate === sIDLE
 
 }
 

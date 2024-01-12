@@ -48,26 +48,7 @@ class SpatialAddrGenUnitIO(
   )
 }
 
-/** This class represents a Spatial Address Generation Unit.
-  *
-  * @param loopDim
-  *   The number of nested for loops.
-  * @param loopBounds
-  *   The bounds of each loop.
-  * @param addrWidth
-  *   The bit width of the address.
-  */
-class SpatialAddrGenUnit(
-    loopDim: Int = SpatialAddrGenUnitTestParameters.loopDim,
-    loopBounds: Seq[Int] = SpatialAddrGenUnitTestParameters.loopBounds,
-    addrWidth: Int = SpatialAddrGenUnitTestParameters.addrWidth
-) extends Module
-    with RequireAsyncReset {
-
-  // the input/output ports
-  val io = IO(
-    new SpatialAddrGenUnitIO(loopDim, loopBounds, addrWidth)
-  )
+trait withSpatialLoopIndeces {
 
   // a scala function to generate the nested indices of the unrolled loop counter for generating unrolling addresses
   // for instance:
@@ -86,6 +67,30 @@ class SpatialAddrGenUnit(
     )
     indices
   }
+
+}
+
+/** This class represents a Spatial Address Generation Unit.
+  *
+  * @param loopDim
+  *   The number of nested for loops.
+  * @param loopBounds
+  *   The bounds of each loop.
+  * @param addrWidth
+  *   The bit width of the address.
+  */
+class SpatialAddrGenUnit(
+    loopDim: Int = SpatialAddrGenUnitTestParameters.loopDim,
+    loopBounds: Seq[Int] = SpatialAddrGenUnitTestParameters.loopBounds,
+    addrWidth: Int = SpatialAddrGenUnitTestParameters.addrWidth
+) extends Module
+    with RequireAsyncReset
+    with withSpatialLoopIndeces {
+
+  // the input/output ports
+  val io = IO(
+    new SpatialAddrGenUnitIO(loopDim, loopBounds, addrWidth)
+  )
 
   /** Generates spatial addresses based on the given parameters.
     *

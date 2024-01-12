@@ -166,15 +166,21 @@ class TemporalAddrGenUnit(
     ) && loop_counters_valid(i - 1)
   }
 
-  for (i <- 0 until loopDim) {
-    when(loop_counters_valid(i)) {
-      loop_counters(i) := Mux(
-        loop_counters_last(i),
-        0.U,
-        loop_counters_next(i)
-      )
-    }.otherwise {
-      loop_counters(i) := loop_counters(i)
+  when(cstate === sBUSY) {
+    for (i <- 0 until loopDim) {
+      when(loop_counters_valid(i)) {
+        loop_counters(i) := Mux(
+          loop_counters_last(i),
+          0.U,
+          loop_counters_next(i)
+        )
+      }.otherwise {
+        loop_counters(i) := loop_counters(i)
+      }
+    }
+  }.otherwise {
+    for (i <- 0 until loopDim) {
+      loop_counters(i) := 0.U
     }
   }
 
@@ -184,10 +190,10 @@ class TemporalAddrGenUnit(
     .map { case (a, b) => a * b })
     .reduce(_ +& _) +& ptr
 
-  addr_gen_finish := loop_counters_last.reduce(_ & _)
+  addr_gen_finish := loop_counters_last.reduce(_ & _) && io.ptr_o.fire
 
   // the decoupled interface is driven by the module state
-  io.ptr_o.valid := cstate === sBUSY && !addr_gen_finish
+  io.ptr_o.valid := cstate === sBUSY
 
   io.loopBounds_i.ready := cstate === sIDLE
   io.strides_i.ready := cstate === sIDLE

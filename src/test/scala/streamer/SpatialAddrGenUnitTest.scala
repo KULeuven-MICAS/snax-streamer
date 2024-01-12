@@ -7,7 +7,7 @@ import scala.math.BigInt
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.Tag
 
-// manaul test for unrolling adress generation unit
+// manual test for unrolling address generation unit
 // TODO: automated random configuration test and automated results check
 class SpatialAddrGenUnitTest
     extends AnyFlatSpec
@@ -26,7 +26,7 @@ class SpatialAddrGenUnitTest
           )
         )
 
-      // sending these configruation to the dut
+      // sending these configuration to the dut
       for (i <- 0 until SpatialAddrGenUnitTestParameters.loopDim) {
         val us = strides(i)
         dut.io.strides_i(i).poke(us)

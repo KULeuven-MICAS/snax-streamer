@@ -138,81 +138,53 @@ class TemporalAddrGenUnit(
   }
 
   /** Generates a nested loop counter based on the provided parameters.
-    *
-    * @param valid
-    *   The flag indicating wether to increment on this clock cycle.
-    * @param loopDim
-    *   The number of neted for loops.
-    * @param loopBounds
-    *   The loop bounds for each for loop.
-    * @return
-    *   The generated nested loop counters.
     */
-  def genNestedLoopCounter(
-      valid: Bool,
-      loopDim: Int,
-      loopBounds: Vec[UInt]
-  ): Vec[UInt] = {
 
-    val loop_counters = RegInit(
-      VecInit(Seq.fill(loopDim)(0.U(loopBoundWidth.W)))
-    )
-    val loop_counters_next = WireInit(
-      VecInit(Seq.fill(loopDim)(0.U(loopBoundWidth.W)))
-    )
-    val loop_counters_valid = WireInit(VecInit(Seq.fill(loopDim)(0.B)))
-    val loop_counters_last = WireInit(VecInit(Seq.fill(loopDim)(0.B)))
-
-    for (i <- 0 until loopDim) {
-      // the next loop counter is the current loop counter plus 1
-      loop_counters_next(i) := loop_counters(i) + 1.U
-      // the loop counter reaches the last value when the
-      // next loop counter equals the loop bound
-      loop_counters_last(i) := loop_counters_next(i) === loopBounds(i)
-    }
-
-    loop_counters_valid(0) := valid
-    for (i <- 1 until loopDim) {
-      // every loop counter must be incremented when the previous loop counter
-      // reaches the last value and is incremented
-      loop_counters_valid(i) := loop_counters_last(
-        i - 1
-      ) && loop_counters_valid(i - 1)
-    }
-
-    for (i <- 0 until loopDim) {
-      when(loop_counters_valid(i)) {
-        loop_counters(i) := Mux(
-          loop_counters_last(i),
-          0.U,
-          loop_counters_next(i)
-        )
-      }.otherwise {
-        loop_counters(i) := loop_counters(i)
-      }
-    }
-
-    // return the generated loop counters
-    loop_counters
-  }
-
-  // counters for tracking values of the nested for loop
-  val loop_counters = WireInit(
+  val loop_counters = RegInit(
     VecInit(Seq.fill(loopDim)(0.U(loopBoundWidth.W)))
   )
-
-  // generating sub-loop counters using the addr_gen_counter
-  loop_counters := genNestedLoopCounter(
-    io.ptr_o.fire,
-    loopDim,
-    loopBounds
+  val loop_counters_next = WireInit(
+    VecInit(Seq.fill(loopDim)(0.U(loopBoundWidth.W)))
   )
+  val loop_counters_valid = WireInit(VecInit(Seq.fill(loopDim)(0.B)))
+  val loop_counters_last = WireInit(VecInit(Seq.fill(loopDim)(0.B)))
+
+  for (i <- 0 until loopDim) {
+    // the next loop counter is the current loop counter plus 1
+    loop_counters_next(i) := loop_counters(i) + 1.U
+    // the loop counter reaches the last value when the
+    // next loop counter equals the loop bound
+    loop_counters_last(i) := loop_counters_next(i) === loopBounds(i)
+  }
+
+  loop_counters_valid(0) := io.ptr_o.fire
+  for (i <- 1 until loopDim) {
+    // every loop counter must be incremented when the previous loop counter
+    // reaches the last value and is incremented
+    loop_counters_valid(i) := loop_counters_last(
+      i - 1
+    ) && loop_counters_valid(i - 1)
+  }
+
+  for (i <- 0 until loopDim) {
+    when(loop_counters_valid(i)) {
+      loop_counters(i) := Mux(
+        loop_counters_last(i),
+        0.U,
+        loop_counters_next(i)
+      )
+    }.otherwise {
+      loop_counters(i) := loop_counters(i)
+    }
+  }
 
   // to generate the address, the loop counters are multiplied by the strides
   io.ptr_o.bits := (loop_counters
     .zip(strides)
     .map { case (a, b) => a * b })
     .reduce(_ +& _) +& ptr
+
+  addr_gen_finish := loop_counters_last.reduce(_ & _)
 
   // the decoupled interface is driven by the module state
   io.ptr_o.valid := cstate === sBUSY && !addr_gen_finish

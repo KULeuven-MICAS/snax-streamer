@@ -195,7 +195,7 @@ class Streamer(
   // a vector of address generation unit generator instantiation with different parameters for each module
   val address_gen_unit = Seq((0 until dataMoverNum).map { i =>
     Module(
-      new TemporalAdressGenUnit(
+      new TemporalAddrGenUnit(
         temporalLoopDim,
         temporalLoopBoundWidth,
         addrWidth

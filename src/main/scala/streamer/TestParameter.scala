@@ -12,6 +12,6 @@ object TemporalAddrGenUnitTestParameters {
 
 object SpatialAddrGenUnitTestParameters {
   def loopBounds = Seq(8, 8)
-  def loopDim = unrollingFactor.length
+  def loopDim = loopBounds.length
   def addrWidth = 32
 }

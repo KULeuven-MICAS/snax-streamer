@@ -31,7 +31,7 @@ class SpatialAddrGenUnitTest
         val us = strides(i)
         dut.io.strides_i(i).poke(us)
       }
-      dut.io.start_ptr_i.poke(16.U)
+      dut.io.ptr_i.poke(16.U)
       dut.io.valid_i.poke(1.B)
 
       dut.clock.step(5)

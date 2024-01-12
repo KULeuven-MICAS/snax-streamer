@@ -143,9 +143,9 @@ class DataWriter(
   )
 
   spatial_addr_gen_unit.io.valid_i := cstate =/= sIDLE
-  spatial_addr_gen_unit.io.start_ptr_i := start_ptr
-  spatial_addr_gen_unit.io.unrollingStrides_i := unrollingStrides
-  unrolling_addr := spatial_addr_gen_unit.io.unrolling_addr_o
+  spatial_addr_gen_unit.io.ptr_i := start_ptr
+  spatial_addr_gen_unit.io.strides_i := unrollingStrides
+  unrolling_addr := spatial_addr_gen_unit.io.ptr_o
 
   // address constraint check
   when(cstate === sBUSY) {

@@ -61,77 +61,76 @@
 
 // VCS coverage exclude_file
 module ram_combMem(	// src/main/scala/chisel3/util/Decoupled.scala:257:91
-  input  [1:0]   R0_addr,
-  input          R0_en,
-                 R0_clk,
-  input  [1:0]   W0_addr,
-  input          W0_en,
-                 W0_clk,
-  input  [511:0] W0_data,
-  output [511:0] R0_data
+  input         R0_addr,
+                R0_en,
+                R0_clk,
+                W0_addr,
+                W0_en,
+                W0_clk,
+  input  [63:0] W0_data,
+  output [63:0] R0_data
 );
 
-  reg [511:0] Memory[0:3];	// src/main/scala/chisel3/util/Decoupled.scala:257:91
+  reg [63:0] Memory[0:1];	// src/main/scala/chisel3/util/Decoupled.scala:257:91
   always @(posedge W0_clk) begin	// src/main/scala/chisel3/util/Decoupled.scala:257:91
     if (W0_en)	// src/main/scala/chisel3/util/Decoupled.scala:257:91
       Memory[W0_addr] <= W0_data;	// src/main/scala/chisel3/util/Decoupled.scala:257:91
   end // always @(posedge)
   `ifndef SYNTHESIS	// src/main/scala/chisel3/util/Decoupled.scala:257:91
-    reg [511:0] _RANDOM_MEM;	// src/main/scala/chisel3/util/Decoupled.scala:257:91
+    reg [63:0] _RANDOM_MEM;	// src/main/scala/chisel3/util/Decoupled.scala:257:91
     initial begin	// src/main/scala/chisel3/util/Decoupled.scala:257:91
       `INIT_RANDOM_PROLOG_	// src/main/scala/chisel3/util/Decoupled.scala:257:91
       `ifdef RANDOMIZE_MEM_INIT	// src/main/scala/chisel3/util/Decoupled.scala:257:91
-        for (logic [2:0] i = 3'h0; i < 3'h4; i += 3'h1) begin
-          for (logic [9:0] j = 10'h0; j < 10'h200; j += 10'h20) begin
+        for (logic [1:0] i = 2'h0; i < 2'h2; i += 2'h1) begin
+          for (logic [6:0] j = 7'h0; j < 7'h40; j += 7'h20) begin
             _RANDOM_MEM[j +: 32] = `RANDOM;	// src/main/scala/chisel3/util/Decoupled.scala:257:91
           end	// src/main/scala/chisel3/util/Decoupled.scala:257:91
-          Memory[i[1:0]] = _RANDOM_MEM;	// src/main/scala/chisel3/util/Decoupled.scala:257:91
+          Memory[i[0]] = _RANDOM_MEM;	// src/main/scala/chisel3/util/Decoupled.scala:257:91
         end	// src/main/scala/chisel3/util/Decoupled.scala:257:91
       `endif // RANDOMIZE_MEM_INIT
     end // initial
   `endif // not def SYNTHESIS
-  assign R0_data = R0_en ? Memory[R0_addr] : 512'bx;	// src/main/scala/chisel3/util/Decoupled.scala:257:91
+  assign R0_data = R0_en ? Memory[R0_addr] : 64'bx;	// src/main/scala/chisel3/util/Decoupled.scala:257:91
 endmodule
 
 // VCS coverage exclude_file
 module ram_combMem_0(	// src/main/scala/chisel3/util/Decoupled.scala:257:91
-  input  [1:0]    R0_addr,
-  input           R0_en,
-                  R0_clk,
-  input  [1:0]    W0_addr,
-  input           W0_en,
-                  W0_clk,
-  input  [2047:0] W0_data,
-  output [2047:0] R0_data
+  input          R0_addr,
+                 R0_en,
+                 R0_clk,
+                 W0_addr,
+                 W0_en,
+                 W0_clk,
+  input  [255:0] W0_data,
+  output [255:0] R0_data
 );
 
-  reg [2047:0] Memory[0:3];	// src/main/scala/chisel3/util/Decoupled.scala:257:91
+  reg [255:0] Memory[0:1];	// src/main/scala/chisel3/util/Decoupled.scala:257:91
   always @(posedge W0_clk) begin	// src/main/scala/chisel3/util/Decoupled.scala:257:91
     if (W0_en)	// src/main/scala/chisel3/util/Decoupled.scala:257:91
       Memory[W0_addr] <= W0_data;	// src/main/scala/chisel3/util/Decoupled.scala:257:91
   end // always @(posedge)
   `ifndef SYNTHESIS	// src/main/scala/chisel3/util/Decoupled.scala:257:91
-    reg [2047:0] _RANDOM_MEM;	// src/main/scala/chisel3/util/Decoupled.scala:257:91
+    reg [255:0] _RANDOM_MEM;	// src/main/scala/chisel3/util/Decoupled.scala:257:91
     initial begin	// src/main/scala/chisel3/util/Decoupled.scala:257:91
       `INIT_RANDOM_PROLOG_	// src/main/scala/chisel3/util/Decoupled.scala:257:91
       `ifdef RANDOMIZE_MEM_INIT	// src/main/scala/chisel3/util/Decoupled.scala:257:91
-        for (logic [2:0] i = 3'h0; i < 3'h4; i += 3'h1) begin
-          for (logic [11:0] j = 12'h0; j < 12'h800; j += 12'h20) begin
+        for (logic [1:0] i = 2'h0; i < 2'h2; i += 2'h1) begin
+          for (logic [8:0] j = 9'h0; j < 9'h100; j += 9'h20) begin
             _RANDOM_MEM[j +: 32] = `RANDOM;	// src/main/scala/chisel3/util/Decoupled.scala:257:91
           end	// src/main/scala/chisel3/util/Decoupled.scala:257:91
-          Memory[i[1:0]] = _RANDOM_MEM;	// src/main/scala/chisel3/util/Decoupled.scala:257:91
+          Memory[i[0]] = _RANDOM_MEM;	// src/main/scala/chisel3/util/Decoupled.scala:257:91
         end	// src/main/scala/chisel3/util/Decoupled.scala:257:91
       `endif // RANDOMIZE_MEM_INIT
     end // initial
   `endif // not def SYNTHESIS
-  assign R0_data = R0_en ? Memory[R0_addr] : 2048'bx;	// src/main/scala/chisel3/util/Decoupled.scala:257:91
+  assign R0_data = R0_en ? Memory[R0_addr] : 256'bx;	// src/main/scala/chisel3/util/Decoupled.scala:257:91
 endmodule
 
-module UnrollingAddrGenUint(	// <stdin>:3:10, :1632:10, :3261:10
+module UnrollingAddrGenUint(	// <stdin>:3:10, :418:10, :1023:10
   input         io_valid_i,	// src/main/scala/streamer/SpatialAddrGenUnit.scala:35:14
   input  [31:0] io_start_ptr_i,	// src/main/scala/streamer/SpatialAddrGenUnit.scala:35:14
                 io_unrollingStrides_i_0,	// src/main/scala/streamer/SpatialAddrGenUnit.scala:35:14
-                io_unrollingStrides_i_1,	// src/main/scala/streamer/SpatialAddrGenUnit.scala:35:14
   output [31:0] io_unrolling_addr_o_0,	// src/main/scala/streamer/SpatialAddrGenUnit.scala:35:14
                 io_unrolling_addr_o_1,	// src/main/scala/streamer/SpatialAddrGenUnit.scala:35:14
                 io_unrolling_addr_o_2,	// src/main/scala/streamer/SpatialAddrGenUnit.scala:35:14
@@ -139,176 +138,37 @@ module UnrollingAddrGenUint(	// <stdin>:3:10, :1632:10, :3261:10
                 io_unrolling_addr_o_4,	// src/main/scala/streamer/SpatialAddrGenUnit.scala:35:14
                 io_unrolling_addr_o_5,	// src/main/scala/streamer/SpatialAddrGenUnit.scala:35:14
                 io_unrolling_addr_o_6,	// src/main/scala/streamer/SpatialAddrGenUnit.scala:35:14
-                io_unrolling_addr_o_7,	// src/main/scala/streamer/SpatialAddrGenUnit.scala:35:14
-                io_unrolling_addr_o_8,	// src/main/scala/streamer/SpatialAddrGenUnit.scala:35:14
-                io_unrolling_addr_o_9,	// src/main/scala/streamer/SpatialAddrGenUnit.scala:35:14
-                io_unrolling_addr_o_10,	// src/main/scala/streamer/SpatialAddrGenUnit.scala:35:14
-                io_unrolling_addr_o_11,	// src/main/scala/streamer/SpatialAddrGenUnit.scala:35:14
-                io_unrolling_addr_o_12,	// src/main/scala/streamer/SpatialAddrGenUnit.scala:35:14
-                io_unrolling_addr_o_13,	// src/main/scala/streamer/SpatialAddrGenUnit.scala:35:14
-                io_unrolling_addr_o_14,	// src/main/scala/streamer/SpatialAddrGenUnit.scala:35:14
-                io_unrolling_addr_o_15,	// src/main/scala/streamer/SpatialAddrGenUnit.scala:35:14
-                io_unrolling_addr_o_16,	// src/main/scala/streamer/SpatialAddrGenUnit.scala:35:14
-                io_unrolling_addr_o_17,	// src/main/scala/streamer/SpatialAddrGenUnit.scala:35:14
-                io_unrolling_addr_o_18,	// src/main/scala/streamer/SpatialAddrGenUnit.scala:35:14
-                io_unrolling_addr_o_19,	// src/main/scala/streamer/SpatialAddrGenUnit.scala:35:14
-                io_unrolling_addr_o_20,	// src/main/scala/streamer/SpatialAddrGenUnit.scala:35:14
-                io_unrolling_addr_o_21,	// src/main/scala/streamer/SpatialAddrGenUnit.scala:35:14
-                io_unrolling_addr_o_22,	// src/main/scala/streamer/SpatialAddrGenUnit.scala:35:14
-                io_unrolling_addr_o_23,	// src/main/scala/streamer/SpatialAddrGenUnit.scala:35:14
-                io_unrolling_addr_o_24,	// src/main/scala/streamer/SpatialAddrGenUnit.scala:35:14
-                io_unrolling_addr_o_25,	// src/main/scala/streamer/SpatialAddrGenUnit.scala:35:14
-                io_unrolling_addr_o_26,	// src/main/scala/streamer/SpatialAddrGenUnit.scala:35:14
-                io_unrolling_addr_o_27,	// src/main/scala/streamer/SpatialAddrGenUnit.scala:35:14
-                io_unrolling_addr_o_28,	// src/main/scala/streamer/SpatialAddrGenUnit.scala:35:14
-                io_unrolling_addr_o_29,	// src/main/scala/streamer/SpatialAddrGenUnit.scala:35:14
-                io_unrolling_addr_o_30,	// src/main/scala/streamer/SpatialAddrGenUnit.scala:35:14
-                io_unrolling_addr_o_31,	// src/main/scala/streamer/SpatialAddrGenUnit.scala:35:14
-                io_unrolling_addr_o_32,	// src/main/scala/streamer/SpatialAddrGenUnit.scala:35:14
-                io_unrolling_addr_o_33,	// src/main/scala/streamer/SpatialAddrGenUnit.scala:35:14
-                io_unrolling_addr_o_34,	// src/main/scala/streamer/SpatialAddrGenUnit.scala:35:14
-                io_unrolling_addr_o_35,	// src/main/scala/streamer/SpatialAddrGenUnit.scala:35:14
-                io_unrolling_addr_o_36,	// src/main/scala/streamer/SpatialAddrGenUnit.scala:35:14
-                io_unrolling_addr_o_37,	// src/main/scala/streamer/SpatialAddrGenUnit.scala:35:14
-                io_unrolling_addr_o_38,	// src/main/scala/streamer/SpatialAddrGenUnit.scala:35:14
-                io_unrolling_addr_o_39,	// src/main/scala/streamer/SpatialAddrGenUnit.scala:35:14
-                io_unrolling_addr_o_40,	// src/main/scala/streamer/SpatialAddrGenUnit.scala:35:14
-                io_unrolling_addr_o_41,	// src/main/scala/streamer/SpatialAddrGenUnit.scala:35:14
-                io_unrolling_addr_o_42,	// src/main/scala/streamer/SpatialAddrGenUnit.scala:35:14
-                io_unrolling_addr_o_43,	// src/main/scala/streamer/SpatialAddrGenUnit.scala:35:14
-                io_unrolling_addr_o_44,	// src/main/scala/streamer/SpatialAddrGenUnit.scala:35:14
-                io_unrolling_addr_o_45,	// src/main/scala/streamer/SpatialAddrGenUnit.scala:35:14
-                io_unrolling_addr_o_46,	// src/main/scala/streamer/SpatialAddrGenUnit.scala:35:14
-                io_unrolling_addr_o_47,	// src/main/scala/streamer/SpatialAddrGenUnit.scala:35:14
-                io_unrolling_addr_o_48,	// src/main/scala/streamer/SpatialAddrGenUnit.scala:35:14
-                io_unrolling_addr_o_49,	// src/main/scala/streamer/SpatialAddrGenUnit.scala:35:14
-                io_unrolling_addr_o_50,	// src/main/scala/streamer/SpatialAddrGenUnit.scala:35:14
-                io_unrolling_addr_o_51,	// src/main/scala/streamer/SpatialAddrGenUnit.scala:35:14
-                io_unrolling_addr_o_52,	// src/main/scala/streamer/SpatialAddrGenUnit.scala:35:14
-                io_unrolling_addr_o_53,	// src/main/scala/streamer/SpatialAddrGenUnit.scala:35:14
-                io_unrolling_addr_o_54,	// src/main/scala/streamer/SpatialAddrGenUnit.scala:35:14
-                io_unrolling_addr_o_55,	// src/main/scala/streamer/SpatialAddrGenUnit.scala:35:14
-                io_unrolling_addr_o_56,	// src/main/scala/streamer/SpatialAddrGenUnit.scala:35:14
-                io_unrolling_addr_o_57,	// src/main/scala/streamer/SpatialAddrGenUnit.scala:35:14
-                io_unrolling_addr_o_58,	// src/main/scala/streamer/SpatialAddrGenUnit.scala:35:14
-                io_unrolling_addr_o_59,	// src/main/scala/streamer/SpatialAddrGenUnit.scala:35:14
-                io_unrolling_addr_o_60,	// src/main/scala/streamer/SpatialAddrGenUnit.scala:35:14
-                io_unrolling_addr_o_61,	// src/main/scala/streamer/SpatialAddrGenUnit.scala:35:14
-                io_unrolling_addr_o_62,	// src/main/scala/streamer/SpatialAddrGenUnit.scala:35:14
-                io_unrolling_addr_o_63	// src/main/scala/streamer/SpatialAddrGenUnit.scala:35:14
+                io_unrolling_addr_o_7	// src/main/scala/streamer/SpatialAddrGenUnit.scala:35:14
 );
 
-  wire [31:0] _GEN = {io_unrollingStrides_i_0[30:0], 1'h0};	// src/main/scala/streamer/SpatialAddrGenUnit.scala:86:34, :87:26
-  wire [31:0] _GEN_0 = io_unrollingStrides_i_0 * 32'h3;	// src/main/scala/streamer/SpatialAddrGenUnit.scala:86:34
-  wire [31:0] _GEN_1 = {io_unrollingStrides_i_0[29:0], 2'h0};	// src/main/scala/streamer/SpatialAddrGenUnit.scala:86:34, :87:26
-  wire [31:0] _GEN_2 = io_unrollingStrides_i_0 * 32'h5;	// src/main/scala/streamer/SpatialAddrGenUnit.scala:86:34
-  wire [31:0] _GEN_3 = io_unrollingStrides_i_0 * 32'h6;	// src/main/scala/streamer/SpatialAddrGenUnit.scala:86:34
-  wire [31:0] _GEN_4 = io_unrollingStrides_i_0 * 32'h7;	// src/main/scala/streamer/SpatialAddrGenUnit.scala:86:34
-  wire [31:0] _GEN_5 = {io_unrollingStrides_i_1[30:0], 1'h0};	// src/main/scala/streamer/SpatialAddrGenUnit.scala:86:34, :87:26
-  wire [31:0] _GEN_6 = io_unrollingStrides_i_1 * 32'h3;	// src/main/scala/streamer/SpatialAddrGenUnit.scala:86:34
-  wire [31:0] _GEN_7 = {io_unrollingStrides_i_1[29:0], 2'h0};	// src/main/scala/streamer/SpatialAddrGenUnit.scala:86:34, :87:26
-  wire [31:0] _GEN_8 = io_unrollingStrides_i_1 * 32'h5;	// src/main/scala/streamer/SpatialAddrGenUnit.scala:86:34
-  wire [31:0] _GEN_9 = io_unrollingStrides_i_1 * 32'h6;	// src/main/scala/streamer/SpatialAddrGenUnit.scala:86:34
-  wire [31:0] _GEN_10 = io_unrollingStrides_i_1 * 32'h7;	// src/main/scala/streamer/SpatialAddrGenUnit.scala:86:34
-  assign io_unrolling_addr_o_0 = io_valid_i ? io_start_ptr_i : 32'h0;	// <stdin>:3:10, :1632:10, :3261:10, src/main/scala/streamer/SpatialAddrGenUnit.scala:72:34, :73:14, :76:17, :85:27
+  assign io_unrolling_addr_o_0 = io_valid_i ? io_start_ptr_i : 32'h0;	// <stdin>:3:10, :418:10, :1023:10, src/main/scala/streamer/SpatialAddrGenUnit.scala:72:34, :73:14, :76:17, :85:27
   assign io_unrolling_addr_o_1 =
-    io_valid_i ? io_unrollingStrides_i_0 + io_start_ptr_i : 32'h0;	// <stdin>:3:10, :1632:10, :3261:10, src/main/scala/streamer/SpatialAddrGenUnit.scala:72:34, :73:14, :76:17, :85:27, :87:26
-  assign io_unrolling_addr_o_2 = io_valid_i ? _GEN + io_start_ptr_i : 32'h0;	// <stdin>:3:10, :1632:10, :3261:10, src/main/scala/streamer/SpatialAddrGenUnit.scala:72:34, :73:14, :76:17, :85:27, :87:26
-  assign io_unrolling_addr_o_3 = io_valid_i ? _GEN_0 + io_start_ptr_i : 32'h0;	// <stdin>:3:10, :1632:10, :3261:10, src/main/scala/streamer/SpatialAddrGenUnit.scala:72:34, :73:14, :76:17, :85:27, :86:34, :87:26
-  assign io_unrolling_addr_o_4 = io_valid_i ? _GEN_1 + io_start_ptr_i : 32'h0;	// <stdin>:3:10, :1632:10, :3261:10, src/main/scala/streamer/SpatialAddrGenUnit.scala:72:34, :73:14, :76:17, :85:27, :87:26
-  assign io_unrolling_addr_o_5 = io_valid_i ? _GEN_2 + io_start_ptr_i : 32'h0;	// <stdin>:3:10, :1632:10, :3261:10, src/main/scala/streamer/SpatialAddrGenUnit.scala:72:34, :73:14, :76:17, :85:27, :86:34, :87:26
-  assign io_unrolling_addr_o_6 = io_valid_i ? _GEN_3 + io_start_ptr_i : 32'h0;	// <stdin>:3:10, :1632:10, :3261:10, src/main/scala/streamer/SpatialAddrGenUnit.scala:72:34, :73:14, :76:17, :85:27, :86:34, :87:26
-  assign io_unrolling_addr_o_7 = io_valid_i ? _GEN_4 + io_start_ptr_i : 32'h0;	// <stdin>:3:10, :1632:10, :3261:10, src/main/scala/streamer/SpatialAddrGenUnit.scala:72:34, :73:14, :76:17, :85:27, :86:34, :87:26
-  assign io_unrolling_addr_o_8 =
-    io_valid_i ? io_unrollingStrides_i_1 + io_start_ptr_i : 32'h0;	// <stdin>:3:10, :1632:10, :3261:10, src/main/scala/streamer/SpatialAddrGenUnit.scala:72:34, :73:14, :76:17, :85:27, :87:26
-  assign io_unrolling_addr_o_9 =
-    io_valid_i
-      ? io_unrollingStrides_i_0 + io_unrollingStrides_i_1 + io_start_ptr_i
-      : 32'h0;	// <stdin>:3:10, :1632:10, :3261:10, src/main/scala/streamer/SpatialAddrGenUnit.scala:72:34, :73:14, :76:17, :85:27, :87:26
-  assign io_unrolling_addr_o_10 =
-    io_valid_i ? _GEN + io_unrollingStrides_i_1 + io_start_ptr_i : 32'h0;	// <stdin>:3:10, :1632:10, :3261:10, src/main/scala/streamer/SpatialAddrGenUnit.scala:72:34, :73:14, :76:17, :85:27, :87:26
-  assign io_unrolling_addr_o_11 =
-    io_valid_i ? _GEN_0 + io_unrollingStrides_i_1 + io_start_ptr_i : 32'h0;	// <stdin>:3:10, :1632:10, :3261:10, src/main/scala/streamer/SpatialAddrGenUnit.scala:72:34, :73:14, :76:17, :85:27, :86:34, :87:26
-  assign io_unrolling_addr_o_12 =
-    io_valid_i ? _GEN_1 + io_unrollingStrides_i_1 + io_start_ptr_i : 32'h0;	// <stdin>:3:10, :1632:10, :3261:10, src/main/scala/streamer/SpatialAddrGenUnit.scala:72:34, :73:14, :76:17, :85:27, :87:26
-  assign io_unrolling_addr_o_13 =
-    io_valid_i ? _GEN_2 + io_unrollingStrides_i_1 + io_start_ptr_i : 32'h0;	// <stdin>:3:10, :1632:10, :3261:10, src/main/scala/streamer/SpatialAddrGenUnit.scala:72:34, :73:14, :76:17, :85:27, :86:34, :87:26
-  assign io_unrolling_addr_o_14 =
-    io_valid_i ? _GEN_3 + io_unrollingStrides_i_1 + io_start_ptr_i : 32'h0;	// <stdin>:3:10, :1632:10, :3261:10, src/main/scala/streamer/SpatialAddrGenUnit.scala:72:34, :73:14, :76:17, :85:27, :86:34, :87:26
-  assign io_unrolling_addr_o_15 =
-    io_valid_i ? _GEN_4 + io_unrollingStrides_i_1 + io_start_ptr_i : 32'h0;	// <stdin>:3:10, :1632:10, :3261:10, src/main/scala/streamer/SpatialAddrGenUnit.scala:72:34, :73:14, :76:17, :85:27, :86:34, :87:26
-  assign io_unrolling_addr_o_16 = io_valid_i ? _GEN_5 + io_start_ptr_i : 32'h0;	// <stdin>:3:10, :1632:10, :3261:10, src/main/scala/streamer/SpatialAddrGenUnit.scala:72:34, :73:14, :76:17, :85:27, :87:26
-  assign io_unrolling_addr_o_17 =
-    io_valid_i ? io_unrollingStrides_i_0 + _GEN_5 + io_start_ptr_i : 32'h0;	// <stdin>:3:10, :1632:10, :3261:10, src/main/scala/streamer/SpatialAddrGenUnit.scala:72:34, :73:14, :76:17, :85:27, :87:26
-  assign io_unrolling_addr_o_18 = io_valid_i ? _GEN + _GEN_5 + io_start_ptr_i : 32'h0;	// <stdin>:3:10, :1632:10, :3261:10, src/main/scala/streamer/SpatialAddrGenUnit.scala:72:34, :73:14, :76:17, :85:27, :87:26
-  assign io_unrolling_addr_o_19 = io_valid_i ? _GEN_0 + _GEN_5 + io_start_ptr_i : 32'h0;	// <stdin>:3:10, :1632:10, :3261:10, src/main/scala/streamer/SpatialAddrGenUnit.scala:72:34, :73:14, :76:17, :85:27, :86:34, :87:26
-  assign io_unrolling_addr_o_20 = io_valid_i ? _GEN_1 + _GEN_5 + io_start_ptr_i : 32'h0;	// <stdin>:3:10, :1632:10, :3261:10, src/main/scala/streamer/SpatialAddrGenUnit.scala:72:34, :73:14, :76:17, :85:27, :87:26
-  assign io_unrolling_addr_o_21 = io_valid_i ? _GEN_2 + _GEN_5 + io_start_ptr_i : 32'h0;	// <stdin>:3:10, :1632:10, :3261:10, src/main/scala/streamer/SpatialAddrGenUnit.scala:72:34, :73:14, :76:17, :85:27, :86:34, :87:26
-  assign io_unrolling_addr_o_22 = io_valid_i ? _GEN_3 + _GEN_5 + io_start_ptr_i : 32'h0;	// <stdin>:3:10, :1632:10, :3261:10, src/main/scala/streamer/SpatialAddrGenUnit.scala:72:34, :73:14, :76:17, :85:27, :86:34, :87:26
-  assign io_unrolling_addr_o_23 = io_valid_i ? _GEN_4 + _GEN_5 + io_start_ptr_i : 32'h0;	// <stdin>:3:10, :1632:10, :3261:10, src/main/scala/streamer/SpatialAddrGenUnit.scala:72:34, :73:14, :76:17, :85:27, :86:34, :87:26
-  assign io_unrolling_addr_o_24 = io_valid_i ? _GEN_6 + io_start_ptr_i : 32'h0;	// <stdin>:3:10, :1632:10, :3261:10, src/main/scala/streamer/SpatialAddrGenUnit.scala:72:34, :73:14, :76:17, :85:27, :86:34, :87:26
-  assign io_unrolling_addr_o_25 =
-    io_valid_i ? io_unrollingStrides_i_0 + _GEN_6 + io_start_ptr_i : 32'h0;	// <stdin>:3:10, :1632:10, :3261:10, src/main/scala/streamer/SpatialAddrGenUnit.scala:72:34, :73:14, :76:17, :85:27, :86:34, :87:26
-  assign io_unrolling_addr_o_26 = io_valid_i ? _GEN + _GEN_6 + io_start_ptr_i : 32'h0;	// <stdin>:3:10, :1632:10, :3261:10, src/main/scala/streamer/SpatialAddrGenUnit.scala:72:34, :73:14, :76:17, :85:27, :86:34, :87:26
-  assign io_unrolling_addr_o_27 = io_valid_i ? _GEN_0 + _GEN_6 + io_start_ptr_i : 32'h0;	// <stdin>:3:10, :1632:10, :3261:10, src/main/scala/streamer/SpatialAddrGenUnit.scala:72:34, :73:14, :76:17, :85:27, :86:34, :87:26
-  assign io_unrolling_addr_o_28 = io_valid_i ? _GEN_1 + _GEN_6 + io_start_ptr_i : 32'h0;	// <stdin>:3:10, :1632:10, :3261:10, src/main/scala/streamer/SpatialAddrGenUnit.scala:72:34, :73:14, :76:17, :85:27, :86:34, :87:26
-  assign io_unrolling_addr_o_29 = io_valid_i ? _GEN_2 + _GEN_6 + io_start_ptr_i : 32'h0;	// <stdin>:3:10, :1632:10, :3261:10, src/main/scala/streamer/SpatialAddrGenUnit.scala:72:34, :73:14, :76:17, :85:27, :86:34, :87:26
-  assign io_unrolling_addr_o_30 = io_valid_i ? _GEN_3 + _GEN_6 + io_start_ptr_i : 32'h0;	// <stdin>:3:10, :1632:10, :3261:10, src/main/scala/streamer/SpatialAddrGenUnit.scala:72:34, :73:14, :76:17, :85:27, :86:34, :87:26
-  assign io_unrolling_addr_o_31 = io_valid_i ? _GEN_4 + _GEN_6 + io_start_ptr_i : 32'h0;	// <stdin>:3:10, :1632:10, :3261:10, src/main/scala/streamer/SpatialAddrGenUnit.scala:72:34, :73:14, :76:17, :85:27, :86:34, :87:26
-  assign io_unrolling_addr_o_32 = io_valid_i ? _GEN_7 + io_start_ptr_i : 32'h0;	// <stdin>:3:10, :1632:10, :3261:10, src/main/scala/streamer/SpatialAddrGenUnit.scala:72:34, :73:14, :76:17, :85:27, :87:26
-  assign io_unrolling_addr_o_33 =
-    io_valid_i ? io_unrollingStrides_i_0 + _GEN_7 + io_start_ptr_i : 32'h0;	// <stdin>:3:10, :1632:10, :3261:10, src/main/scala/streamer/SpatialAddrGenUnit.scala:72:34, :73:14, :76:17, :85:27, :87:26
-  assign io_unrolling_addr_o_34 = io_valid_i ? _GEN + _GEN_7 + io_start_ptr_i : 32'h0;	// <stdin>:3:10, :1632:10, :3261:10, src/main/scala/streamer/SpatialAddrGenUnit.scala:72:34, :73:14, :76:17, :85:27, :87:26
-  assign io_unrolling_addr_o_35 = io_valid_i ? _GEN_0 + _GEN_7 + io_start_ptr_i : 32'h0;	// <stdin>:3:10, :1632:10, :3261:10, src/main/scala/streamer/SpatialAddrGenUnit.scala:72:34, :73:14, :76:17, :85:27, :86:34, :87:26
-  assign io_unrolling_addr_o_36 = io_valid_i ? _GEN_1 + _GEN_7 + io_start_ptr_i : 32'h0;	// <stdin>:3:10, :1632:10, :3261:10, src/main/scala/streamer/SpatialAddrGenUnit.scala:72:34, :73:14, :76:17, :85:27, :87:26
-  assign io_unrolling_addr_o_37 = io_valid_i ? _GEN_2 + _GEN_7 + io_start_ptr_i : 32'h0;	// <stdin>:3:10, :1632:10, :3261:10, src/main/scala/streamer/SpatialAddrGenUnit.scala:72:34, :73:14, :76:17, :85:27, :86:34, :87:26
-  assign io_unrolling_addr_o_38 = io_valid_i ? _GEN_3 + _GEN_7 + io_start_ptr_i : 32'h0;	// <stdin>:3:10, :1632:10, :3261:10, src/main/scala/streamer/SpatialAddrGenUnit.scala:72:34, :73:14, :76:17, :85:27, :86:34, :87:26
-  assign io_unrolling_addr_o_39 = io_valid_i ? _GEN_4 + _GEN_7 + io_start_ptr_i : 32'h0;	// <stdin>:3:10, :1632:10, :3261:10, src/main/scala/streamer/SpatialAddrGenUnit.scala:72:34, :73:14, :76:17, :85:27, :86:34, :87:26
-  assign io_unrolling_addr_o_40 = io_valid_i ? _GEN_8 + io_start_ptr_i : 32'h0;	// <stdin>:3:10, :1632:10, :3261:10, src/main/scala/streamer/SpatialAddrGenUnit.scala:72:34, :73:14, :76:17, :85:27, :86:34, :87:26
-  assign io_unrolling_addr_o_41 =
-    io_valid_i ? io_unrollingStrides_i_0 + _GEN_8 + io_start_ptr_i : 32'h0;	// <stdin>:3:10, :1632:10, :3261:10, src/main/scala/streamer/SpatialAddrGenUnit.scala:72:34, :73:14, :76:17, :85:27, :86:34, :87:26
-  assign io_unrolling_addr_o_42 = io_valid_i ? _GEN + _GEN_8 + io_start_ptr_i : 32'h0;	// <stdin>:3:10, :1632:10, :3261:10, src/main/scala/streamer/SpatialAddrGenUnit.scala:72:34, :73:14, :76:17, :85:27, :86:34, :87:26
-  assign io_unrolling_addr_o_43 = io_valid_i ? _GEN_0 + _GEN_8 + io_start_ptr_i : 32'h0;	// <stdin>:3:10, :1632:10, :3261:10, src/main/scala/streamer/SpatialAddrGenUnit.scala:72:34, :73:14, :76:17, :85:27, :86:34, :87:26
-  assign io_unrolling_addr_o_44 = io_valid_i ? _GEN_1 + _GEN_8 + io_start_ptr_i : 32'h0;	// <stdin>:3:10, :1632:10, :3261:10, src/main/scala/streamer/SpatialAddrGenUnit.scala:72:34, :73:14, :76:17, :85:27, :86:34, :87:26
-  assign io_unrolling_addr_o_45 = io_valid_i ? _GEN_2 + _GEN_8 + io_start_ptr_i : 32'h0;	// <stdin>:3:10, :1632:10, :3261:10, src/main/scala/streamer/SpatialAddrGenUnit.scala:72:34, :73:14, :76:17, :85:27, :86:34, :87:26
-  assign io_unrolling_addr_o_46 = io_valid_i ? _GEN_3 + _GEN_8 + io_start_ptr_i : 32'h0;	// <stdin>:3:10, :1632:10, :3261:10, src/main/scala/streamer/SpatialAddrGenUnit.scala:72:34, :73:14, :76:17, :85:27, :86:34, :87:26
-  assign io_unrolling_addr_o_47 = io_valid_i ? _GEN_4 + _GEN_8 + io_start_ptr_i : 32'h0;	// <stdin>:3:10, :1632:10, :3261:10, src/main/scala/streamer/SpatialAddrGenUnit.scala:72:34, :73:14, :76:17, :85:27, :86:34, :87:26
-  assign io_unrolling_addr_o_48 = io_valid_i ? _GEN_9 + io_start_ptr_i : 32'h0;	// <stdin>:3:10, :1632:10, :3261:10, src/main/scala/streamer/SpatialAddrGenUnit.scala:72:34, :73:14, :76:17, :85:27, :86:34, :87:26
-  assign io_unrolling_addr_o_49 =
-    io_valid_i ? io_unrollingStrides_i_0 + _GEN_9 + io_start_ptr_i : 32'h0;	// <stdin>:3:10, :1632:10, :3261:10, src/main/scala/streamer/SpatialAddrGenUnit.scala:72:34, :73:14, :76:17, :85:27, :86:34, :87:26
-  assign io_unrolling_addr_o_50 = io_valid_i ? _GEN + _GEN_9 + io_start_ptr_i : 32'h0;	// <stdin>:3:10, :1632:10, :3261:10, src/main/scala/streamer/SpatialAddrGenUnit.scala:72:34, :73:14, :76:17, :85:27, :86:34, :87:26
-  assign io_unrolling_addr_o_51 = io_valid_i ? _GEN_0 + _GEN_9 + io_start_ptr_i : 32'h0;	// <stdin>:3:10, :1632:10, :3261:10, src/main/scala/streamer/SpatialAddrGenUnit.scala:72:34, :73:14, :76:17, :85:27, :86:34, :87:26
-  assign io_unrolling_addr_o_52 = io_valid_i ? _GEN_1 + _GEN_9 + io_start_ptr_i : 32'h0;	// <stdin>:3:10, :1632:10, :3261:10, src/main/scala/streamer/SpatialAddrGenUnit.scala:72:34, :73:14, :76:17, :85:27, :86:34, :87:26
-  assign io_unrolling_addr_o_53 = io_valid_i ? _GEN_2 + _GEN_9 + io_start_ptr_i : 32'h0;	// <stdin>:3:10, :1632:10, :3261:10, src/main/scala/streamer/SpatialAddrGenUnit.scala:72:34, :73:14, :76:17, :85:27, :86:34, :87:26
-  assign io_unrolling_addr_o_54 = io_valid_i ? _GEN_3 + _GEN_9 + io_start_ptr_i : 32'h0;	// <stdin>:3:10, :1632:10, :3261:10, src/main/scala/streamer/SpatialAddrGenUnit.scala:72:34, :73:14, :76:17, :85:27, :86:34, :87:26
-  assign io_unrolling_addr_o_55 = io_valid_i ? _GEN_4 + _GEN_9 + io_start_ptr_i : 32'h0;	// <stdin>:3:10, :1632:10, :3261:10, src/main/scala/streamer/SpatialAddrGenUnit.scala:72:34, :73:14, :76:17, :85:27, :86:34, :87:26
-  assign io_unrolling_addr_o_56 = io_valid_i ? _GEN_10 + io_start_ptr_i : 32'h0;	// <stdin>:3:10, :1632:10, :3261:10, src/main/scala/streamer/SpatialAddrGenUnit.scala:72:34, :73:14, :76:17, :85:27, :86:34, :87:26
-  assign io_unrolling_addr_o_57 =
-    io_valid_i ? io_unrollingStrides_i_0 + _GEN_10 + io_start_ptr_i : 32'h0;	// <stdin>:3:10, :1632:10, :3261:10, src/main/scala/streamer/SpatialAddrGenUnit.scala:72:34, :73:14, :76:17, :85:27, :86:34, :87:26
-  assign io_unrolling_addr_o_58 = io_valid_i ? _GEN + _GEN_10 + io_start_ptr_i : 32'h0;	// <stdin>:3:10, :1632:10, :3261:10, src/main/scala/streamer/SpatialAddrGenUnit.scala:72:34, :73:14, :76:17, :85:27, :86:34, :87:26
-  assign io_unrolling_addr_o_59 = io_valid_i ? _GEN_0 + _GEN_10 + io_start_ptr_i : 32'h0;	// <stdin>:3:10, :1632:10, :3261:10, src/main/scala/streamer/SpatialAddrGenUnit.scala:72:34, :73:14, :76:17, :85:27, :86:34, :87:26
-  assign io_unrolling_addr_o_60 = io_valid_i ? _GEN_1 + _GEN_10 + io_start_ptr_i : 32'h0;	// <stdin>:3:10, :1632:10, :3261:10, src/main/scala/streamer/SpatialAddrGenUnit.scala:72:34, :73:14, :76:17, :85:27, :86:34, :87:26
-  assign io_unrolling_addr_o_61 = io_valid_i ? _GEN_2 + _GEN_10 + io_start_ptr_i : 32'h0;	// <stdin>:3:10, :1632:10, :3261:10, src/main/scala/streamer/SpatialAddrGenUnit.scala:72:34, :73:14, :76:17, :85:27, :86:34, :87:26
-  assign io_unrolling_addr_o_62 = io_valid_i ? _GEN_3 + _GEN_10 + io_start_ptr_i : 32'h0;	// <stdin>:3:10, :1632:10, :3261:10, src/main/scala/streamer/SpatialAddrGenUnit.scala:72:34, :73:14, :76:17, :85:27, :86:34, :87:26
-  assign io_unrolling_addr_o_63 = io_valid_i ? _GEN_4 + _GEN_10 + io_start_ptr_i : 32'h0;	// <stdin>:3:10, :1632:10, :3261:10, src/main/scala/streamer/SpatialAddrGenUnit.scala:72:34, :73:14, :76:17, :85:27, :86:34, :87:26
+    io_valid_i ? io_unrollingStrides_i_0 + io_start_ptr_i : 32'h0;	// <stdin>:3:10, :418:10, :1023:10, src/main/scala/streamer/SpatialAddrGenUnit.scala:72:34, :73:14, :76:17, :85:27, :87:26
+  assign io_unrolling_addr_o_2 =
+    io_valid_i ? {io_unrollingStrides_i_0[30:0], 1'h0} + io_start_ptr_i : 32'h0;	// <stdin>:3:10, :418:10, :1023:10, src/main/scala/streamer/SpatialAddrGenUnit.scala:72:34, :73:14, :76:17, :85:27, :86:34, :87:26
+  assign io_unrolling_addr_o_3 =
+    io_valid_i ? io_unrollingStrides_i_0 * 32'h3 + io_start_ptr_i : 32'h0;	// <stdin>:3:10, :418:10, :1023:10, src/main/scala/streamer/SpatialAddrGenUnit.scala:72:34, :73:14, :76:17, :85:27, :86:34, :87:26
+  assign io_unrolling_addr_o_4 =
+    io_valid_i ? {io_unrollingStrides_i_0[29:0], 2'h0} + io_start_ptr_i : 32'h0;	// <stdin>:3:10, :418:10, :1023:10, src/main/scala/streamer/SpatialAddrGenUnit.scala:72:34, :73:14, :76:17, :85:27, :86:34, :87:26
+  assign io_unrolling_addr_o_5 =
+    io_valid_i ? io_unrollingStrides_i_0 * 32'h5 + io_start_ptr_i : 32'h0;	// <stdin>:3:10, :418:10, :1023:10, src/main/scala/streamer/SpatialAddrGenUnit.scala:72:34, :73:14, :76:17, :85:27, :86:34, :87:26
+  assign io_unrolling_addr_o_6 =
+    io_valid_i ? io_unrollingStrides_i_0 * 32'h6 + io_start_ptr_i : 32'h0;	// <stdin>:3:10, :418:10, :1023:10, src/main/scala/streamer/SpatialAddrGenUnit.scala:72:34, :73:14, :76:17, :85:27, :86:34, :87:26
+  assign io_unrolling_addr_o_7 =
+    io_valid_i ? io_unrollingStrides_i_0 * 32'h7 + io_start_ptr_i : 32'h0;	// <stdin>:3:10, :418:10, :1023:10, src/main/scala/streamer/SpatialAddrGenUnit.scala:72:34, :73:14, :76:17, :85:27, :86:34, :87:26
 endmodule
 
-module DataReader(	// <stdin>:462:10, :2091:10
-  input          clock,	// <stdin>:463:11, :2092:11
-                 reset,	// <stdin>:464:11, :2093:11
+module DataReader(	// <stdin>:46:10, :461:10
+  input          clock,	// <stdin>:47:11, :462:11
+                 reset,	// <stdin>:48:11, :463:11
                  io_ptr_agu_i_valid,	// src/main/scala/streamer/DataReader.scala:58:14
   input  [31:0]  io_ptr_agu_i_bits,	// src/main/scala/streamer/DataReader.scala:58:14
   input          io_unrollingStrides_csr_i_valid,	// src/main/scala/streamer/DataReader.scala:58:14
   input  [31:0]  io_unrollingStrides_csr_i_bits_0,	// src/main/scala/streamer/DataReader.scala:58:14
-                 io_unrollingStrides_csr_i_bits_1,	// src/main/scala/streamer/DataReader.scala:58:14
   input          io_tcdm_ready_i_0,	// src/main/scala/streamer/DataReader.scala:58:14
                  io_tcdm_ready_i_1,	// src/main/scala/streamer/DataReader.scala:58:14
                  io_tcdm_ready_i_2,	// src/main/scala/streamer/DataReader.scala:58:14
                  io_tcdm_ready_i_3,	// src/main/scala/streamer/DataReader.scala:58:14
-                 io_tcdm_ready_i_4,	// src/main/scala/streamer/DataReader.scala:58:14
-                 io_tcdm_ready_i_5,	// src/main/scala/streamer/DataReader.scala:58:14
-                 io_tcdm_ready_i_6,	// src/main/scala/streamer/DataReader.scala:58:14
-                 io_tcdm_ready_i_7,	// src/main/scala/streamer/DataReader.scala:58:14
                  io_data_tcdm_i_0_valid,	// src/main/scala/streamer/DataReader.scala:58:14
   input  [63:0]  io_data_tcdm_i_0_bits,	// src/main/scala/streamer/DataReader.scala:58:14
   input          io_data_tcdm_i_1_valid,	// src/main/scala/streamer/DataReader.scala:58:14
@@ -317,14 +177,6 @@ module DataReader(	// <stdin>:462:10, :2091:10
   input  [63:0]  io_data_tcdm_i_2_bits,	// src/main/scala/streamer/DataReader.scala:58:14
   input          io_data_tcdm_i_3_valid,	// src/main/scala/streamer/DataReader.scala:58:14
   input  [63:0]  io_data_tcdm_i_3_bits,	// src/main/scala/streamer/DataReader.scala:58:14
-  input          io_data_tcdm_i_4_valid,	// src/main/scala/streamer/DataReader.scala:58:14
-  input  [63:0]  io_data_tcdm_i_4_bits,	// src/main/scala/streamer/DataReader.scala:58:14
-  input          io_data_tcdm_i_5_valid,	// src/main/scala/streamer/DataReader.scala:58:14
-  input  [63:0]  io_data_tcdm_i_5_bits,	// src/main/scala/streamer/DataReader.scala:58:14
-  input          io_data_tcdm_i_6_valid,	// src/main/scala/streamer/DataReader.scala:58:14
-  input  [63:0]  io_data_tcdm_i_6_bits,	// src/main/scala/streamer/DataReader.scala:58:14
-  input          io_data_tcdm_i_7_valid,	// src/main/scala/streamer/DataReader.scala:58:14
-  input  [63:0]  io_data_tcdm_i_7_bits,	// src/main/scala/streamer/DataReader.scala:58:14
   input          io_data_fifo_o_ready,	// src/main/scala/streamer/DataReader.scala:58:14
                  io_data_move_done,	// src/main/scala/streamer/DataReader.scala:58:14
   output         io_ptr_agu_i_ready,	// src/main/scala/streamer/DataReader.scala:58:14
@@ -332,20 +184,12 @@ module DataReader(	// <stdin>:462:10, :2091:10
                  io_tcdm_req_addr_1,	// src/main/scala/streamer/DataReader.scala:58:14
                  io_tcdm_req_addr_2,	// src/main/scala/streamer/DataReader.scala:58:14
                  io_tcdm_req_addr_3,	// src/main/scala/streamer/DataReader.scala:58:14
-                 io_tcdm_req_addr_4,	// src/main/scala/streamer/DataReader.scala:58:14
-                 io_tcdm_req_addr_5,	// src/main/scala/streamer/DataReader.scala:58:14
-                 io_tcdm_req_addr_6,	// src/main/scala/streamer/DataReader.scala:58:14
-                 io_tcdm_req_addr_7,	// src/main/scala/streamer/DataReader.scala:58:14
   output         io_read_tcmd_valid_o_0,	// src/main/scala/streamer/DataReader.scala:58:14
                  io_read_tcmd_valid_o_1,	// src/main/scala/streamer/DataReader.scala:58:14
                  io_read_tcmd_valid_o_2,	// src/main/scala/streamer/DataReader.scala:58:14
                  io_read_tcmd_valid_o_3,	// src/main/scala/streamer/DataReader.scala:58:14
-                 io_read_tcmd_valid_o_4,	// src/main/scala/streamer/DataReader.scala:58:14
-                 io_read_tcmd_valid_o_5,	// src/main/scala/streamer/DataReader.scala:58:14
-                 io_read_tcmd_valid_o_6,	// src/main/scala/streamer/DataReader.scala:58:14
-                 io_read_tcmd_valid_o_7,	// src/main/scala/streamer/DataReader.scala:58:14
                  io_data_fifo_o_valid,	// src/main/scala/streamer/DataReader.scala:58:14
-  output [511:0] io_data_fifo_o_bits	// src/main/scala/streamer/DataReader.scala:58:14
+  output [255:0] io_data_fifo_o_bits	// src/main/scala/streamer/DataReader.scala:58:14
 );
 
   wire        _io_ptr_agu_i_ready_output;	// src/main/scala/streamer/DataReader.scala:279:42
@@ -359,186 +203,78 @@ module DataReader(	// <stdin>:462:10, :2091:10
   wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_5;	// src/main/scala/streamer/DataReader.scala:166:39
   wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_6;	// src/main/scala/streamer/DataReader.scala:166:39
   wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_7;	// src/main/scala/streamer/DataReader.scala:166:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_8;	// src/main/scala/streamer/DataReader.scala:166:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_9;	// src/main/scala/streamer/DataReader.scala:166:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_10;	// src/main/scala/streamer/DataReader.scala:166:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_11;	// src/main/scala/streamer/DataReader.scala:166:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_12;	// src/main/scala/streamer/DataReader.scala:166:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_13;	// src/main/scala/streamer/DataReader.scala:166:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_14;	// src/main/scala/streamer/DataReader.scala:166:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_15;	// src/main/scala/streamer/DataReader.scala:166:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_16;	// src/main/scala/streamer/DataReader.scala:166:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_17;	// src/main/scala/streamer/DataReader.scala:166:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_18;	// src/main/scala/streamer/DataReader.scala:166:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_19;	// src/main/scala/streamer/DataReader.scala:166:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_20;	// src/main/scala/streamer/DataReader.scala:166:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_21;	// src/main/scala/streamer/DataReader.scala:166:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_22;	// src/main/scala/streamer/DataReader.scala:166:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_23;	// src/main/scala/streamer/DataReader.scala:166:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_24;	// src/main/scala/streamer/DataReader.scala:166:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_25;	// src/main/scala/streamer/DataReader.scala:166:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_26;	// src/main/scala/streamer/DataReader.scala:166:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_27;	// src/main/scala/streamer/DataReader.scala:166:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_28;	// src/main/scala/streamer/DataReader.scala:166:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_29;	// src/main/scala/streamer/DataReader.scala:166:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_30;	// src/main/scala/streamer/DataReader.scala:166:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_31;	// src/main/scala/streamer/DataReader.scala:166:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_32;	// src/main/scala/streamer/DataReader.scala:166:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_33;	// src/main/scala/streamer/DataReader.scala:166:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_34;	// src/main/scala/streamer/DataReader.scala:166:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_35;	// src/main/scala/streamer/DataReader.scala:166:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_36;	// src/main/scala/streamer/DataReader.scala:166:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_37;	// src/main/scala/streamer/DataReader.scala:166:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_38;	// src/main/scala/streamer/DataReader.scala:166:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_39;	// src/main/scala/streamer/DataReader.scala:166:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_40;	// src/main/scala/streamer/DataReader.scala:166:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_41;	// src/main/scala/streamer/DataReader.scala:166:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_42;	// src/main/scala/streamer/DataReader.scala:166:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_43;	// src/main/scala/streamer/DataReader.scala:166:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_44;	// src/main/scala/streamer/DataReader.scala:166:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_45;	// src/main/scala/streamer/DataReader.scala:166:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_46;	// src/main/scala/streamer/DataReader.scala:166:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_47;	// src/main/scala/streamer/DataReader.scala:166:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_48;	// src/main/scala/streamer/DataReader.scala:166:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_49;	// src/main/scala/streamer/DataReader.scala:166:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_50;	// src/main/scala/streamer/DataReader.scala:166:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_51;	// src/main/scala/streamer/DataReader.scala:166:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_52;	// src/main/scala/streamer/DataReader.scala:166:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_53;	// src/main/scala/streamer/DataReader.scala:166:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_54;	// src/main/scala/streamer/DataReader.scala:166:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_55;	// src/main/scala/streamer/DataReader.scala:166:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_56;	// src/main/scala/streamer/DataReader.scala:166:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_57;	// src/main/scala/streamer/DataReader.scala:166:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_58;	// src/main/scala/streamer/DataReader.scala:166:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_59;	// src/main/scala/streamer/DataReader.scala:166:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_60;	// src/main/scala/streamer/DataReader.scala:166:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_61;	// src/main/scala/streamer/DataReader.scala:166:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_62;	// src/main/scala/streamer/DataReader.scala:166:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_63;	// src/main/scala/streamer/DataReader.scala:166:39
   reg  [31:0] ptr_agu;	// src/main/scala/streamer/DataReader.scala:69:24
   reg  [31:0] unrollingStrides_0;	// src/main/scala/streamer/DataReader.scala:75:33
-  reg  [31:0] unrollingStrides_1;	// src/main/scala/streamer/DataReader.scala:75:33
   reg         tcdm_rsp_i_p_valid_reg_0;	// src/main/scala/streamer/DataReader.scala:103:39
   reg         tcdm_rsp_i_p_valid_reg_1;	// src/main/scala/streamer/DataReader.scala:103:39
   reg         tcdm_rsp_i_p_valid_reg_2;	// src/main/scala/streamer/DataReader.scala:103:39
   reg         tcdm_rsp_i_p_valid_reg_3;	// src/main/scala/streamer/DataReader.scala:103:39
-  reg         tcdm_rsp_i_p_valid_reg_4;	// src/main/scala/streamer/DataReader.scala:103:39
-  reg         tcdm_rsp_i_p_valid_reg_5;	// src/main/scala/streamer/DataReader.scala:103:39
-  reg         tcdm_rsp_i_p_valid_reg_6;	// src/main/scala/streamer/DataReader.scala:103:39
-  reg         tcdm_rsp_i_p_valid_reg_7;	// src/main/scala/streamer/DataReader.scala:103:39
   reg         tcdm_rsp_i_q_ready_reg_0;	// src/main/scala/streamer/DataReader.scala:107:39
   reg         tcdm_rsp_i_q_ready_reg_1;	// src/main/scala/streamer/DataReader.scala:107:39
   reg         tcdm_rsp_i_q_ready_reg_2;	// src/main/scala/streamer/DataReader.scala:107:39
   reg         tcdm_rsp_i_q_ready_reg_3;	// src/main/scala/streamer/DataReader.scala:107:39
-  reg         tcdm_rsp_i_q_ready_reg_4;	// src/main/scala/streamer/DataReader.scala:107:39
-  reg         tcdm_rsp_i_q_ready_reg_5;	// src/main/scala/streamer/DataReader.scala:107:39
-  reg         tcdm_rsp_i_q_ready_reg_6;	// src/main/scala/streamer/DataReader.scala:107:39
-  reg         tcdm_rsp_i_q_ready_reg_7;	// src/main/scala/streamer/DataReader.scala:107:39
   reg  [63:0] data_reg_0;	// src/main/scala/streamer/DataReader.scala:114:25
   reg  [63:0] data_reg_1;	// src/main/scala/streamer/DataReader.scala:114:25
   reg  [63:0] data_reg_2;	// src/main/scala/streamer/DataReader.scala:114:25
   reg  [63:0] data_reg_3;	// src/main/scala/streamer/DataReader.scala:114:25
-  reg  [63:0] data_reg_4;	// src/main/scala/streamer/DataReader.scala:114:25
-  reg  [63:0] data_reg_5;	// src/main/scala/streamer/DataReader.scala:114:25
-  reg  [63:0] data_reg_6;	// src/main/scala/streamer/DataReader.scala:114:25
-  reg  [63:0] data_reg_7;	// src/main/scala/streamer/DataReader.scala:114:25
   reg         cstate;	// src/main/scala/streamer/DataReader.scala:123:23
-  wire        _T_348 = _io_ptr_agu_i_ready_output & io_ptr_agu_i_valid;	// src/main/scala/chisel3/util/Decoupled.scala:52:35, src/main/scala/streamer/DataReader.scala:279:42
+  wire        _T_32 = _io_ptr_agu_i_ready_output & io_ptr_agu_i_valid;	// src/main/scala/chisel3/util/Decoupled.scala:52:35, src/main/scala/streamer/DataReader.scala:279:42
   wire        can_send_tcdm_read_req = io_data_fifo_o_ready & cstate;	// src/main/scala/streamer/DataReader.scala:123:23, :189:50
   wire        wait_for_q_ready_read = can_send_tcdm_read_req & ~tcdm_read_mem_all_ready;	// src/main/scala/streamer/DataReader.scala:189:50, :212:{33,36}, :233:58
   assign tcdm_read_mem_all_ready =
     (io_tcdm_ready_i_0 | tcdm_rsp_i_q_ready_reg_0)
     & (io_tcdm_ready_i_1 | tcdm_rsp_i_q_ready_reg_1)
     & (io_tcdm_ready_i_2 | tcdm_rsp_i_q_ready_reg_2)
-    & (io_tcdm_ready_i_3 | tcdm_rsp_i_q_ready_reg_3)
-    & (io_tcdm_ready_i_4 | tcdm_rsp_i_q_ready_reg_4)
-    & (io_tcdm_ready_i_5 | tcdm_rsp_i_q_ready_reg_5)
-    & (io_tcdm_ready_i_6 | tcdm_rsp_i_q_ready_reg_6)
-    & (io_tcdm_ready_i_7 | tcdm_rsp_i_q_ready_reg_7);	// src/main/scala/streamer/DataReader.scala:107:39, :230:49, :233:58
+    & (io_tcdm_ready_i_3 | tcdm_rsp_i_q_ready_reg_3);	// src/main/scala/streamer/DataReader.scala:107:39, :230:49, :233:58
   assign fifo_input_valid =
     (io_data_tcdm_i_0_valid | tcdm_rsp_i_p_valid_reg_0)
     & (io_data_tcdm_i_1_valid | tcdm_rsp_i_p_valid_reg_1)
     & (io_data_tcdm_i_2_valid | tcdm_rsp_i_p_valid_reg_2)
-    & (io_data_tcdm_i_3_valid | tcdm_rsp_i_p_valid_reg_3)
-    & (io_data_tcdm_i_4_valid | tcdm_rsp_i_p_valid_reg_4)
-    & (io_data_tcdm_i_5_valid | tcdm_rsp_i_p_valid_reg_5)
-    & (io_data_tcdm_i_6_valid | tcdm_rsp_i_p_valid_reg_6)
-    & (io_data_tcdm_i_7_valid | tcdm_rsp_i_p_valid_reg_7);	// src/main/scala/streamer/DataReader.scala:103:39, :271:54, :275:51
+    & (io_data_tcdm_i_3_valid | tcdm_rsp_i_p_valid_reg_3);	// src/main/scala/streamer/DataReader.scala:103:39, :271:54, :275:51
   assign _io_ptr_agu_i_ready_output =
     cstate & ~wait_for_q_ready_read & can_send_tcdm_read_req;	// src/main/scala/streamer/DataReader.scala:123:23, :189:50, :212:33, :234:30, :279:42
-  always @(posedge clock or posedge reset) begin	// <stdin>:463:11, :2092:11
-    if (reset) begin	// <stdin>:463:11, :2092:11
+  always @(posedge clock or posedge reset) begin	// <stdin>:47:11, :462:11
+    if (reset) begin	// <stdin>:47:11, :462:11
       ptr_agu <= 32'h0;	// src/main/scala/streamer/DataReader.scala:69:24
       unrollingStrides_0 <= 32'h0;	// src/main/scala/streamer/DataReader.scala:69:24, :75:33
-      unrollingStrides_1 <= 32'h0;	// src/main/scala/streamer/DataReader.scala:69:24, :75:33
       tcdm_rsp_i_p_valid_reg_0 <= 1'h0;	// src/main/scala/streamer/DataReader.scala:74:30, :103:39
       tcdm_rsp_i_p_valid_reg_1 <= 1'h0;	// src/main/scala/streamer/DataReader.scala:74:30, :103:39
       tcdm_rsp_i_p_valid_reg_2 <= 1'h0;	// src/main/scala/streamer/DataReader.scala:74:30, :103:39
       tcdm_rsp_i_p_valid_reg_3 <= 1'h0;	// src/main/scala/streamer/DataReader.scala:74:30, :103:39
-      tcdm_rsp_i_p_valid_reg_4 <= 1'h0;	// src/main/scala/streamer/DataReader.scala:74:30, :103:39
-      tcdm_rsp_i_p_valid_reg_5 <= 1'h0;	// src/main/scala/streamer/DataReader.scala:74:30, :103:39
-      tcdm_rsp_i_p_valid_reg_6 <= 1'h0;	// src/main/scala/streamer/DataReader.scala:74:30, :103:39
-      tcdm_rsp_i_p_valid_reg_7 <= 1'h0;	// src/main/scala/streamer/DataReader.scala:74:30, :103:39
       tcdm_rsp_i_q_ready_reg_0 <= 1'h0;	// src/main/scala/streamer/DataReader.scala:74:30, :107:39
       tcdm_rsp_i_q_ready_reg_1 <= 1'h0;	// src/main/scala/streamer/DataReader.scala:74:30, :107:39
       tcdm_rsp_i_q_ready_reg_2 <= 1'h0;	// src/main/scala/streamer/DataReader.scala:74:30, :107:39
       tcdm_rsp_i_q_ready_reg_3 <= 1'h0;	// src/main/scala/streamer/DataReader.scala:74:30, :107:39
-      tcdm_rsp_i_q_ready_reg_4 <= 1'h0;	// src/main/scala/streamer/DataReader.scala:74:30, :107:39
-      tcdm_rsp_i_q_ready_reg_5 <= 1'h0;	// src/main/scala/streamer/DataReader.scala:74:30, :107:39
-      tcdm_rsp_i_q_ready_reg_6 <= 1'h0;	// src/main/scala/streamer/DataReader.scala:74:30, :107:39
-      tcdm_rsp_i_q_ready_reg_7 <= 1'h0;	// src/main/scala/streamer/DataReader.scala:74:30, :107:39
       data_reg_0 <= 64'h0;	// src/main/scala/streamer/DataReader.scala:114:25, :115:12
       data_reg_1 <= 64'h0;	// src/main/scala/streamer/DataReader.scala:114:25, :115:12
       data_reg_2 <= 64'h0;	// src/main/scala/streamer/DataReader.scala:114:25, :115:12
       data_reg_3 <= 64'h0;	// src/main/scala/streamer/DataReader.scala:114:25, :115:12
-      data_reg_4 <= 64'h0;	// src/main/scala/streamer/DataReader.scala:114:25, :115:12
-      data_reg_5 <= 64'h0;	// src/main/scala/streamer/DataReader.scala:114:25, :115:12
-      data_reg_6 <= 64'h0;	// src/main/scala/streamer/DataReader.scala:114:25, :115:12
-      data_reg_7 <= 64'h0;	// src/main/scala/streamer/DataReader.scala:114:25, :115:12
       cstate <= 1'h0;	// src/main/scala/streamer/DataReader.scala:74:30, :123:23
     end
-    else begin	// <stdin>:463:11, :2092:11
+    else begin	// <stdin>:47:11, :462:11
       automatic logic config_valid;	// src/main/scala/chisel3/util/Decoupled.scala:52:35
       automatic logic wait_for_p_valid_read = can_send_tcdm_read_req & ~fifo_input_valid;	// src/main/scala/streamer/DataReader.scala:189:50, :238:{33,36}, :275:51
-      automatic logic _T_398 = wait_for_p_valid_read & ~fifo_input_valid;	// src/main/scala/streamer/DataReader.scala:238:{33,36}, :246:32, :275:51
-      automatic logic _T_400 = wait_for_p_valid_read & ~fifo_input_valid;	// src/main/scala/streamer/DataReader.scala:238:{33,36}, :246:32, :275:51
-      automatic logic _T_402 = wait_for_p_valid_read & ~fifo_input_valid;	// src/main/scala/streamer/DataReader.scala:238:{33,36}, :246:32, :275:51
-      automatic logic _T_404 = wait_for_p_valid_read & ~fifo_input_valid;	// src/main/scala/streamer/DataReader.scala:238:{33,36}, :246:32, :275:51
-      automatic logic _T_406 = wait_for_p_valid_read & ~fifo_input_valid;	// src/main/scala/streamer/DataReader.scala:238:{33,36}, :246:32, :275:51
-      automatic logic _T_408 = wait_for_p_valid_read & ~fifo_input_valid;	// src/main/scala/streamer/DataReader.scala:238:{33,36}, :246:32, :275:51
-      automatic logic _T_410 = wait_for_p_valid_read & ~fifo_input_valid;	// src/main/scala/streamer/DataReader.scala:238:{33,36}, :246:32, :275:51
-      automatic logic _T_412 = wait_for_p_valid_read & ~fifo_input_valid;	// src/main/scala/streamer/DataReader.scala:238:{33,36}, :246:32, :275:51
+      automatic logic _T_58 = wait_for_p_valid_read & ~fifo_input_valid;	// src/main/scala/streamer/DataReader.scala:238:{33,36}, :246:32, :275:51
+      automatic logic _T_60 = wait_for_p_valid_read & ~fifo_input_valid;	// src/main/scala/streamer/DataReader.scala:238:{33,36}, :246:32, :275:51
+      automatic logic _T_62 = wait_for_p_valid_read & ~fifo_input_valid;	// src/main/scala/streamer/DataReader.scala:238:{33,36}, :246:32, :275:51
+      automatic logic _T_64 = wait_for_p_valid_read & ~fifo_input_valid;	// src/main/scala/streamer/DataReader.scala:238:{33,36}, :246:32, :275:51
       config_valid = ~cstate & io_unrollingStrides_csr_i_valid;	// src/main/scala/chisel3/util/Decoupled.scala:52:35, src/main/scala/streamer/DataReader.scala:123:23, :130:18
-      if (_T_348)	// src/main/scala/chisel3/util/Decoupled.scala:52:35
+      if (_T_32)	// src/main/scala/chisel3/util/Decoupled.scala:52:35
         ptr_agu <= io_ptr_agu_i_bits;	// src/main/scala/streamer/DataReader.scala:69:24
-      if (config_valid) begin	// src/main/scala/chisel3/util/Decoupled.scala:52:35
+      if (config_valid)	// src/main/scala/chisel3/util/Decoupled.scala:52:35
         unrollingStrides_0 <= io_unrollingStrides_csr_i_bits_0;	// src/main/scala/streamer/DataReader.scala:75:33
-        unrollingStrides_1 <= io_unrollingStrides_csr_i_bits_1;	// src/main/scala/streamer/DataReader.scala:75:33
-      end
       tcdm_rsp_i_p_valid_reg_0 <=
-        _T_398
+        _T_58
         & (io_data_tcdm_i_0_valid ? io_data_tcdm_i_0_valid : tcdm_rsp_i_p_valid_reg_0);	// src/main/scala/streamer/DataReader.scala:103:39, :246:{32,54}, :247:37, :248:35, :252:33
       tcdm_rsp_i_p_valid_reg_1 <=
-        _T_400
+        _T_60
         & (io_data_tcdm_i_1_valid ? io_data_tcdm_i_1_valid : tcdm_rsp_i_p_valid_reg_1);	// src/main/scala/streamer/DataReader.scala:103:39, :246:{32,54}, :247:37, :248:35, :252:33
       tcdm_rsp_i_p_valid_reg_2 <=
-        _T_402
+        _T_62
         & (io_data_tcdm_i_2_valid ? io_data_tcdm_i_2_valid : tcdm_rsp_i_p_valid_reg_2);	// src/main/scala/streamer/DataReader.scala:103:39, :246:{32,54}, :247:37, :248:35, :252:33
       tcdm_rsp_i_p_valid_reg_3 <=
-        _T_404
+        _T_64
         & (io_data_tcdm_i_3_valid ? io_data_tcdm_i_3_valid : tcdm_rsp_i_p_valid_reg_3);	// src/main/scala/streamer/DataReader.scala:103:39, :246:{32,54}, :247:37, :248:35, :252:33
-      tcdm_rsp_i_p_valid_reg_4 <=
-        _T_406
-        & (io_data_tcdm_i_4_valid ? io_data_tcdm_i_4_valid : tcdm_rsp_i_p_valid_reg_4);	// src/main/scala/streamer/DataReader.scala:103:39, :246:{32,54}, :247:37, :248:35, :252:33
-      tcdm_rsp_i_p_valid_reg_5 <=
-        _T_408
-        & (io_data_tcdm_i_5_valid ? io_data_tcdm_i_5_valid : tcdm_rsp_i_p_valid_reg_5);	// src/main/scala/streamer/DataReader.scala:103:39, :246:{32,54}, :247:37, :248:35, :252:33
-      tcdm_rsp_i_p_valid_reg_6 <=
-        _T_410
-        & (io_data_tcdm_i_6_valid ? io_data_tcdm_i_6_valid : tcdm_rsp_i_p_valid_reg_6);	// src/main/scala/streamer/DataReader.scala:103:39, :246:{32,54}, :247:37, :248:35, :252:33
-      tcdm_rsp_i_p_valid_reg_7 <=
-        _T_412
-        & (io_data_tcdm_i_7_valid ? io_data_tcdm_i_7_valid : tcdm_rsp_i_p_valid_reg_7);	// src/main/scala/streamer/DataReader.scala:103:39, :246:{32,54}, :247:37, :248:35, :252:33
       tcdm_rsp_i_q_ready_reg_0 <=
         wait_for_q_ready_read & ~tcdm_read_mem_all_ready
         & (io_tcdm_ready_i_0 ? io_tcdm_ready_i_0 : tcdm_rsp_i_q_ready_reg_0);	// src/main/scala/streamer/DataReader.scala:107:39, :212:{33,36}, :220:61, :221:32, :222:35, :225:33, :233:58
@@ -551,52 +287,24 @@ module DataReader(	// <stdin>:462:10, :2091:10
       tcdm_rsp_i_q_ready_reg_3 <=
         wait_for_q_ready_read & ~tcdm_read_mem_all_ready
         & (io_tcdm_ready_i_3 ? io_tcdm_ready_i_3 : tcdm_rsp_i_q_ready_reg_3);	// src/main/scala/streamer/DataReader.scala:107:39, :212:{33,36}, :220:61, :221:32, :222:35, :225:33, :233:58
-      tcdm_rsp_i_q_ready_reg_4 <=
-        wait_for_q_ready_read & ~tcdm_read_mem_all_ready
-        & (io_tcdm_ready_i_4 ? io_tcdm_ready_i_4 : tcdm_rsp_i_q_ready_reg_4);	// src/main/scala/streamer/DataReader.scala:107:39, :212:{33,36}, :220:61, :221:32, :222:35, :225:33, :233:58
-      tcdm_rsp_i_q_ready_reg_5 <=
-        wait_for_q_ready_read & ~tcdm_read_mem_all_ready
-        & (io_tcdm_ready_i_5 ? io_tcdm_ready_i_5 : tcdm_rsp_i_q_ready_reg_5);	// src/main/scala/streamer/DataReader.scala:107:39, :212:{33,36}, :220:61, :221:32, :222:35, :225:33, :233:58
-      tcdm_rsp_i_q_ready_reg_6 <=
-        wait_for_q_ready_read & ~tcdm_read_mem_all_ready
-        & (io_tcdm_ready_i_6 ? io_tcdm_ready_i_6 : tcdm_rsp_i_q_ready_reg_6);	// src/main/scala/streamer/DataReader.scala:107:39, :212:{33,36}, :220:61, :221:32, :222:35, :225:33, :233:58
-      tcdm_rsp_i_q_ready_reg_7 <=
-        wait_for_q_ready_read & ~tcdm_read_mem_all_ready
-        & (io_tcdm_ready_i_7 ? io_tcdm_ready_i_7 : tcdm_rsp_i_q_ready_reg_7);	// src/main/scala/streamer/DataReader.scala:107:39, :212:{33,36}, :220:61, :221:32, :222:35, :225:33, :233:58
-      if (_T_398 & io_data_tcdm_i_0_valid)	// src/main/scala/streamer/DataReader.scala:114:25, :246:{32,54}, :247:37, :249:21
+      if (_T_58 & io_data_tcdm_i_0_valid)	// src/main/scala/streamer/DataReader.scala:114:25, :246:{32,54}, :247:37, :249:21
         data_reg_0 <= io_data_tcdm_i_0_bits;	// src/main/scala/streamer/DataReader.scala:114:25
-      if (_T_400 & io_data_tcdm_i_1_valid)	// src/main/scala/streamer/DataReader.scala:114:25, :246:{32,54}, :247:37, :249:21
+      if (_T_60 & io_data_tcdm_i_1_valid)	// src/main/scala/streamer/DataReader.scala:114:25, :246:{32,54}, :247:37, :249:21
         data_reg_1 <= io_data_tcdm_i_1_bits;	// src/main/scala/streamer/DataReader.scala:114:25
-      if (_T_402 & io_data_tcdm_i_2_valid)	// src/main/scala/streamer/DataReader.scala:114:25, :246:{32,54}, :247:37, :249:21
+      if (_T_62 & io_data_tcdm_i_2_valid)	// src/main/scala/streamer/DataReader.scala:114:25, :246:{32,54}, :247:37, :249:21
         data_reg_2 <= io_data_tcdm_i_2_bits;	// src/main/scala/streamer/DataReader.scala:114:25
-      if (_T_404 & io_data_tcdm_i_3_valid)	// src/main/scala/streamer/DataReader.scala:114:25, :246:{32,54}, :247:37, :249:21
+      if (_T_64 & io_data_tcdm_i_3_valid)	// src/main/scala/streamer/DataReader.scala:114:25, :246:{32,54}, :247:37, :249:21
         data_reg_3 <= io_data_tcdm_i_3_bits;	// src/main/scala/streamer/DataReader.scala:114:25
-      if (_T_406 & io_data_tcdm_i_4_valid)	// src/main/scala/streamer/DataReader.scala:114:25, :246:{32,54}, :247:37, :249:21
-        data_reg_4 <= io_data_tcdm_i_4_bits;	// src/main/scala/streamer/DataReader.scala:114:25
-      if (_T_408 & io_data_tcdm_i_5_valid)	// src/main/scala/streamer/DataReader.scala:114:25, :246:{32,54}, :247:37, :249:21
-        data_reg_5 <= io_data_tcdm_i_5_bits;	// src/main/scala/streamer/DataReader.scala:114:25
-      if (_T_410 & io_data_tcdm_i_6_valid)	// src/main/scala/streamer/DataReader.scala:114:25, :246:{32,54}, :247:37, :249:21
-        data_reg_6 <= io_data_tcdm_i_6_bits;	// src/main/scala/streamer/DataReader.scala:114:25
-      if (_T_412 & io_data_tcdm_i_7_valid)	// src/main/scala/streamer/DataReader.scala:114:25, :246:{32,54}, :247:37, :249:21
-        data_reg_7 <= io_data_tcdm_i_7_bits;	// src/main/scala/streamer/DataReader.scala:114:25
       if (cstate)	// src/main/scala/streamer/DataReader.scala:123:23
         cstate <= cstate & ~io_data_move_done;	// src/main/scala/streamer/DataReader.scala:74:30, :123:23, :124:24, :130:18, :133:16, :140:31, :141:16, :143:16
       else	// src/main/scala/streamer/DataReader.scala:123:23
         cstate <= config_valid;	// src/main/scala/chisel3/util/Decoupled.scala:52:35, src/main/scala/streamer/DataReader.scala:123:23
     end
   end // always @(posedge, posedge)
-  `ifndef SYNTHESIS	// <stdin>:462:10, :2091:10
+  `ifndef SYNTHESIS	// <stdin>:46:10, :461:10
     always @(posedge clock) begin	// src/main/scala/streamer/DataReader.scala:179:15
       if (cstate & ~reset
           & _unrolling_addr_gen_unit_io_unrolling_addr_o_1 != _unrolling_addr_gen_unit_io_unrolling_addr_o_0
-          + 32'h1) begin	// src/main/scala/streamer/DataReader.scala:123:23, :166:39, :179:15, :180:55, :182:13
-        if (`ASSERT_VERBOSE_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $error("Assertion failed: read address in not consecutive in the same bank!\n    at DataReader.scala:179 assert(\n");	// src/main/scala/streamer/DataReader.scala:179:15
-        if (`STOP_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $fatal;	// src/main/scala/streamer/DataReader.scala:179:15
-      end
-      if (cstate & ~reset
-          & _unrolling_addr_gen_unit_io_unrolling_addr_o_2 != _unrolling_addr_gen_unit_io_unrolling_addr_o_1
           + 32'h1) begin	// src/main/scala/streamer/DataReader.scala:123:23, :166:39, :179:15, :180:55, :182:13
         if (`ASSERT_VERBOSE_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
           $error("Assertion failed: read address in not consecutive in the same bank!\n    at DataReader.scala:179 assert(\n");	// src/main/scala/streamer/DataReader.scala:179:15
@@ -612,23 +320,7 @@ module DataReader(	// <stdin>:462:10, :2091:10
           $fatal;	// src/main/scala/streamer/DataReader.scala:179:15
       end
       if (cstate & ~reset
-          & _unrolling_addr_gen_unit_io_unrolling_addr_o_4 != _unrolling_addr_gen_unit_io_unrolling_addr_o_3
-          + 32'h1) begin	// src/main/scala/streamer/DataReader.scala:123:23, :166:39, :179:15, :180:55, :182:13
-        if (`ASSERT_VERBOSE_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $error("Assertion failed: read address in not consecutive in the same bank!\n    at DataReader.scala:179 assert(\n");	// src/main/scala/streamer/DataReader.scala:179:15
-        if (`STOP_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $fatal;	// src/main/scala/streamer/DataReader.scala:179:15
-      end
-      if (cstate & ~reset
           & _unrolling_addr_gen_unit_io_unrolling_addr_o_5 != _unrolling_addr_gen_unit_io_unrolling_addr_o_4
-          + 32'h1) begin	// src/main/scala/streamer/DataReader.scala:123:23, :166:39, :179:15, :180:55, :182:13
-        if (`ASSERT_VERBOSE_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $error("Assertion failed: read address in not consecutive in the same bank!\n    at DataReader.scala:179 assert(\n");	// src/main/scala/streamer/DataReader.scala:179:15
-        if (`STOP_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $fatal;	// src/main/scala/streamer/DataReader.scala:179:15
-      end
-      if (cstate & ~reset
-          & _unrolling_addr_gen_unit_io_unrolling_addr_o_6 != _unrolling_addr_gen_unit_io_unrolling_addr_o_5
           + 32'h1) begin	// src/main/scala/streamer/DataReader.scala:123:23, :166:39, :179:15, :180:55, :182:13
         if (`ASSERT_VERBOSE_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
           $error("Assertion failed: read address in not consecutive in the same bank!\n    at DataReader.scala:179 assert(\n");	// src/main/scala/streamer/DataReader.scala:179:15
@@ -643,480 +335,61 @@ module DataReader(	// <stdin>:462:10, :2091:10
         if (`STOP_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
           $fatal;	// src/main/scala/streamer/DataReader.scala:179:15
       end
-      if (cstate & ~reset
-          & _unrolling_addr_gen_unit_io_unrolling_addr_o_9 != _unrolling_addr_gen_unit_io_unrolling_addr_o_8
-          + 32'h1) begin	// src/main/scala/streamer/DataReader.scala:123:23, :166:39, :179:15, :180:55, :182:13
-        if (`ASSERT_VERBOSE_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $error("Assertion failed: read address in not consecutive in the same bank!\n    at DataReader.scala:179 assert(\n");	// src/main/scala/streamer/DataReader.scala:179:15
-        if (`STOP_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $fatal;	// src/main/scala/streamer/DataReader.scala:179:15
-      end
-      if (cstate & ~reset
-          & _unrolling_addr_gen_unit_io_unrolling_addr_o_10 != _unrolling_addr_gen_unit_io_unrolling_addr_o_9
-          + 32'h1) begin	// src/main/scala/streamer/DataReader.scala:123:23, :166:39, :179:15, :180:55, :182:13
-        if (`ASSERT_VERBOSE_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $error("Assertion failed: read address in not consecutive in the same bank!\n    at DataReader.scala:179 assert(\n");	// src/main/scala/streamer/DataReader.scala:179:15
-        if (`STOP_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $fatal;	// src/main/scala/streamer/DataReader.scala:179:15
-      end
-      if (cstate & ~reset
-          & _unrolling_addr_gen_unit_io_unrolling_addr_o_11 != _unrolling_addr_gen_unit_io_unrolling_addr_o_10
-          + 32'h1) begin	// src/main/scala/streamer/DataReader.scala:123:23, :166:39, :179:15, :180:55, :182:13
-        if (`ASSERT_VERBOSE_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $error("Assertion failed: read address in not consecutive in the same bank!\n    at DataReader.scala:179 assert(\n");	// src/main/scala/streamer/DataReader.scala:179:15
-        if (`STOP_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $fatal;	// src/main/scala/streamer/DataReader.scala:179:15
-      end
-      if (cstate & ~reset
-          & _unrolling_addr_gen_unit_io_unrolling_addr_o_12 != _unrolling_addr_gen_unit_io_unrolling_addr_o_11
-          + 32'h1) begin	// src/main/scala/streamer/DataReader.scala:123:23, :166:39, :179:15, :180:55, :182:13
-        if (`ASSERT_VERBOSE_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $error("Assertion failed: read address in not consecutive in the same bank!\n    at DataReader.scala:179 assert(\n");	// src/main/scala/streamer/DataReader.scala:179:15
-        if (`STOP_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $fatal;	// src/main/scala/streamer/DataReader.scala:179:15
-      end
-      if (cstate & ~reset
-          & _unrolling_addr_gen_unit_io_unrolling_addr_o_13 != _unrolling_addr_gen_unit_io_unrolling_addr_o_12
-          + 32'h1) begin	// src/main/scala/streamer/DataReader.scala:123:23, :166:39, :179:15, :180:55, :182:13
-        if (`ASSERT_VERBOSE_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $error("Assertion failed: read address in not consecutive in the same bank!\n    at DataReader.scala:179 assert(\n");	// src/main/scala/streamer/DataReader.scala:179:15
-        if (`STOP_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $fatal;	// src/main/scala/streamer/DataReader.scala:179:15
-      end
-      if (cstate & ~reset
-          & _unrolling_addr_gen_unit_io_unrolling_addr_o_14 != _unrolling_addr_gen_unit_io_unrolling_addr_o_13
-          + 32'h1) begin	// src/main/scala/streamer/DataReader.scala:123:23, :166:39, :179:15, :180:55, :182:13
-        if (`ASSERT_VERBOSE_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $error("Assertion failed: read address in not consecutive in the same bank!\n    at DataReader.scala:179 assert(\n");	// src/main/scala/streamer/DataReader.scala:179:15
-        if (`STOP_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $fatal;	// src/main/scala/streamer/DataReader.scala:179:15
-      end
-      if (cstate & ~reset
-          & _unrolling_addr_gen_unit_io_unrolling_addr_o_15 != _unrolling_addr_gen_unit_io_unrolling_addr_o_14
-          + 32'h1) begin	// src/main/scala/streamer/DataReader.scala:123:23, :166:39, :179:15, :180:55, :182:13
-        if (`ASSERT_VERBOSE_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $error("Assertion failed: read address in not consecutive in the same bank!\n    at DataReader.scala:179 assert(\n");	// src/main/scala/streamer/DataReader.scala:179:15
-        if (`STOP_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $fatal;	// src/main/scala/streamer/DataReader.scala:179:15
-      end
-      if (cstate & ~reset
-          & _unrolling_addr_gen_unit_io_unrolling_addr_o_17 != _unrolling_addr_gen_unit_io_unrolling_addr_o_16
-          + 32'h1) begin	// src/main/scala/streamer/DataReader.scala:123:23, :166:39, :179:15, :180:55, :182:13
-        if (`ASSERT_VERBOSE_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $error("Assertion failed: read address in not consecutive in the same bank!\n    at DataReader.scala:179 assert(\n");	// src/main/scala/streamer/DataReader.scala:179:15
-        if (`STOP_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $fatal;	// src/main/scala/streamer/DataReader.scala:179:15
-      end
-      if (cstate & ~reset
-          & _unrolling_addr_gen_unit_io_unrolling_addr_o_18 != _unrolling_addr_gen_unit_io_unrolling_addr_o_17
-          + 32'h1) begin	// src/main/scala/streamer/DataReader.scala:123:23, :166:39, :179:15, :180:55, :182:13
-        if (`ASSERT_VERBOSE_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $error("Assertion failed: read address in not consecutive in the same bank!\n    at DataReader.scala:179 assert(\n");	// src/main/scala/streamer/DataReader.scala:179:15
-        if (`STOP_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $fatal;	// src/main/scala/streamer/DataReader.scala:179:15
-      end
-      if (cstate & ~reset
-          & _unrolling_addr_gen_unit_io_unrolling_addr_o_19 != _unrolling_addr_gen_unit_io_unrolling_addr_o_18
-          + 32'h1) begin	// src/main/scala/streamer/DataReader.scala:123:23, :166:39, :179:15, :180:55, :182:13
-        if (`ASSERT_VERBOSE_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $error("Assertion failed: read address in not consecutive in the same bank!\n    at DataReader.scala:179 assert(\n");	// src/main/scala/streamer/DataReader.scala:179:15
-        if (`STOP_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $fatal;	// src/main/scala/streamer/DataReader.scala:179:15
-      end
-      if (cstate & ~reset
-          & _unrolling_addr_gen_unit_io_unrolling_addr_o_20 != _unrolling_addr_gen_unit_io_unrolling_addr_o_19
-          + 32'h1) begin	// src/main/scala/streamer/DataReader.scala:123:23, :166:39, :179:15, :180:55, :182:13
-        if (`ASSERT_VERBOSE_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $error("Assertion failed: read address in not consecutive in the same bank!\n    at DataReader.scala:179 assert(\n");	// src/main/scala/streamer/DataReader.scala:179:15
-        if (`STOP_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $fatal;	// src/main/scala/streamer/DataReader.scala:179:15
-      end
-      if (cstate & ~reset
-          & _unrolling_addr_gen_unit_io_unrolling_addr_o_21 != _unrolling_addr_gen_unit_io_unrolling_addr_o_20
-          + 32'h1) begin	// src/main/scala/streamer/DataReader.scala:123:23, :166:39, :179:15, :180:55, :182:13
-        if (`ASSERT_VERBOSE_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $error("Assertion failed: read address in not consecutive in the same bank!\n    at DataReader.scala:179 assert(\n");	// src/main/scala/streamer/DataReader.scala:179:15
-        if (`STOP_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $fatal;	// src/main/scala/streamer/DataReader.scala:179:15
-      end
-      if (cstate & ~reset
-          & _unrolling_addr_gen_unit_io_unrolling_addr_o_22 != _unrolling_addr_gen_unit_io_unrolling_addr_o_21
-          + 32'h1) begin	// src/main/scala/streamer/DataReader.scala:123:23, :166:39, :179:15, :180:55, :182:13
-        if (`ASSERT_VERBOSE_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $error("Assertion failed: read address in not consecutive in the same bank!\n    at DataReader.scala:179 assert(\n");	// src/main/scala/streamer/DataReader.scala:179:15
-        if (`STOP_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $fatal;	// src/main/scala/streamer/DataReader.scala:179:15
-      end
-      if (cstate & ~reset
-          & _unrolling_addr_gen_unit_io_unrolling_addr_o_23 != _unrolling_addr_gen_unit_io_unrolling_addr_o_22
-          + 32'h1) begin	// src/main/scala/streamer/DataReader.scala:123:23, :166:39, :179:15, :180:55, :182:13
-        if (`ASSERT_VERBOSE_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $error("Assertion failed: read address in not consecutive in the same bank!\n    at DataReader.scala:179 assert(\n");	// src/main/scala/streamer/DataReader.scala:179:15
-        if (`STOP_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $fatal;	// src/main/scala/streamer/DataReader.scala:179:15
-      end
-      if (cstate & ~reset
-          & _unrolling_addr_gen_unit_io_unrolling_addr_o_25 != _unrolling_addr_gen_unit_io_unrolling_addr_o_24
-          + 32'h1) begin	// src/main/scala/streamer/DataReader.scala:123:23, :166:39, :179:15, :180:55, :182:13
-        if (`ASSERT_VERBOSE_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $error("Assertion failed: read address in not consecutive in the same bank!\n    at DataReader.scala:179 assert(\n");	// src/main/scala/streamer/DataReader.scala:179:15
-        if (`STOP_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $fatal;	// src/main/scala/streamer/DataReader.scala:179:15
-      end
-      if (cstate & ~reset
-          & _unrolling_addr_gen_unit_io_unrolling_addr_o_26 != _unrolling_addr_gen_unit_io_unrolling_addr_o_25
-          + 32'h1) begin	// src/main/scala/streamer/DataReader.scala:123:23, :166:39, :179:15, :180:55, :182:13
-        if (`ASSERT_VERBOSE_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $error("Assertion failed: read address in not consecutive in the same bank!\n    at DataReader.scala:179 assert(\n");	// src/main/scala/streamer/DataReader.scala:179:15
-        if (`STOP_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $fatal;	// src/main/scala/streamer/DataReader.scala:179:15
-      end
-      if (cstate & ~reset
-          & _unrolling_addr_gen_unit_io_unrolling_addr_o_27 != _unrolling_addr_gen_unit_io_unrolling_addr_o_26
-          + 32'h1) begin	// src/main/scala/streamer/DataReader.scala:123:23, :166:39, :179:15, :180:55, :182:13
-        if (`ASSERT_VERBOSE_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $error("Assertion failed: read address in not consecutive in the same bank!\n    at DataReader.scala:179 assert(\n");	// src/main/scala/streamer/DataReader.scala:179:15
-        if (`STOP_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $fatal;	// src/main/scala/streamer/DataReader.scala:179:15
-      end
-      if (cstate & ~reset
-          & _unrolling_addr_gen_unit_io_unrolling_addr_o_28 != _unrolling_addr_gen_unit_io_unrolling_addr_o_27
-          + 32'h1) begin	// src/main/scala/streamer/DataReader.scala:123:23, :166:39, :179:15, :180:55, :182:13
-        if (`ASSERT_VERBOSE_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $error("Assertion failed: read address in not consecutive in the same bank!\n    at DataReader.scala:179 assert(\n");	// src/main/scala/streamer/DataReader.scala:179:15
-        if (`STOP_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $fatal;	// src/main/scala/streamer/DataReader.scala:179:15
-      end
-      if (cstate & ~reset
-          & _unrolling_addr_gen_unit_io_unrolling_addr_o_29 != _unrolling_addr_gen_unit_io_unrolling_addr_o_28
-          + 32'h1) begin	// src/main/scala/streamer/DataReader.scala:123:23, :166:39, :179:15, :180:55, :182:13
-        if (`ASSERT_VERBOSE_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $error("Assertion failed: read address in not consecutive in the same bank!\n    at DataReader.scala:179 assert(\n");	// src/main/scala/streamer/DataReader.scala:179:15
-        if (`STOP_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $fatal;	// src/main/scala/streamer/DataReader.scala:179:15
-      end
-      if (cstate & ~reset
-          & _unrolling_addr_gen_unit_io_unrolling_addr_o_30 != _unrolling_addr_gen_unit_io_unrolling_addr_o_29
-          + 32'h1) begin	// src/main/scala/streamer/DataReader.scala:123:23, :166:39, :179:15, :180:55, :182:13
-        if (`ASSERT_VERBOSE_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $error("Assertion failed: read address in not consecutive in the same bank!\n    at DataReader.scala:179 assert(\n");	// src/main/scala/streamer/DataReader.scala:179:15
-        if (`STOP_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $fatal;	// src/main/scala/streamer/DataReader.scala:179:15
-      end
-      if (cstate & ~reset
-          & _unrolling_addr_gen_unit_io_unrolling_addr_o_31 != _unrolling_addr_gen_unit_io_unrolling_addr_o_30
-          + 32'h1) begin	// src/main/scala/streamer/DataReader.scala:123:23, :166:39, :179:15, :180:55, :182:13
-        if (`ASSERT_VERBOSE_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $error("Assertion failed: read address in not consecutive in the same bank!\n    at DataReader.scala:179 assert(\n");	// src/main/scala/streamer/DataReader.scala:179:15
-        if (`STOP_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $fatal;	// src/main/scala/streamer/DataReader.scala:179:15
-      end
-      if (cstate & ~reset
-          & _unrolling_addr_gen_unit_io_unrolling_addr_o_33 != _unrolling_addr_gen_unit_io_unrolling_addr_o_32
-          + 32'h1) begin	// src/main/scala/streamer/DataReader.scala:123:23, :166:39, :179:15, :180:55, :182:13
-        if (`ASSERT_VERBOSE_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $error("Assertion failed: read address in not consecutive in the same bank!\n    at DataReader.scala:179 assert(\n");	// src/main/scala/streamer/DataReader.scala:179:15
-        if (`STOP_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $fatal;	// src/main/scala/streamer/DataReader.scala:179:15
-      end
-      if (cstate & ~reset
-          & _unrolling_addr_gen_unit_io_unrolling_addr_o_34 != _unrolling_addr_gen_unit_io_unrolling_addr_o_33
-          + 32'h1) begin	// src/main/scala/streamer/DataReader.scala:123:23, :166:39, :179:15, :180:55, :182:13
-        if (`ASSERT_VERBOSE_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $error("Assertion failed: read address in not consecutive in the same bank!\n    at DataReader.scala:179 assert(\n");	// src/main/scala/streamer/DataReader.scala:179:15
-        if (`STOP_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $fatal;	// src/main/scala/streamer/DataReader.scala:179:15
-      end
-      if (cstate & ~reset
-          & _unrolling_addr_gen_unit_io_unrolling_addr_o_35 != _unrolling_addr_gen_unit_io_unrolling_addr_o_34
-          + 32'h1) begin	// src/main/scala/streamer/DataReader.scala:123:23, :166:39, :179:15, :180:55, :182:13
-        if (`ASSERT_VERBOSE_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $error("Assertion failed: read address in not consecutive in the same bank!\n    at DataReader.scala:179 assert(\n");	// src/main/scala/streamer/DataReader.scala:179:15
-        if (`STOP_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $fatal;	// src/main/scala/streamer/DataReader.scala:179:15
-      end
-      if (cstate & ~reset
-          & _unrolling_addr_gen_unit_io_unrolling_addr_o_36 != _unrolling_addr_gen_unit_io_unrolling_addr_o_35
-          + 32'h1) begin	// src/main/scala/streamer/DataReader.scala:123:23, :166:39, :179:15, :180:55, :182:13
-        if (`ASSERT_VERBOSE_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $error("Assertion failed: read address in not consecutive in the same bank!\n    at DataReader.scala:179 assert(\n");	// src/main/scala/streamer/DataReader.scala:179:15
-        if (`STOP_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $fatal;	// src/main/scala/streamer/DataReader.scala:179:15
-      end
-      if (cstate & ~reset
-          & _unrolling_addr_gen_unit_io_unrolling_addr_o_37 != _unrolling_addr_gen_unit_io_unrolling_addr_o_36
-          + 32'h1) begin	// src/main/scala/streamer/DataReader.scala:123:23, :166:39, :179:15, :180:55, :182:13
-        if (`ASSERT_VERBOSE_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $error("Assertion failed: read address in not consecutive in the same bank!\n    at DataReader.scala:179 assert(\n");	// src/main/scala/streamer/DataReader.scala:179:15
-        if (`STOP_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $fatal;	// src/main/scala/streamer/DataReader.scala:179:15
-      end
-      if (cstate & ~reset
-          & _unrolling_addr_gen_unit_io_unrolling_addr_o_38 != _unrolling_addr_gen_unit_io_unrolling_addr_o_37
-          + 32'h1) begin	// src/main/scala/streamer/DataReader.scala:123:23, :166:39, :179:15, :180:55, :182:13
-        if (`ASSERT_VERBOSE_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $error("Assertion failed: read address in not consecutive in the same bank!\n    at DataReader.scala:179 assert(\n");	// src/main/scala/streamer/DataReader.scala:179:15
-        if (`STOP_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $fatal;	// src/main/scala/streamer/DataReader.scala:179:15
-      end
-      if (cstate & ~reset
-          & _unrolling_addr_gen_unit_io_unrolling_addr_o_39 != _unrolling_addr_gen_unit_io_unrolling_addr_o_38
-          + 32'h1) begin	// src/main/scala/streamer/DataReader.scala:123:23, :166:39, :179:15, :180:55, :182:13
-        if (`ASSERT_VERBOSE_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $error("Assertion failed: read address in not consecutive in the same bank!\n    at DataReader.scala:179 assert(\n");	// src/main/scala/streamer/DataReader.scala:179:15
-        if (`STOP_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $fatal;	// src/main/scala/streamer/DataReader.scala:179:15
-      end
-      if (cstate & ~reset
-          & _unrolling_addr_gen_unit_io_unrolling_addr_o_41 != _unrolling_addr_gen_unit_io_unrolling_addr_o_40
-          + 32'h1) begin	// src/main/scala/streamer/DataReader.scala:123:23, :166:39, :179:15, :180:55, :182:13
-        if (`ASSERT_VERBOSE_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $error("Assertion failed: read address in not consecutive in the same bank!\n    at DataReader.scala:179 assert(\n");	// src/main/scala/streamer/DataReader.scala:179:15
-        if (`STOP_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $fatal;	// src/main/scala/streamer/DataReader.scala:179:15
-      end
-      if (cstate & ~reset
-          & _unrolling_addr_gen_unit_io_unrolling_addr_o_42 != _unrolling_addr_gen_unit_io_unrolling_addr_o_41
-          + 32'h1) begin	// src/main/scala/streamer/DataReader.scala:123:23, :166:39, :179:15, :180:55, :182:13
-        if (`ASSERT_VERBOSE_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $error("Assertion failed: read address in not consecutive in the same bank!\n    at DataReader.scala:179 assert(\n");	// src/main/scala/streamer/DataReader.scala:179:15
-        if (`STOP_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $fatal;	// src/main/scala/streamer/DataReader.scala:179:15
-      end
-      if (cstate & ~reset
-          & _unrolling_addr_gen_unit_io_unrolling_addr_o_43 != _unrolling_addr_gen_unit_io_unrolling_addr_o_42
-          + 32'h1) begin	// src/main/scala/streamer/DataReader.scala:123:23, :166:39, :179:15, :180:55, :182:13
-        if (`ASSERT_VERBOSE_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $error("Assertion failed: read address in not consecutive in the same bank!\n    at DataReader.scala:179 assert(\n");	// src/main/scala/streamer/DataReader.scala:179:15
-        if (`STOP_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $fatal;	// src/main/scala/streamer/DataReader.scala:179:15
-      end
-      if (cstate & ~reset
-          & _unrolling_addr_gen_unit_io_unrolling_addr_o_44 != _unrolling_addr_gen_unit_io_unrolling_addr_o_43
-          + 32'h1) begin	// src/main/scala/streamer/DataReader.scala:123:23, :166:39, :179:15, :180:55, :182:13
-        if (`ASSERT_VERBOSE_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $error("Assertion failed: read address in not consecutive in the same bank!\n    at DataReader.scala:179 assert(\n");	// src/main/scala/streamer/DataReader.scala:179:15
-        if (`STOP_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $fatal;	// src/main/scala/streamer/DataReader.scala:179:15
-      end
-      if (cstate & ~reset
-          & _unrolling_addr_gen_unit_io_unrolling_addr_o_45 != _unrolling_addr_gen_unit_io_unrolling_addr_o_44
-          + 32'h1) begin	// src/main/scala/streamer/DataReader.scala:123:23, :166:39, :179:15, :180:55, :182:13
-        if (`ASSERT_VERBOSE_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $error("Assertion failed: read address in not consecutive in the same bank!\n    at DataReader.scala:179 assert(\n");	// src/main/scala/streamer/DataReader.scala:179:15
-        if (`STOP_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $fatal;	// src/main/scala/streamer/DataReader.scala:179:15
-      end
-      if (cstate & ~reset
-          & _unrolling_addr_gen_unit_io_unrolling_addr_o_46 != _unrolling_addr_gen_unit_io_unrolling_addr_o_45
-          + 32'h1) begin	// src/main/scala/streamer/DataReader.scala:123:23, :166:39, :179:15, :180:55, :182:13
-        if (`ASSERT_VERBOSE_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $error("Assertion failed: read address in not consecutive in the same bank!\n    at DataReader.scala:179 assert(\n");	// src/main/scala/streamer/DataReader.scala:179:15
-        if (`STOP_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $fatal;	// src/main/scala/streamer/DataReader.scala:179:15
-      end
-      if (cstate & ~reset
-          & _unrolling_addr_gen_unit_io_unrolling_addr_o_47 != _unrolling_addr_gen_unit_io_unrolling_addr_o_46
-          + 32'h1) begin	// src/main/scala/streamer/DataReader.scala:123:23, :166:39, :179:15, :180:55, :182:13
-        if (`ASSERT_VERBOSE_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $error("Assertion failed: read address in not consecutive in the same bank!\n    at DataReader.scala:179 assert(\n");	// src/main/scala/streamer/DataReader.scala:179:15
-        if (`STOP_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $fatal;	// src/main/scala/streamer/DataReader.scala:179:15
-      end
-      if (cstate & ~reset
-          & _unrolling_addr_gen_unit_io_unrolling_addr_o_49 != _unrolling_addr_gen_unit_io_unrolling_addr_o_48
-          + 32'h1) begin	// src/main/scala/streamer/DataReader.scala:123:23, :166:39, :179:15, :180:55, :182:13
-        if (`ASSERT_VERBOSE_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $error("Assertion failed: read address in not consecutive in the same bank!\n    at DataReader.scala:179 assert(\n");	// src/main/scala/streamer/DataReader.scala:179:15
-        if (`STOP_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $fatal;	// src/main/scala/streamer/DataReader.scala:179:15
-      end
-      if (cstate & ~reset
-          & _unrolling_addr_gen_unit_io_unrolling_addr_o_50 != _unrolling_addr_gen_unit_io_unrolling_addr_o_49
-          + 32'h1) begin	// src/main/scala/streamer/DataReader.scala:123:23, :166:39, :179:15, :180:55, :182:13
-        if (`ASSERT_VERBOSE_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $error("Assertion failed: read address in not consecutive in the same bank!\n    at DataReader.scala:179 assert(\n");	// src/main/scala/streamer/DataReader.scala:179:15
-        if (`STOP_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $fatal;	// src/main/scala/streamer/DataReader.scala:179:15
-      end
-      if (cstate & ~reset
-          & _unrolling_addr_gen_unit_io_unrolling_addr_o_51 != _unrolling_addr_gen_unit_io_unrolling_addr_o_50
-          + 32'h1) begin	// src/main/scala/streamer/DataReader.scala:123:23, :166:39, :179:15, :180:55, :182:13
-        if (`ASSERT_VERBOSE_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $error("Assertion failed: read address in not consecutive in the same bank!\n    at DataReader.scala:179 assert(\n");	// src/main/scala/streamer/DataReader.scala:179:15
-        if (`STOP_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $fatal;	// src/main/scala/streamer/DataReader.scala:179:15
-      end
-      if (cstate & ~reset
-          & _unrolling_addr_gen_unit_io_unrolling_addr_o_52 != _unrolling_addr_gen_unit_io_unrolling_addr_o_51
-          + 32'h1) begin	// src/main/scala/streamer/DataReader.scala:123:23, :166:39, :179:15, :180:55, :182:13
-        if (`ASSERT_VERBOSE_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $error("Assertion failed: read address in not consecutive in the same bank!\n    at DataReader.scala:179 assert(\n");	// src/main/scala/streamer/DataReader.scala:179:15
-        if (`STOP_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $fatal;	// src/main/scala/streamer/DataReader.scala:179:15
-      end
-      if (cstate & ~reset
-          & _unrolling_addr_gen_unit_io_unrolling_addr_o_53 != _unrolling_addr_gen_unit_io_unrolling_addr_o_52
-          + 32'h1) begin	// src/main/scala/streamer/DataReader.scala:123:23, :166:39, :179:15, :180:55, :182:13
-        if (`ASSERT_VERBOSE_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $error("Assertion failed: read address in not consecutive in the same bank!\n    at DataReader.scala:179 assert(\n");	// src/main/scala/streamer/DataReader.scala:179:15
-        if (`STOP_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $fatal;	// src/main/scala/streamer/DataReader.scala:179:15
-      end
-      if (cstate & ~reset
-          & _unrolling_addr_gen_unit_io_unrolling_addr_o_54 != _unrolling_addr_gen_unit_io_unrolling_addr_o_53
-          + 32'h1) begin	// src/main/scala/streamer/DataReader.scala:123:23, :166:39, :179:15, :180:55, :182:13
-        if (`ASSERT_VERBOSE_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $error("Assertion failed: read address in not consecutive in the same bank!\n    at DataReader.scala:179 assert(\n");	// src/main/scala/streamer/DataReader.scala:179:15
-        if (`STOP_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $fatal;	// src/main/scala/streamer/DataReader.scala:179:15
-      end
-      if (cstate & ~reset
-          & _unrolling_addr_gen_unit_io_unrolling_addr_o_55 != _unrolling_addr_gen_unit_io_unrolling_addr_o_54
-          + 32'h1) begin	// src/main/scala/streamer/DataReader.scala:123:23, :166:39, :179:15, :180:55, :182:13
-        if (`ASSERT_VERBOSE_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $error("Assertion failed: read address in not consecutive in the same bank!\n    at DataReader.scala:179 assert(\n");	// src/main/scala/streamer/DataReader.scala:179:15
-        if (`STOP_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $fatal;	// src/main/scala/streamer/DataReader.scala:179:15
-      end
-      if (cstate & ~reset
-          & _unrolling_addr_gen_unit_io_unrolling_addr_o_57 != _unrolling_addr_gen_unit_io_unrolling_addr_o_56
-          + 32'h1) begin	// src/main/scala/streamer/DataReader.scala:123:23, :166:39, :179:15, :180:55, :182:13
-        if (`ASSERT_VERBOSE_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $error("Assertion failed: read address in not consecutive in the same bank!\n    at DataReader.scala:179 assert(\n");	// src/main/scala/streamer/DataReader.scala:179:15
-        if (`STOP_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $fatal;	// src/main/scala/streamer/DataReader.scala:179:15
-      end
-      if (cstate & ~reset
-          & _unrolling_addr_gen_unit_io_unrolling_addr_o_58 != _unrolling_addr_gen_unit_io_unrolling_addr_o_57
-          + 32'h1) begin	// src/main/scala/streamer/DataReader.scala:123:23, :166:39, :179:15, :180:55, :182:13
-        if (`ASSERT_VERBOSE_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $error("Assertion failed: read address in not consecutive in the same bank!\n    at DataReader.scala:179 assert(\n");	// src/main/scala/streamer/DataReader.scala:179:15
-        if (`STOP_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $fatal;	// src/main/scala/streamer/DataReader.scala:179:15
-      end
-      if (cstate & ~reset
-          & _unrolling_addr_gen_unit_io_unrolling_addr_o_59 != _unrolling_addr_gen_unit_io_unrolling_addr_o_58
-          + 32'h1) begin	// src/main/scala/streamer/DataReader.scala:123:23, :166:39, :179:15, :180:55, :182:13
-        if (`ASSERT_VERBOSE_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $error("Assertion failed: read address in not consecutive in the same bank!\n    at DataReader.scala:179 assert(\n");	// src/main/scala/streamer/DataReader.scala:179:15
-        if (`STOP_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $fatal;	// src/main/scala/streamer/DataReader.scala:179:15
-      end
-      if (cstate & ~reset
-          & _unrolling_addr_gen_unit_io_unrolling_addr_o_60 != _unrolling_addr_gen_unit_io_unrolling_addr_o_59
-          + 32'h1) begin	// src/main/scala/streamer/DataReader.scala:123:23, :166:39, :179:15, :180:55, :182:13
-        if (`ASSERT_VERBOSE_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $error("Assertion failed: read address in not consecutive in the same bank!\n    at DataReader.scala:179 assert(\n");	// src/main/scala/streamer/DataReader.scala:179:15
-        if (`STOP_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $fatal;	// src/main/scala/streamer/DataReader.scala:179:15
-      end
-      if (cstate & ~reset
-          & _unrolling_addr_gen_unit_io_unrolling_addr_o_61 != _unrolling_addr_gen_unit_io_unrolling_addr_o_60
-          + 32'h1) begin	// src/main/scala/streamer/DataReader.scala:123:23, :166:39, :179:15, :180:55, :182:13
-        if (`ASSERT_VERBOSE_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $error("Assertion failed: read address in not consecutive in the same bank!\n    at DataReader.scala:179 assert(\n");	// src/main/scala/streamer/DataReader.scala:179:15
-        if (`STOP_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $fatal;	// src/main/scala/streamer/DataReader.scala:179:15
-      end
-      if (cstate & ~reset
-          & _unrolling_addr_gen_unit_io_unrolling_addr_o_62 != _unrolling_addr_gen_unit_io_unrolling_addr_o_61
-          + 32'h1) begin	// src/main/scala/streamer/DataReader.scala:123:23, :166:39, :179:15, :180:55, :182:13
-        if (`ASSERT_VERBOSE_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $error("Assertion failed: read address in not consecutive in the same bank!\n    at DataReader.scala:179 assert(\n");	// src/main/scala/streamer/DataReader.scala:179:15
-        if (`STOP_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $fatal;	// src/main/scala/streamer/DataReader.scala:179:15
-      end
-      if (cstate & ~reset
-          & _unrolling_addr_gen_unit_io_unrolling_addr_o_63 != _unrolling_addr_gen_unit_io_unrolling_addr_o_62
-          + 32'h1) begin	// src/main/scala/streamer/DataReader.scala:123:23, :166:39, :179:15, :180:55, :182:13
-        if (`ASSERT_VERBOSE_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $error("Assertion failed: read address in not consecutive in the same bank!\n    at DataReader.scala:179 assert(\n");	// src/main/scala/streamer/DataReader.scala:179:15
-        if (`STOP_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
-          $fatal;	// src/main/scala/streamer/DataReader.scala:179:15
-      end
     end // always @(posedge)
-    `ifdef FIRRTL_BEFORE_INITIAL	// <stdin>:462:10, :2091:10
-      `FIRRTL_BEFORE_INITIAL	// <stdin>:462:10, :2091:10
+    `ifdef FIRRTL_BEFORE_INITIAL	// <stdin>:46:10, :461:10
+      `FIRRTL_BEFORE_INITIAL	// <stdin>:46:10, :461:10
     `endif // FIRRTL_BEFORE_INITIAL
-    initial begin	// <stdin>:462:10, :2091:10
-      automatic logic [31:0] _RANDOM[0:19];	// <stdin>:462:10, :2091:10
-      `ifdef INIT_RANDOM_PROLOG_	// <stdin>:462:10, :2091:10
-        `INIT_RANDOM_PROLOG_	// <stdin>:462:10, :2091:10
+    initial begin	// <stdin>:46:10, :461:10
+      automatic logic [31:0] _RANDOM[0:10];	// <stdin>:46:10, :461:10
+      `ifdef INIT_RANDOM_PROLOG_	// <stdin>:46:10, :461:10
+        `INIT_RANDOM_PROLOG_	// <stdin>:46:10, :461:10
       `endif // INIT_RANDOM_PROLOG_
-      `ifdef RANDOMIZE_REG_INIT	// <stdin>:462:10, :2091:10
-        for (logic [4:0] i = 5'h0; i < 5'h14; i += 5'h1) begin
-          _RANDOM[i] = `RANDOM;	// <stdin>:462:10, :2091:10
-        end	// <stdin>:462:10, :2091:10
-        ptr_agu = _RANDOM[5'h0];	// <stdin>:462:10, :2091:10, src/main/scala/streamer/DataReader.scala:69:24
-        unrollingStrides_0 = _RANDOM[5'h1];	// <stdin>:462:10, :2091:10, src/main/scala/streamer/DataReader.scala:75:33
-        unrollingStrides_1 = _RANDOM[5'h2];	// <stdin>:462:10, :2091:10, src/main/scala/streamer/DataReader.scala:75:33
-        tcdm_rsp_i_p_valid_reg_0 = _RANDOM[5'h3][0];	// <stdin>:462:10, :2091:10, src/main/scala/streamer/DataReader.scala:103:39
-        tcdm_rsp_i_p_valid_reg_1 = _RANDOM[5'h3][1];	// <stdin>:462:10, :2091:10, src/main/scala/streamer/DataReader.scala:103:39
-        tcdm_rsp_i_p_valid_reg_2 = _RANDOM[5'h3][2];	// <stdin>:462:10, :2091:10, src/main/scala/streamer/DataReader.scala:103:39
-        tcdm_rsp_i_p_valid_reg_3 = _RANDOM[5'h3][3];	// <stdin>:462:10, :2091:10, src/main/scala/streamer/DataReader.scala:103:39
-        tcdm_rsp_i_p_valid_reg_4 = _RANDOM[5'h3][4];	// <stdin>:462:10, :2091:10, src/main/scala/streamer/DataReader.scala:103:39
-        tcdm_rsp_i_p_valid_reg_5 = _RANDOM[5'h3][5];	// <stdin>:462:10, :2091:10, src/main/scala/streamer/DataReader.scala:103:39
-        tcdm_rsp_i_p_valid_reg_6 = _RANDOM[5'h3][6];	// <stdin>:462:10, :2091:10, src/main/scala/streamer/DataReader.scala:103:39
-        tcdm_rsp_i_p_valid_reg_7 = _RANDOM[5'h3][7];	// <stdin>:462:10, :2091:10, src/main/scala/streamer/DataReader.scala:103:39
-        tcdm_rsp_i_q_ready_reg_0 = _RANDOM[5'h3][8];	// <stdin>:462:10, :2091:10, src/main/scala/streamer/DataReader.scala:103:39, :107:39
-        tcdm_rsp_i_q_ready_reg_1 = _RANDOM[5'h3][9];	// <stdin>:462:10, :2091:10, src/main/scala/streamer/DataReader.scala:103:39, :107:39
-        tcdm_rsp_i_q_ready_reg_2 = _RANDOM[5'h3][10];	// <stdin>:462:10, :2091:10, src/main/scala/streamer/DataReader.scala:103:39, :107:39
-        tcdm_rsp_i_q_ready_reg_3 = _RANDOM[5'h3][11];	// <stdin>:462:10, :2091:10, src/main/scala/streamer/DataReader.scala:103:39, :107:39
-        tcdm_rsp_i_q_ready_reg_4 = _RANDOM[5'h3][12];	// <stdin>:462:10, :2091:10, src/main/scala/streamer/DataReader.scala:103:39, :107:39
-        tcdm_rsp_i_q_ready_reg_5 = _RANDOM[5'h3][13];	// <stdin>:462:10, :2091:10, src/main/scala/streamer/DataReader.scala:103:39, :107:39
-        tcdm_rsp_i_q_ready_reg_6 = _RANDOM[5'h3][14];	// <stdin>:462:10, :2091:10, src/main/scala/streamer/DataReader.scala:103:39, :107:39
-        tcdm_rsp_i_q_ready_reg_7 = _RANDOM[5'h3][15];	// <stdin>:462:10, :2091:10, src/main/scala/streamer/DataReader.scala:103:39, :107:39
-        data_reg_0 = {_RANDOM[5'h3][31:16], _RANDOM[5'h4], _RANDOM[5'h5][15:0]};	// <stdin>:462:10, :2091:10, src/main/scala/streamer/DataReader.scala:103:39, :114:25
-        data_reg_1 = {_RANDOM[5'h5][31:16], _RANDOM[5'h6], _RANDOM[5'h7][15:0]};	// <stdin>:462:10, :2091:10, src/main/scala/streamer/DataReader.scala:114:25
-        data_reg_2 = {_RANDOM[5'h7][31:16], _RANDOM[5'h8], _RANDOM[5'h9][15:0]};	// <stdin>:462:10, :2091:10, src/main/scala/streamer/DataReader.scala:114:25
-        data_reg_3 = {_RANDOM[5'h9][31:16], _RANDOM[5'hA], _RANDOM[5'hB][15:0]};	// <stdin>:462:10, :2091:10, src/main/scala/streamer/DataReader.scala:114:25
-        data_reg_4 = {_RANDOM[5'hB][31:16], _RANDOM[5'hC], _RANDOM[5'hD][15:0]};	// <stdin>:462:10, :2091:10, src/main/scala/streamer/DataReader.scala:114:25
-        data_reg_5 = {_RANDOM[5'hD][31:16], _RANDOM[5'hE], _RANDOM[5'hF][15:0]};	// <stdin>:462:10, :2091:10, src/main/scala/streamer/DataReader.scala:114:25
-        data_reg_6 = {_RANDOM[5'hF][31:16], _RANDOM[5'h10], _RANDOM[5'h11][15:0]};	// <stdin>:462:10, :2091:10, src/main/scala/streamer/DataReader.scala:114:25
-        data_reg_7 = {_RANDOM[5'h11][31:16], _RANDOM[5'h12], _RANDOM[5'h13][15:0]};	// <stdin>:462:10, :2091:10, src/main/scala/streamer/DataReader.scala:114:25
-        cstate = _RANDOM[5'h13][16];	// <stdin>:462:10, :2091:10, src/main/scala/streamer/DataReader.scala:114:25, :123:23
+      `ifdef RANDOMIZE_REG_INIT	// <stdin>:46:10, :461:10
+        for (logic [3:0] i = 4'h0; i < 4'hB; i += 4'h1) begin
+          _RANDOM[i] = `RANDOM;	// <stdin>:46:10, :461:10
+        end	// <stdin>:46:10, :461:10
+        ptr_agu = _RANDOM[4'h0];	// <stdin>:46:10, :461:10, src/main/scala/streamer/DataReader.scala:69:24
+        unrollingStrides_0 = _RANDOM[4'h1];	// <stdin>:46:10, :461:10, src/main/scala/streamer/DataReader.scala:75:33
+        tcdm_rsp_i_p_valid_reg_0 = _RANDOM[4'h2][0];	// <stdin>:46:10, :461:10, src/main/scala/streamer/DataReader.scala:103:39
+        tcdm_rsp_i_p_valid_reg_1 = _RANDOM[4'h2][1];	// <stdin>:46:10, :461:10, src/main/scala/streamer/DataReader.scala:103:39
+        tcdm_rsp_i_p_valid_reg_2 = _RANDOM[4'h2][2];	// <stdin>:46:10, :461:10, src/main/scala/streamer/DataReader.scala:103:39
+        tcdm_rsp_i_p_valid_reg_3 = _RANDOM[4'h2][3];	// <stdin>:46:10, :461:10, src/main/scala/streamer/DataReader.scala:103:39
+        tcdm_rsp_i_q_ready_reg_0 = _RANDOM[4'h2][4];	// <stdin>:46:10, :461:10, src/main/scala/streamer/DataReader.scala:103:39, :107:39
+        tcdm_rsp_i_q_ready_reg_1 = _RANDOM[4'h2][5];	// <stdin>:46:10, :461:10, src/main/scala/streamer/DataReader.scala:103:39, :107:39
+        tcdm_rsp_i_q_ready_reg_2 = _RANDOM[4'h2][6];	// <stdin>:46:10, :461:10, src/main/scala/streamer/DataReader.scala:103:39, :107:39
+        tcdm_rsp_i_q_ready_reg_3 = _RANDOM[4'h2][7];	// <stdin>:46:10, :461:10, src/main/scala/streamer/DataReader.scala:103:39, :107:39
+        data_reg_0 = {_RANDOM[4'h2][31:8], _RANDOM[4'h3], _RANDOM[4'h4][7:0]};	// <stdin>:46:10, :461:10, src/main/scala/streamer/DataReader.scala:103:39, :114:25
+        data_reg_1 = {_RANDOM[4'h4][31:8], _RANDOM[4'h5], _RANDOM[4'h6][7:0]};	// <stdin>:46:10, :461:10, src/main/scala/streamer/DataReader.scala:114:25
+        data_reg_2 = {_RANDOM[4'h6][31:8], _RANDOM[4'h7], _RANDOM[4'h8][7:0]};	// <stdin>:46:10, :461:10, src/main/scala/streamer/DataReader.scala:114:25
+        data_reg_3 = {_RANDOM[4'h8][31:8], _RANDOM[4'h9], _RANDOM[4'hA][7:0]};	// <stdin>:46:10, :461:10, src/main/scala/streamer/DataReader.scala:114:25
+        cstate = _RANDOM[4'hA][8];	// <stdin>:46:10, :461:10, src/main/scala/streamer/DataReader.scala:114:25, :123:23
       `endif // RANDOMIZE_REG_INIT
-      if (reset) begin	// <stdin>:462:10, :2091:10
+      if (reset) begin	// <stdin>:46:10, :461:10
         ptr_agu = 32'h0;	// src/main/scala/streamer/DataReader.scala:69:24
         unrollingStrides_0 = 32'h0;	// src/main/scala/streamer/DataReader.scala:69:24, :75:33
-        unrollingStrides_1 = 32'h0;	// src/main/scala/streamer/DataReader.scala:69:24, :75:33
         tcdm_rsp_i_p_valid_reg_0 = 1'h0;	// src/main/scala/streamer/DataReader.scala:74:30, :103:39
         tcdm_rsp_i_p_valid_reg_1 = 1'h0;	// src/main/scala/streamer/DataReader.scala:74:30, :103:39
         tcdm_rsp_i_p_valid_reg_2 = 1'h0;	// src/main/scala/streamer/DataReader.scala:74:30, :103:39
         tcdm_rsp_i_p_valid_reg_3 = 1'h0;	// src/main/scala/streamer/DataReader.scala:74:30, :103:39
-        tcdm_rsp_i_p_valid_reg_4 = 1'h0;	// src/main/scala/streamer/DataReader.scala:74:30, :103:39
-        tcdm_rsp_i_p_valid_reg_5 = 1'h0;	// src/main/scala/streamer/DataReader.scala:74:30, :103:39
-        tcdm_rsp_i_p_valid_reg_6 = 1'h0;	// src/main/scala/streamer/DataReader.scala:74:30, :103:39
-        tcdm_rsp_i_p_valid_reg_7 = 1'h0;	// src/main/scala/streamer/DataReader.scala:74:30, :103:39
         tcdm_rsp_i_q_ready_reg_0 = 1'h0;	// src/main/scala/streamer/DataReader.scala:74:30, :107:39
         tcdm_rsp_i_q_ready_reg_1 = 1'h0;	// src/main/scala/streamer/DataReader.scala:74:30, :107:39
         tcdm_rsp_i_q_ready_reg_2 = 1'h0;	// src/main/scala/streamer/DataReader.scala:74:30, :107:39
         tcdm_rsp_i_q_ready_reg_3 = 1'h0;	// src/main/scala/streamer/DataReader.scala:74:30, :107:39
-        tcdm_rsp_i_q_ready_reg_4 = 1'h0;	// src/main/scala/streamer/DataReader.scala:74:30, :107:39
-        tcdm_rsp_i_q_ready_reg_5 = 1'h0;	// src/main/scala/streamer/DataReader.scala:74:30, :107:39
-        tcdm_rsp_i_q_ready_reg_6 = 1'h0;	// src/main/scala/streamer/DataReader.scala:74:30, :107:39
-        tcdm_rsp_i_q_ready_reg_7 = 1'h0;	// src/main/scala/streamer/DataReader.scala:74:30, :107:39
         data_reg_0 = 64'h0;	// src/main/scala/streamer/DataReader.scala:114:25, :115:12
         data_reg_1 = 64'h0;	// src/main/scala/streamer/DataReader.scala:114:25, :115:12
         data_reg_2 = 64'h0;	// src/main/scala/streamer/DataReader.scala:114:25, :115:12
         data_reg_3 = 64'h0;	// src/main/scala/streamer/DataReader.scala:114:25, :115:12
-        data_reg_4 = 64'h0;	// src/main/scala/streamer/DataReader.scala:114:25, :115:12
-        data_reg_5 = 64'h0;	// src/main/scala/streamer/DataReader.scala:114:25, :115:12
-        data_reg_6 = 64'h0;	// src/main/scala/streamer/DataReader.scala:114:25, :115:12
-        data_reg_7 = 64'h0;	// src/main/scala/streamer/DataReader.scala:114:25, :115:12
         cstate = 1'h0;	// src/main/scala/streamer/DataReader.scala:74:30, :123:23
       end
     end // initial
-    `ifdef FIRRTL_AFTER_INITIAL	// <stdin>:462:10, :2091:10
-      `FIRRTL_AFTER_INITIAL	// <stdin>:462:10, :2091:10
+    `ifdef FIRRTL_AFTER_INITIAL	// <stdin>:46:10, :461:10
+      `FIRRTL_AFTER_INITIAL	// <stdin>:46:10, :461:10
     `endif // FIRRTL_AFTER_INITIAL
   `endif // not def SYNTHESIS
   UnrollingAddrGenUint unrolling_addr_gen_unit (	// src/main/scala/streamer/DataReader.scala:166:39
     .io_valid_i              (cstate),	// src/main/scala/streamer/DataReader.scala:123:23
-    .io_start_ptr_i          (_T_348 ? io_ptr_agu_i_bits : ptr_agu),	// src/main/scala/chisel3/util/Decoupled.scala:52:35, src/main/scala/streamer/DataReader.scala:69:24, :155:27, :156:13
+    .io_start_ptr_i          (_T_32 ? io_ptr_agu_i_bits : ptr_agu),	// src/main/scala/chisel3/util/Decoupled.scala:52:35, src/main/scala/streamer/DataReader.scala:69:24, :155:27, :156:13
     .io_unrollingStrides_i_0 (unrollingStrides_0),	// src/main/scala/streamer/DataReader.scala:75:33
-    .io_unrollingStrides_i_1 (unrollingStrides_1),	// src/main/scala/streamer/DataReader.scala:75:33
     .io_unrolling_addr_o_0   (_unrolling_addr_gen_unit_io_unrolling_addr_o_0),
     .io_unrolling_addr_o_1   (_unrolling_addr_gen_unit_io_unrolling_addr_o_1),
     .io_unrolling_addr_o_2   (_unrolling_addr_gen_unit_io_unrolling_addr_o_2),
@@ -1124,90 +397,22 @@ module DataReader(	// <stdin>:462:10, :2091:10
     .io_unrolling_addr_o_4   (_unrolling_addr_gen_unit_io_unrolling_addr_o_4),
     .io_unrolling_addr_o_5   (_unrolling_addr_gen_unit_io_unrolling_addr_o_5),
     .io_unrolling_addr_o_6   (_unrolling_addr_gen_unit_io_unrolling_addr_o_6),
-    .io_unrolling_addr_o_7   (_unrolling_addr_gen_unit_io_unrolling_addr_o_7),
-    .io_unrolling_addr_o_8   (_unrolling_addr_gen_unit_io_unrolling_addr_o_8),
-    .io_unrolling_addr_o_9   (_unrolling_addr_gen_unit_io_unrolling_addr_o_9),
-    .io_unrolling_addr_o_10  (_unrolling_addr_gen_unit_io_unrolling_addr_o_10),
-    .io_unrolling_addr_o_11  (_unrolling_addr_gen_unit_io_unrolling_addr_o_11),
-    .io_unrolling_addr_o_12  (_unrolling_addr_gen_unit_io_unrolling_addr_o_12),
-    .io_unrolling_addr_o_13  (_unrolling_addr_gen_unit_io_unrolling_addr_o_13),
-    .io_unrolling_addr_o_14  (_unrolling_addr_gen_unit_io_unrolling_addr_o_14),
-    .io_unrolling_addr_o_15  (_unrolling_addr_gen_unit_io_unrolling_addr_o_15),
-    .io_unrolling_addr_o_16  (_unrolling_addr_gen_unit_io_unrolling_addr_o_16),
-    .io_unrolling_addr_o_17  (_unrolling_addr_gen_unit_io_unrolling_addr_o_17),
-    .io_unrolling_addr_o_18  (_unrolling_addr_gen_unit_io_unrolling_addr_o_18),
-    .io_unrolling_addr_o_19  (_unrolling_addr_gen_unit_io_unrolling_addr_o_19),
-    .io_unrolling_addr_o_20  (_unrolling_addr_gen_unit_io_unrolling_addr_o_20),
-    .io_unrolling_addr_o_21  (_unrolling_addr_gen_unit_io_unrolling_addr_o_21),
-    .io_unrolling_addr_o_22  (_unrolling_addr_gen_unit_io_unrolling_addr_o_22),
-    .io_unrolling_addr_o_23  (_unrolling_addr_gen_unit_io_unrolling_addr_o_23),
-    .io_unrolling_addr_o_24  (_unrolling_addr_gen_unit_io_unrolling_addr_o_24),
-    .io_unrolling_addr_o_25  (_unrolling_addr_gen_unit_io_unrolling_addr_o_25),
-    .io_unrolling_addr_o_26  (_unrolling_addr_gen_unit_io_unrolling_addr_o_26),
-    .io_unrolling_addr_o_27  (_unrolling_addr_gen_unit_io_unrolling_addr_o_27),
-    .io_unrolling_addr_o_28  (_unrolling_addr_gen_unit_io_unrolling_addr_o_28),
-    .io_unrolling_addr_o_29  (_unrolling_addr_gen_unit_io_unrolling_addr_o_29),
-    .io_unrolling_addr_o_30  (_unrolling_addr_gen_unit_io_unrolling_addr_o_30),
-    .io_unrolling_addr_o_31  (_unrolling_addr_gen_unit_io_unrolling_addr_o_31),
-    .io_unrolling_addr_o_32  (_unrolling_addr_gen_unit_io_unrolling_addr_o_32),
-    .io_unrolling_addr_o_33  (_unrolling_addr_gen_unit_io_unrolling_addr_o_33),
-    .io_unrolling_addr_o_34  (_unrolling_addr_gen_unit_io_unrolling_addr_o_34),
-    .io_unrolling_addr_o_35  (_unrolling_addr_gen_unit_io_unrolling_addr_o_35),
-    .io_unrolling_addr_o_36  (_unrolling_addr_gen_unit_io_unrolling_addr_o_36),
-    .io_unrolling_addr_o_37  (_unrolling_addr_gen_unit_io_unrolling_addr_o_37),
-    .io_unrolling_addr_o_38  (_unrolling_addr_gen_unit_io_unrolling_addr_o_38),
-    .io_unrolling_addr_o_39  (_unrolling_addr_gen_unit_io_unrolling_addr_o_39),
-    .io_unrolling_addr_o_40  (_unrolling_addr_gen_unit_io_unrolling_addr_o_40),
-    .io_unrolling_addr_o_41  (_unrolling_addr_gen_unit_io_unrolling_addr_o_41),
-    .io_unrolling_addr_o_42  (_unrolling_addr_gen_unit_io_unrolling_addr_o_42),
-    .io_unrolling_addr_o_43  (_unrolling_addr_gen_unit_io_unrolling_addr_o_43),
-    .io_unrolling_addr_o_44  (_unrolling_addr_gen_unit_io_unrolling_addr_o_44),
-    .io_unrolling_addr_o_45  (_unrolling_addr_gen_unit_io_unrolling_addr_o_45),
-    .io_unrolling_addr_o_46  (_unrolling_addr_gen_unit_io_unrolling_addr_o_46),
-    .io_unrolling_addr_o_47  (_unrolling_addr_gen_unit_io_unrolling_addr_o_47),
-    .io_unrolling_addr_o_48  (_unrolling_addr_gen_unit_io_unrolling_addr_o_48),
-    .io_unrolling_addr_o_49  (_unrolling_addr_gen_unit_io_unrolling_addr_o_49),
-    .io_unrolling_addr_o_50  (_unrolling_addr_gen_unit_io_unrolling_addr_o_50),
-    .io_unrolling_addr_o_51  (_unrolling_addr_gen_unit_io_unrolling_addr_o_51),
-    .io_unrolling_addr_o_52  (_unrolling_addr_gen_unit_io_unrolling_addr_o_52),
-    .io_unrolling_addr_o_53  (_unrolling_addr_gen_unit_io_unrolling_addr_o_53),
-    .io_unrolling_addr_o_54  (_unrolling_addr_gen_unit_io_unrolling_addr_o_54),
-    .io_unrolling_addr_o_55  (_unrolling_addr_gen_unit_io_unrolling_addr_o_55),
-    .io_unrolling_addr_o_56  (_unrolling_addr_gen_unit_io_unrolling_addr_o_56),
-    .io_unrolling_addr_o_57  (_unrolling_addr_gen_unit_io_unrolling_addr_o_57),
-    .io_unrolling_addr_o_58  (_unrolling_addr_gen_unit_io_unrolling_addr_o_58),
-    .io_unrolling_addr_o_59  (_unrolling_addr_gen_unit_io_unrolling_addr_o_59),
-    .io_unrolling_addr_o_60  (_unrolling_addr_gen_unit_io_unrolling_addr_o_60),
-    .io_unrolling_addr_o_61  (_unrolling_addr_gen_unit_io_unrolling_addr_o_61),
-    .io_unrolling_addr_o_62  (_unrolling_addr_gen_unit_io_unrolling_addr_o_62),
-    .io_unrolling_addr_o_63  (_unrolling_addr_gen_unit_io_unrolling_addr_o_63)
+    .io_unrolling_addr_o_7   (_unrolling_addr_gen_unit_io_unrolling_addr_o_7)
   );
-  assign io_ptr_agu_i_ready = _io_ptr_agu_i_ready_output;	// <stdin>:462:10, :2091:10, src/main/scala/streamer/DataReader.scala:279:42
-  assign io_tcdm_req_addr_0 = _unrolling_addr_gen_unit_io_unrolling_addr_o_0;	// <stdin>:462:10, :2091:10, src/main/scala/streamer/DataReader.scala:166:39
-  assign io_tcdm_req_addr_1 = _unrolling_addr_gen_unit_io_unrolling_addr_o_8;	// <stdin>:462:10, :2091:10, src/main/scala/streamer/DataReader.scala:166:39
-  assign io_tcdm_req_addr_2 = _unrolling_addr_gen_unit_io_unrolling_addr_o_16;	// <stdin>:462:10, :2091:10, src/main/scala/streamer/DataReader.scala:166:39
-  assign io_tcdm_req_addr_3 = _unrolling_addr_gen_unit_io_unrolling_addr_o_24;	// <stdin>:462:10, :2091:10, src/main/scala/streamer/DataReader.scala:166:39
-  assign io_tcdm_req_addr_4 = _unrolling_addr_gen_unit_io_unrolling_addr_o_32;	// <stdin>:462:10, :2091:10, src/main/scala/streamer/DataReader.scala:166:39
-  assign io_tcdm_req_addr_5 = _unrolling_addr_gen_unit_io_unrolling_addr_o_40;	// <stdin>:462:10, :2091:10, src/main/scala/streamer/DataReader.scala:166:39
-  assign io_tcdm_req_addr_6 = _unrolling_addr_gen_unit_io_unrolling_addr_o_48;	// <stdin>:462:10, :2091:10, src/main/scala/streamer/DataReader.scala:166:39
-  assign io_tcdm_req_addr_7 = _unrolling_addr_gen_unit_io_unrolling_addr_o_56;	// <stdin>:462:10, :2091:10, src/main/scala/streamer/DataReader.scala:166:39
+  assign io_ptr_agu_i_ready = _io_ptr_agu_i_ready_output;	// <stdin>:46:10, :461:10, src/main/scala/streamer/DataReader.scala:279:42
+  assign io_tcdm_req_addr_0 = _unrolling_addr_gen_unit_io_unrolling_addr_o_0;	// <stdin>:46:10, :461:10, src/main/scala/streamer/DataReader.scala:166:39
+  assign io_tcdm_req_addr_1 = _unrolling_addr_gen_unit_io_unrolling_addr_o_2;	// <stdin>:46:10, :461:10, src/main/scala/streamer/DataReader.scala:166:39
+  assign io_tcdm_req_addr_2 = _unrolling_addr_gen_unit_io_unrolling_addr_o_4;	// <stdin>:46:10, :461:10, src/main/scala/streamer/DataReader.scala:166:39
+  assign io_tcdm_req_addr_3 = _unrolling_addr_gen_unit_io_unrolling_addr_o_6;	// <stdin>:46:10, :461:10, src/main/scala/streamer/DataReader.scala:166:39
   assign io_read_tcmd_valid_o_0 =
-    can_send_tcdm_read_req & (_T_348 | ~tcdm_rsp_i_q_ready_reg_0);	// <stdin>:462:10, :2091:10, src/main/scala/chisel3/util/Decoupled.scala:52:35, src/main/scala/streamer/DataReader.scala:107:39, :189:50, :200:34, :201:31, :202:33, :204:{33,36}, :207:31
+    can_send_tcdm_read_req & (_T_32 | ~tcdm_rsp_i_q_ready_reg_0);	// <stdin>:46:10, :461:10, src/main/scala/chisel3/util/Decoupled.scala:52:35, src/main/scala/streamer/DataReader.scala:107:39, :189:50, :200:34, :201:31, :202:33, :204:{33,36}, :207:31
   assign io_read_tcmd_valid_o_1 =
-    can_send_tcdm_read_req & (_T_348 | ~tcdm_rsp_i_q_ready_reg_1);	// <stdin>:462:10, :2091:10, src/main/scala/chisel3/util/Decoupled.scala:52:35, src/main/scala/streamer/DataReader.scala:107:39, :189:50, :200:34, :201:31, :202:33, :204:{33,36}, :207:31
+    can_send_tcdm_read_req & (_T_32 | ~tcdm_rsp_i_q_ready_reg_1);	// <stdin>:46:10, :461:10, src/main/scala/chisel3/util/Decoupled.scala:52:35, src/main/scala/streamer/DataReader.scala:107:39, :189:50, :200:34, :201:31, :202:33, :204:{33,36}, :207:31
   assign io_read_tcmd_valid_o_2 =
-    can_send_tcdm_read_req & (_T_348 | ~tcdm_rsp_i_q_ready_reg_2);	// <stdin>:462:10, :2091:10, src/main/scala/chisel3/util/Decoupled.scala:52:35, src/main/scala/streamer/DataReader.scala:107:39, :189:50, :200:34, :201:31, :202:33, :204:{33,36}, :207:31
+    can_send_tcdm_read_req & (_T_32 | ~tcdm_rsp_i_q_ready_reg_2);	// <stdin>:46:10, :461:10, src/main/scala/chisel3/util/Decoupled.scala:52:35, src/main/scala/streamer/DataReader.scala:107:39, :189:50, :200:34, :201:31, :202:33, :204:{33,36}, :207:31
   assign io_read_tcmd_valid_o_3 =
-    can_send_tcdm_read_req & (_T_348 | ~tcdm_rsp_i_q_ready_reg_3);	// <stdin>:462:10, :2091:10, src/main/scala/chisel3/util/Decoupled.scala:52:35, src/main/scala/streamer/DataReader.scala:107:39, :189:50, :200:34, :201:31, :202:33, :204:{33,36}, :207:31
-  assign io_read_tcmd_valid_o_4 =
-    can_send_tcdm_read_req & (_T_348 | ~tcdm_rsp_i_q_ready_reg_4);	// <stdin>:462:10, :2091:10, src/main/scala/chisel3/util/Decoupled.scala:52:35, src/main/scala/streamer/DataReader.scala:107:39, :189:50, :200:34, :201:31, :202:33, :204:{33,36}, :207:31
-  assign io_read_tcmd_valid_o_5 =
-    can_send_tcdm_read_req & (_T_348 | ~tcdm_rsp_i_q_ready_reg_5);	// <stdin>:462:10, :2091:10, src/main/scala/chisel3/util/Decoupled.scala:52:35, src/main/scala/streamer/DataReader.scala:107:39, :189:50, :200:34, :201:31, :202:33, :204:{33,36}, :207:31
-  assign io_read_tcmd_valid_o_6 =
-    can_send_tcdm_read_req & (_T_348 | ~tcdm_rsp_i_q_ready_reg_6);	// <stdin>:462:10, :2091:10, src/main/scala/chisel3/util/Decoupled.scala:52:35, src/main/scala/streamer/DataReader.scala:107:39, :189:50, :200:34, :201:31, :202:33, :204:{33,36}, :207:31
-  assign io_read_tcmd_valid_o_7 =
-    can_send_tcdm_read_req & (_T_348 | ~tcdm_rsp_i_q_ready_reg_7);	// <stdin>:462:10, :2091:10, src/main/scala/chisel3/util/Decoupled.scala:52:35, src/main/scala/streamer/DataReader.scala:107:39, :189:50, :200:34, :201:31, :202:33, :204:{33,36}, :207:31
-  assign io_data_fifo_o_valid = fifo_input_valid;	// <stdin>:462:10, :2091:10, src/main/scala/streamer/DataReader.scala:275:51
+    can_send_tcdm_read_req & (_T_32 | ~tcdm_rsp_i_q_ready_reg_3);	// <stdin>:46:10, :461:10, src/main/scala/chisel3/util/Decoupled.scala:52:35, src/main/scala/streamer/DataReader.scala:107:39, :189:50, :200:34, :201:31, :202:33, :204:{33,36}, :207:31
+  assign io_data_fifo_o_valid = fifo_input_valid;	// <stdin>:46:10, :461:10, src/main/scala/streamer/DataReader.scala:275:51
   assign io_data_fifo_o_bits =
     {fifo_input_valid
        ? (io_data_tcdm_i_0_valid ? io_data_tcdm_i_0_bits : data_reg_0)
@@ -1220,162 +425,179 @@ module DataReader(	// <stdin>:462:10, :2091:10
        : 64'h0,
      fifo_input_valid
        ? (io_data_tcdm_i_3_valid ? io_data_tcdm_i_3_bits : data_reg_3)
-       : 64'h0,
-     fifo_input_valid
-       ? (io_data_tcdm_i_4_valid ? io_data_tcdm_i_4_bits : data_reg_4)
-       : 64'h0,
-     fifo_input_valid
-       ? (io_data_tcdm_i_5_valid ? io_data_tcdm_i_5_bits : data_reg_5)
-       : 64'h0,
-     fifo_input_valid
-       ? (io_data_tcdm_i_6_valid ? io_data_tcdm_i_6_bits : data_reg_6)
-       : 64'h0,
-     fifo_input_valid
-       ? (io_data_tcdm_i_7_valid ? io_data_tcdm_i_7_bits : data_reg_7)
-       : 64'h0};	// <stdin>:462:10, :2091:10, src/main/scala/streamer/DataReader.scala:114:25, :115:12, :117:33, :258:28, :259:37, :260:28, :262:28, :266:25, :275:51
+       : 64'h0};	// <stdin>:46:10, :461:10, src/main/scala/streamer/DataReader.scala:114:25, :115:12, :117:33, :258:28, :259:37, :260:28, :262:28, :266:25, :275:51
 endmodule
 
-module DataWriter(	// <stdin>:3720:10
-  input           clock,	// <stdin>:3721:11
-                  reset,	// <stdin>:3722:11
-                  io_ptr_agu_i_valid,	// src/main/scala/streamer/DataWriter.scala:54:14
-  input  [31:0]   io_ptr_agu_i_bits,	// src/main/scala/streamer/DataWriter.scala:54:14
-  input           io_unrollingStrides_csr_i_valid,	// src/main/scala/streamer/DataWriter.scala:54:14
-  input  [31:0]   io_unrollingStrides_csr_i_bits_0,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_unrollingStrides_csr_i_bits_1,	// src/main/scala/streamer/DataWriter.scala:54:14
-  input           io_data_fifo_i_valid,	// src/main/scala/streamer/DataWriter.scala:54:14
-  input  [2047:0] io_data_fifo_i_bits,	// src/main/scala/streamer/DataWriter.scala:54:14
-  input           io_tcdm_ready_i_0,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_tcdm_ready_i_1,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_tcdm_ready_i_2,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_tcdm_ready_i_3,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_tcdm_ready_i_4,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_tcdm_ready_i_5,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_tcdm_ready_i_6,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_tcdm_ready_i_7,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_tcdm_ready_i_8,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_tcdm_ready_i_9,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_tcdm_ready_i_10,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_tcdm_ready_i_11,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_tcdm_ready_i_12,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_tcdm_ready_i_13,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_tcdm_ready_i_14,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_tcdm_ready_i_15,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_tcdm_ready_i_16,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_tcdm_ready_i_17,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_tcdm_ready_i_18,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_tcdm_ready_i_19,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_tcdm_ready_i_20,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_tcdm_ready_i_21,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_tcdm_ready_i_22,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_tcdm_ready_i_23,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_tcdm_ready_i_24,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_tcdm_ready_i_25,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_tcdm_ready_i_26,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_tcdm_ready_i_27,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_tcdm_ready_i_28,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_tcdm_ready_i_29,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_tcdm_ready_i_30,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_tcdm_ready_i_31,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_data_move_done,	// src/main/scala/streamer/DataWriter.scala:54:14
-  output          io_ptr_agu_i_ready,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_data_fifo_i_ready,	// src/main/scala/streamer/DataWriter.scala:54:14
-  output [31:0]   io_tcdm_req_addr_0,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_tcdm_req_addr_1,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_tcdm_req_addr_2,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_tcdm_req_addr_3,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_tcdm_req_addr_4,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_tcdm_req_addr_5,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_tcdm_req_addr_6,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_tcdm_req_addr_7,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_tcdm_req_addr_8,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_tcdm_req_addr_9,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_tcdm_req_addr_10,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_tcdm_req_addr_11,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_tcdm_req_addr_12,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_tcdm_req_addr_13,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_tcdm_req_addr_14,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_tcdm_req_addr_15,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_tcdm_req_addr_16,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_tcdm_req_addr_17,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_tcdm_req_addr_18,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_tcdm_req_addr_19,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_tcdm_req_addr_20,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_tcdm_req_addr_21,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_tcdm_req_addr_22,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_tcdm_req_addr_23,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_tcdm_req_addr_24,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_tcdm_req_addr_25,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_tcdm_req_addr_26,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_tcdm_req_addr_27,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_tcdm_req_addr_28,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_tcdm_req_addr_29,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_tcdm_req_addr_30,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_tcdm_req_addr_31,	// src/main/scala/streamer/DataWriter.scala:54:14
-  output          io_write_tcmd_valid_o_0,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_write_tcmd_valid_o_1,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_write_tcmd_valid_o_2,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_write_tcmd_valid_o_3,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_write_tcmd_valid_o_4,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_write_tcmd_valid_o_5,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_write_tcmd_valid_o_6,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_write_tcmd_valid_o_7,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_write_tcmd_valid_o_8,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_write_tcmd_valid_o_9,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_write_tcmd_valid_o_10,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_write_tcmd_valid_o_11,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_write_tcmd_valid_o_12,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_write_tcmd_valid_o_13,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_write_tcmd_valid_o_14,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_write_tcmd_valid_o_15,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_write_tcmd_valid_o_16,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_write_tcmd_valid_o_17,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_write_tcmd_valid_o_18,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_write_tcmd_valid_o_19,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_write_tcmd_valid_o_20,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_write_tcmd_valid_o_21,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_write_tcmd_valid_o_22,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_write_tcmd_valid_o_23,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_write_tcmd_valid_o_24,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_write_tcmd_valid_o_25,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_write_tcmd_valid_o_26,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_write_tcmd_valid_o_27,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_write_tcmd_valid_o_28,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_write_tcmd_valid_o_29,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_write_tcmd_valid_o_30,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_write_tcmd_valid_o_31,	// src/main/scala/streamer/DataWriter.scala:54:14
-  output [63:0]   io_tcdm_req_data_0,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_tcdm_req_data_1,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_tcdm_req_data_2,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_tcdm_req_data_3,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_tcdm_req_data_4,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_tcdm_req_data_5,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_tcdm_req_data_6,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_tcdm_req_data_7,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_tcdm_req_data_8,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_tcdm_req_data_9,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_tcdm_req_data_10,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_tcdm_req_data_11,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_tcdm_req_data_12,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_tcdm_req_data_13,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_tcdm_req_data_14,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_tcdm_req_data_15,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_tcdm_req_data_16,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_tcdm_req_data_17,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_tcdm_req_data_18,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_tcdm_req_data_19,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_tcdm_req_data_20,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_tcdm_req_data_21,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_tcdm_req_data_22,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_tcdm_req_data_23,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_tcdm_req_data_24,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_tcdm_req_data_25,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_tcdm_req_data_26,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_tcdm_req_data_27,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_tcdm_req_data_28,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_tcdm_req_data_29,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_tcdm_req_data_30,	// src/main/scala/streamer/DataWriter.scala:54:14
-                  io_tcdm_req_data_31	// src/main/scala/streamer/DataWriter.scala:54:14
+module UnrollingAddrGenUint_2(	// <stdin>:833:10
+  input         io_valid_i,	// src/main/scala/streamer/SpatialAddrGenUnit.scala:35:14
+  input  [31:0] io_start_ptr_i,	// src/main/scala/streamer/SpatialAddrGenUnit.scala:35:14
+                io_unrollingStrides_i_0,	// src/main/scala/streamer/SpatialAddrGenUnit.scala:35:14
+  output [31:0] io_unrolling_addr_o_0,	// src/main/scala/streamer/SpatialAddrGenUnit.scala:35:14
+                io_unrolling_addr_o_1	// src/main/scala/streamer/SpatialAddrGenUnit.scala:35:14
+);
+
+  assign io_unrolling_addr_o_0 = io_valid_i ? io_start_ptr_i : 32'h0;	// <stdin>:833:10, src/main/scala/streamer/SpatialAddrGenUnit.scala:72:34, :73:14, :76:17, :85:27
+  assign io_unrolling_addr_o_1 =
+    io_valid_i ? io_unrollingStrides_i_0 + io_start_ptr_i : 32'h0;	// <stdin>:833:10, src/main/scala/streamer/SpatialAddrGenUnit.scala:72:34, :73:14, :76:17, :85:27, :87:26
+endmodule
+
+module DataReader_2(	// <stdin>:852:10
+  input         clock,	// <stdin>:853:11
+                reset,	// <stdin>:854:11
+                io_ptr_agu_i_valid,	// src/main/scala/streamer/DataReader.scala:58:14
+  input  [31:0] io_ptr_agu_i_bits,	// src/main/scala/streamer/DataReader.scala:58:14
+  input         io_unrollingStrides_csr_i_valid,	// src/main/scala/streamer/DataReader.scala:58:14
+  input  [31:0] io_unrollingStrides_csr_i_bits_0,	// src/main/scala/streamer/DataReader.scala:58:14
+  input         io_tcdm_ready_i_0,	// src/main/scala/streamer/DataReader.scala:58:14
+                io_data_tcdm_i_0_valid,	// src/main/scala/streamer/DataReader.scala:58:14
+  input  [63:0] io_data_tcdm_i_0_bits,	// src/main/scala/streamer/DataReader.scala:58:14
+  input         io_data_fifo_o_ready,	// src/main/scala/streamer/DataReader.scala:58:14
+                io_data_move_done,	// src/main/scala/streamer/DataReader.scala:58:14
+  output        io_ptr_agu_i_ready,	// src/main/scala/streamer/DataReader.scala:58:14
+  output [31:0] io_tcdm_req_addr_0,	// src/main/scala/streamer/DataReader.scala:58:14
+  output        io_read_tcmd_valid_o_0,	// src/main/scala/streamer/DataReader.scala:58:14
+                io_data_fifo_o_valid,	// src/main/scala/streamer/DataReader.scala:58:14
+  output [63:0] io_data_fifo_o_bits	// src/main/scala/streamer/DataReader.scala:58:14
+);
+
+  wire        _io_ptr_agu_i_ready_output;	// src/main/scala/streamer/DataReader.scala:279:42
+  wire        tcdm_rsp_i_p_valid_0;	// src/main/scala/streamer/DataReader.scala:271:54
+  wire        tcdm_rsp_i_q_ready_0;	// src/main/scala/streamer/DataReader.scala:230:49
+  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_0;	// src/main/scala/streamer/DataReader.scala:166:39
+  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_1;	// src/main/scala/streamer/DataReader.scala:166:39
+  reg  [31:0] ptr_agu;	// src/main/scala/streamer/DataReader.scala:69:24
+  reg  [31:0] unrollingStrides_0;	// src/main/scala/streamer/DataReader.scala:75:33
+  reg         tcdm_rsp_i_p_valid_reg_0;	// src/main/scala/streamer/DataReader.scala:103:39
+  reg         tcdm_rsp_i_q_ready_reg_0;	// src/main/scala/streamer/DataReader.scala:107:39
+  reg  [63:0] data_reg_0;	// src/main/scala/streamer/DataReader.scala:114:25
+  reg         cstate;	// src/main/scala/streamer/DataReader.scala:123:23
+  wire        _T_11 = _io_ptr_agu_i_ready_output & io_ptr_agu_i_valid;	// src/main/scala/chisel3/util/Decoupled.scala:52:35, src/main/scala/streamer/DataReader.scala:279:42
+  wire        can_send_tcdm_read_req = io_data_fifo_o_ready & cstate;	// src/main/scala/streamer/DataReader.scala:123:23, :189:50
+  wire        wait_for_q_ready_read = can_send_tcdm_read_req & ~tcdm_rsp_i_q_ready_0;	// src/main/scala/streamer/DataReader.scala:189:50, :212:{33,36}, :230:49
+  assign tcdm_rsp_i_q_ready_0 = io_tcdm_ready_i_0 | tcdm_rsp_i_q_ready_reg_0;	// src/main/scala/streamer/DataReader.scala:107:39, :230:49
+  assign tcdm_rsp_i_p_valid_0 = io_data_tcdm_i_0_valid | tcdm_rsp_i_p_valid_reg_0;	// src/main/scala/streamer/DataReader.scala:103:39, :271:54
+  assign _io_ptr_agu_i_ready_output =
+    cstate & ~wait_for_q_ready_read & can_send_tcdm_read_req;	// src/main/scala/streamer/DataReader.scala:123:23, :189:50, :212:33, :234:30, :279:42
+  always @(posedge clock or posedge reset) begin	// <stdin>:853:11
+    if (reset) begin	// <stdin>:853:11
+      ptr_agu <= 32'h0;	// src/main/scala/streamer/DataReader.scala:69:24
+      unrollingStrides_0 <= 32'h0;	// src/main/scala/streamer/DataReader.scala:69:24, :75:33
+      tcdm_rsp_i_p_valid_reg_0 <= 1'h0;	// src/main/scala/streamer/DataReader.scala:74:30, :103:39
+      tcdm_rsp_i_q_ready_reg_0 <= 1'h0;	// src/main/scala/streamer/DataReader.scala:74:30, :107:39
+      data_reg_0 <= 64'h0;	// src/main/scala/streamer/DataReader.scala:91:33, :114:25
+      cstate <= 1'h0;	// src/main/scala/streamer/DataReader.scala:74:30, :123:23
+    end
+    else begin	// <stdin>:853:11
+      automatic logic config_valid;	// src/main/scala/chisel3/util/Decoupled.scala:52:35
+      automatic logic _T_19 = can_send_tcdm_read_req & ~tcdm_rsp_i_p_valid_0;	// src/main/scala/streamer/DataReader.scala:189:50, :238:36, :246:32, :271:54
+      config_valid = ~cstate & io_unrollingStrides_csr_i_valid;	// src/main/scala/chisel3/util/Decoupled.scala:52:35, src/main/scala/streamer/DataReader.scala:123:23, :130:18
+      if (_T_11)	// src/main/scala/chisel3/util/Decoupled.scala:52:35
+        ptr_agu <= io_ptr_agu_i_bits;	// src/main/scala/streamer/DataReader.scala:69:24
+      if (config_valid)	// src/main/scala/chisel3/util/Decoupled.scala:52:35
+        unrollingStrides_0 <= io_unrollingStrides_csr_i_bits_0;	// src/main/scala/streamer/DataReader.scala:75:33
+      tcdm_rsp_i_p_valid_reg_0 <=
+        _T_19
+        & (io_data_tcdm_i_0_valid ? io_data_tcdm_i_0_valid : tcdm_rsp_i_p_valid_reg_0);	// src/main/scala/streamer/DataReader.scala:103:39, :246:{32,54}, :247:37, :248:35, :252:33
+      tcdm_rsp_i_q_ready_reg_0 <=
+        wait_for_q_ready_read & ~tcdm_rsp_i_q_ready_0
+        & (io_tcdm_ready_i_0 ? io_tcdm_ready_i_0 : tcdm_rsp_i_q_ready_reg_0);	// src/main/scala/streamer/DataReader.scala:107:39, :212:{33,36}, :220:61, :221:32, :222:35, :225:33, :230:49
+      if (_T_19 & io_data_tcdm_i_0_valid)	// src/main/scala/streamer/DataReader.scala:114:25, :246:{32,54}, :247:37, :249:21
+        data_reg_0 <= io_data_tcdm_i_0_bits;	// src/main/scala/streamer/DataReader.scala:114:25
+      if (cstate)	// src/main/scala/streamer/DataReader.scala:123:23
+        cstate <= cstate & ~io_data_move_done;	// src/main/scala/streamer/DataReader.scala:74:30, :123:23, :124:24, :130:18, :133:16, :140:31, :141:16, :143:16
+      else	// src/main/scala/streamer/DataReader.scala:123:23
+        cstate <= config_valid;	// src/main/scala/chisel3/util/Decoupled.scala:52:35, src/main/scala/streamer/DataReader.scala:123:23
+    end
+  end // always @(posedge, posedge)
+  `ifndef SYNTHESIS	// <stdin>:852:10
+    always @(posedge clock) begin	// src/main/scala/streamer/DataReader.scala:179:15
+      if (cstate & ~reset
+          & _unrolling_addr_gen_unit_io_unrolling_addr_o_1 != _unrolling_addr_gen_unit_io_unrolling_addr_o_0
+          + 32'h1) begin	// src/main/scala/streamer/DataReader.scala:123:23, :166:39, :179:15, :180:55, :182:13
+        if (`ASSERT_VERBOSE_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
+          $error("Assertion failed: read address in not consecutive in the same bank!\n    at DataReader.scala:179 assert(\n");	// src/main/scala/streamer/DataReader.scala:179:15
+        if (`STOP_COND_)	// src/main/scala/streamer/DataReader.scala:179:15
+          $fatal;	// src/main/scala/streamer/DataReader.scala:179:15
+      end
+    end // always @(posedge)
+    `ifdef FIRRTL_BEFORE_INITIAL	// <stdin>:852:10
+      `FIRRTL_BEFORE_INITIAL	// <stdin>:852:10
+    `endif // FIRRTL_BEFORE_INITIAL
+    initial begin	// <stdin>:852:10
+      automatic logic [31:0] _RANDOM[0:4];	// <stdin>:852:10
+      `ifdef INIT_RANDOM_PROLOG_	// <stdin>:852:10
+        `INIT_RANDOM_PROLOG_	// <stdin>:852:10
+      `endif // INIT_RANDOM_PROLOG_
+      `ifdef RANDOMIZE_REG_INIT	// <stdin>:852:10
+        for (logic [2:0] i = 3'h0; i < 3'h5; i += 3'h1) begin
+          _RANDOM[i] = `RANDOM;	// <stdin>:852:10
+        end	// <stdin>:852:10
+        ptr_agu = _RANDOM[3'h0];	// <stdin>:852:10, src/main/scala/streamer/DataReader.scala:69:24
+        unrollingStrides_0 = _RANDOM[3'h1];	// <stdin>:852:10, src/main/scala/streamer/DataReader.scala:75:33
+        tcdm_rsp_i_p_valid_reg_0 = _RANDOM[3'h2][0];	// <stdin>:852:10, src/main/scala/streamer/DataReader.scala:103:39
+        tcdm_rsp_i_q_ready_reg_0 = _RANDOM[3'h2][1];	// <stdin>:852:10, src/main/scala/streamer/DataReader.scala:103:39, :107:39
+        data_reg_0 = {_RANDOM[3'h2][31:2], _RANDOM[3'h3], _RANDOM[3'h4][1:0]};	// <stdin>:852:10, src/main/scala/streamer/DataReader.scala:103:39, :114:25
+        cstate = _RANDOM[3'h4][2];	// <stdin>:852:10, src/main/scala/streamer/DataReader.scala:114:25, :123:23
+      `endif // RANDOMIZE_REG_INIT
+      if (reset) begin	// <stdin>:852:10
+        ptr_agu = 32'h0;	// src/main/scala/streamer/DataReader.scala:69:24
+        unrollingStrides_0 = 32'h0;	// src/main/scala/streamer/DataReader.scala:69:24, :75:33
+        tcdm_rsp_i_p_valid_reg_0 = 1'h0;	// src/main/scala/streamer/DataReader.scala:74:30, :103:39
+        tcdm_rsp_i_q_ready_reg_0 = 1'h0;	// src/main/scala/streamer/DataReader.scala:74:30, :107:39
+        data_reg_0 = 64'h0;	// src/main/scala/streamer/DataReader.scala:91:33, :114:25
+        cstate = 1'h0;	// src/main/scala/streamer/DataReader.scala:74:30, :123:23
+      end
+    end // initial
+    `ifdef FIRRTL_AFTER_INITIAL	// <stdin>:852:10
+      `FIRRTL_AFTER_INITIAL	// <stdin>:852:10
+    `endif // FIRRTL_AFTER_INITIAL
+  `endif // not def SYNTHESIS
+  UnrollingAddrGenUint_2 unrolling_addr_gen_unit (	// src/main/scala/streamer/DataReader.scala:166:39
+    .io_valid_i              (cstate),	// src/main/scala/streamer/DataReader.scala:123:23
+    .io_start_ptr_i          (_T_11 ? io_ptr_agu_i_bits : ptr_agu),	// src/main/scala/chisel3/util/Decoupled.scala:52:35, src/main/scala/streamer/DataReader.scala:69:24, :155:27, :156:13
+    .io_unrollingStrides_i_0 (unrollingStrides_0),	// src/main/scala/streamer/DataReader.scala:75:33
+    .io_unrolling_addr_o_0   (_unrolling_addr_gen_unit_io_unrolling_addr_o_0),
+    .io_unrolling_addr_o_1   (_unrolling_addr_gen_unit_io_unrolling_addr_o_1)
+  );
+  assign io_ptr_agu_i_ready = _io_ptr_agu_i_ready_output;	// <stdin>:852:10, src/main/scala/streamer/DataReader.scala:279:42
+  assign io_tcdm_req_addr_0 = _unrolling_addr_gen_unit_io_unrolling_addr_o_0;	// <stdin>:852:10, src/main/scala/streamer/DataReader.scala:166:39
+  assign io_read_tcmd_valid_o_0 =
+    can_send_tcdm_read_req & (_T_11 | ~tcdm_rsp_i_q_ready_reg_0);	// <stdin>:852:10, src/main/scala/chisel3/util/Decoupled.scala:52:35, src/main/scala/streamer/DataReader.scala:107:39, :189:50, :200:34, :201:31, :202:33, :204:{33,36}, :207:31
+  assign io_data_fifo_o_valid = tcdm_rsp_i_p_valid_0;	// <stdin>:852:10, src/main/scala/streamer/DataReader.scala:271:54
+  assign io_data_fifo_o_bits =
+    tcdm_rsp_i_p_valid_0
+      ? (io_data_tcdm_i_0_valid ? io_data_tcdm_i_0_bits : data_reg_0)
+      : 64'h0;	// <stdin>:852:10, src/main/scala/streamer/DataReader.scala:91:33, :114:25, :117:33, :258:28, :259:37, :260:28, :262:28, :271:54
+endmodule
+
+module DataWriter(	// <stdin>:1066:10
+  input          clock,	// <stdin>:1067:11
+                 reset,	// <stdin>:1068:11
+                 io_ptr_agu_i_valid,	// src/main/scala/streamer/DataWriter.scala:54:14
+  input  [31:0]  io_ptr_agu_i_bits,	// src/main/scala/streamer/DataWriter.scala:54:14
+  input          io_unrollingStrides_csr_i_valid,	// src/main/scala/streamer/DataWriter.scala:54:14
+  input  [31:0]  io_unrollingStrides_csr_i_bits_0,	// src/main/scala/streamer/DataWriter.scala:54:14
+  input          io_data_fifo_i_valid,	// src/main/scala/streamer/DataWriter.scala:54:14
+  input  [255:0] io_data_fifo_i_bits,	// src/main/scala/streamer/DataWriter.scala:54:14
+  input          io_tcdm_ready_i_0,	// src/main/scala/streamer/DataWriter.scala:54:14
+                 io_tcdm_ready_i_1,	// src/main/scala/streamer/DataWriter.scala:54:14
+                 io_tcdm_ready_i_2,	// src/main/scala/streamer/DataWriter.scala:54:14
+                 io_tcdm_ready_i_3,	// src/main/scala/streamer/DataWriter.scala:54:14
+                 io_data_move_done,	// src/main/scala/streamer/DataWriter.scala:54:14
+  output         io_ptr_agu_i_ready,	// src/main/scala/streamer/DataWriter.scala:54:14
+                 io_data_fifo_i_ready,	// src/main/scala/streamer/DataWriter.scala:54:14
+  output [31:0]  io_tcdm_req_addr_0,	// src/main/scala/streamer/DataWriter.scala:54:14
+                 io_tcdm_req_addr_1,	// src/main/scala/streamer/DataWriter.scala:54:14
+                 io_tcdm_req_addr_2,	// src/main/scala/streamer/DataWriter.scala:54:14
+                 io_tcdm_req_addr_3,	// src/main/scala/streamer/DataWriter.scala:54:14
+  output         io_write_tcmd_valid_o_0,	// src/main/scala/streamer/DataWriter.scala:54:14
+                 io_write_tcmd_valid_o_1,	// src/main/scala/streamer/DataWriter.scala:54:14
+                 io_write_tcmd_valid_o_2,	// src/main/scala/streamer/DataWriter.scala:54:14
+                 io_write_tcmd_valid_o_3,	// src/main/scala/streamer/DataWriter.scala:54:14
+  output [63:0]  io_tcdm_req_data_0,	// src/main/scala/streamer/DataWriter.scala:54:14
+                 io_tcdm_req_data_1,	// src/main/scala/streamer/DataWriter.scala:54:14
+                 io_tcdm_req_data_2,	// src/main/scala/streamer/DataWriter.scala:54:14
+                 io_tcdm_req_data_3	// src/main/scala/streamer/DataWriter.scala:54:14
 );
 
   wire        _io_ptr_agu_i_ready_output;	// src/main/scala/streamer/DataWriter.scala:217:42
@@ -1388,99 +610,14 @@ module DataWriter(	// <stdin>:3720:10
   wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_5;	// src/main/scala/streamer/DataWriter.scala:141:39
   wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_6;	// src/main/scala/streamer/DataWriter.scala:141:39
   wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_7;	// src/main/scala/streamer/DataWriter.scala:141:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_8;	// src/main/scala/streamer/DataWriter.scala:141:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_9;	// src/main/scala/streamer/DataWriter.scala:141:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_10;	// src/main/scala/streamer/DataWriter.scala:141:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_11;	// src/main/scala/streamer/DataWriter.scala:141:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_12;	// src/main/scala/streamer/DataWriter.scala:141:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_13;	// src/main/scala/streamer/DataWriter.scala:141:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_14;	// src/main/scala/streamer/DataWriter.scala:141:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_15;	// src/main/scala/streamer/DataWriter.scala:141:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_16;	// src/main/scala/streamer/DataWriter.scala:141:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_17;	// src/main/scala/streamer/DataWriter.scala:141:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_18;	// src/main/scala/streamer/DataWriter.scala:141:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_19;	// src/main/scala/streamer/DataWriter.scala:141:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_20;	// src/main/scala/streamer/DataWriter.scala:141:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_21;	// src/main/scala/streamer/DataWriter.scala:141:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_22;	// src/main/scala/streamer/DataWriter.scala:141:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_23;	// src/main/scala/streamer/DataWriter.scala:141:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_24;	// src/main/scala/streamer/DataWriter.scala:141:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_25;	// src/main/scala/streamer/DataWriter.scala:141:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_26;	// src/main/scala/streamer/DataWriter.scala:141:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_27;	// src/main/scala/streamer/DataWriter.scala:141:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_28;	// src/main/scala/streamer/DataWriter.scala:141:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_29;	// src/main/scala/streamer/DataWriter.scala:141:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_30;	// src/main/scala/streamer/DataWriter.scala:141:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_31;	// src/main/scala/streamer/DataWriter.scala:141:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_32;	// src/main/scala/streamer/DataWriter.scala:141:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_33;	// src/main/scala/streamer/DataWriter.scala:141:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_34;	// src/main/scala/streamer/DataWriter.scala:141:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_35;	// src/main/scala/streamer/DataWriter.scala:141:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_36;	// src/main/scala/streamer/DataWriter.scala:141:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_37;	// src/main/scala/streamer/DataWriter.scala:141:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_38;	// src/main/scala/streamer/DataWriter.scala:141:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_39;	// src/main/scala/streamer/DataWriter.scala:141:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_40;	// src/main/scala/streamer/DataWriter.scala:141:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_41;	// src/main/scala/streamer/DataWriter.scala:141:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_42;	// src/main/scala/streamer/DataWriter.scala:141:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_43;	// src/main/scala/streamer/DataWriter.scala:141:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_44;	// src/main/scala/streamer/DataWriter.scala:141:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_45;	// src/main/scala/streamer/DataWriter.scala:141:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_46;	// src/main/scala/streamer/DataWriter.scala:141:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_47;	// src/main/scala/streamer/DataWriter.scala:141:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_48;	// src/main/scala/streamer/DataWriter.scala:141:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_49;	// src/main/scala/streamer/DataWriter.scala:141:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_50;	// src/main/scala/streamer/DataWriter.scala:141:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_51;	// src/main/scala/streamer/DataWriter.scala:141:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_52;	// src/main/scala/streamer/DataWriter.scala:141:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_53;	// src/main/scala/streamer/DataWriter.scala:141:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_54;	// src/main/scala/streamer/DataWriter.scala:141:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_55;	// src/main/scala/streamer/DataWriter.scala:141:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_56;	// src/main/scala/streamer/DataWriter.scala:141:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_57;	// src/main/scala/streamer/DataWriter.scala:141:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_58;	// src/main/scala/streamer/DataWriter.scala:141:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_59;	// src/main/scala/streamer/DataWriter.scala:141:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_60;	// src/main/scala/streamer/DataWriter.scala:141:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_61;	// src/main/scala/streamer/DataWriter.scala:141:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_62;	// src/main/scala/streamer/DataWriter.scala:141:39
-  wire [31:0] _unrolling_addr_gen_unit_io_unrolling_addr_o_63;	// src/main/scala/streamer/DataWriter.scala:141:39
   reg  [31:0] ptr_agu;	// src/main/scala/streamer/DataWriter.scala:65:24
   reg  [31:0] unrollingStrides_0;	// src/main/scala/streamer/DataWriter.scala:71:33
-  reg  [31:0] unrollingStrides_1;	// src/main/scala/streamer/DataWriter.scala:71:33
   reg         tcdm_rsp_i_q_ready_reg_0;	// src/main/scala/streamer/DataWriter.scala:87:39
   reg         tcdm_rsp_i_q_ready_reg_1;	// src/main/scala/streamer/DataWriter.scala:87:39
   reg         tcdm_rsp_i_q_ready_reg_2;	// src/main/scala/streamer/DataWriter.scala:87:39
   reg         tcdm_rsp_i_q_ready_reg_3;	// src/main/scala/streamer/DataWriter.scala:87:39
-  reg         tcdm_rsp_i_q_ready_reg_4;	// src/main/scala/streamer/DataWriter.scala:87:39
-  reg         tcdm_rsp_i_q_ready_reg_5;	// src/main/scala/streamer/DataWriter.scala:87:39
-  reg         tcdm_rsp_i_q_ready_reg_6;	// src/main/scala/streamer/DataWriter.scala:87:39
-  reg         tcdm_rsp_i_q_ready_reg_7;	// src/main/scala/streamer/DataWriter.scala:87:39
-  reg         tcdm_rsp_i_q_ready_reg_8;	// src/main/scala/streamer/DataWriter.scala:87:39
-  reg         tcdm_rsp_i_q_ready_reg_9;	// src/main/scala/streamer/DataWriter.scala:87:39
-  reg         tcdm_rsp_i_q_ready_reg_10;	// src/main/scala/streamer/DataWriter.scala:87:39
-  reg         tcdm_rsp_i_q_ready_reg_11;	// src/main/scala/streamer/DataWriter.scala:87:39
-  reg         tcdm_rsp_i_q_ready_reg_12;	// src/main/scala/streamer/DataWriter.scala:87:39
-  reg         tcdm_rsp_i_q_ready_reg_13;	// src/main/scala/streamer/DataWriter.scala:87:39
-  reg         tcdm_rsp_i_q_ready_reg_14;	// src/main/scala/streamer/DataWriter.scala:87:39
-  reg         tcdm_rsp_i_q_ready_reg_15;	// src/main/scala/streamer/DataWriter.scala:87:39
-  reg         tcdm_rsp_i_q_ready_reg_16;	// src/main/scala/streamer/DataWriter.scala:87:39
-  reg         tcdm_rsp_i_q_ready_reg_17;	// src/main/scala/streamer/DataWriter.scala:87:39
-  reg         tcdm_rsp_i_q_ready_reg_18;	// src/main/scala/streamer/DataWriter.scala:87:39
-  reg         tcdm_rsp_i_q_ready_reg_19;	// src/main/scala/streamer/DataWriter.scala:87:39
-  reg         tcdm_rsp_i_q_ready_reg_20;	// src/main/scala/streamer/DataWriter.scala:87:39
-  reg         tcdm_rsp_i_q_ready_reg_21;	// src/main/scala/streamer/DataWriter.scala:87:39
-  reg         tcdm_rsp_i_q_ready_reg_22;	// src/main/scala/streamer/DataWriter.scala:87:39
-  reg         tcdm_rsp_i_q_ready_reg_23;	// src/main/scala/streamer/DataWriter.scala:87:39
-  reg         tcdm_rsp_i_q_ready_reg_24;	// src/main/scala/streamer/DataWriter.scala:87:39
-  reg         tcdm_rsp_i_q_ready_reg_25;	// src/main/scala/streamer/DataWriter.scala:87:39
-  reg         tcdm_rsp_i_q_ready_reg_26;	// src/main/scala/streamer/DataWriter.scala:87:39
-  reg         tcdm_rsp_i_q_ready_reg_27;	// src/main/scala/streamer/DataWriter.scala:87:39
-  reg         tcdm_rsp_i_q_ready_reg_28;	// src/main/scala/streamer/DataWriter.scala:87:39
-  reg         tcdm_rsp_i_q_ready_reg_29;	// src/main/scala/streamer/DataWriter.scala:87:39
-  reg         tcdm_rsp_i_q_ready_reg_30;	// src/main/scala/streamer/DataWriter.scala:87:39
-  reg         tcdm_rsp_i_q_ready_reg_31;	// src/main/scala/streamer/DataWriter.scala:87:39
   reg         cstate;	// src/main/scala/streamer/DataWriter.scala:98:23
-  wire        _T_228 = _io_ptr_agu_i_ready_output & io_ptr_agu_i_valid;	// src/main/scala/chisel3/util/Decoupled.scala:52:35, src/main/scala/streamer/DataWriter.scala:217:42
+  wire        _T_32 = _io_ptr_agu_i_ready_output & io_ptr_agu_i_valid;	// src/main/scala/chisel3/util/Decoupled.scala:52:35, src/main/scala/streamer/DataWriter.scala:217:42
   wire        can_send_tcdm_write_req = io_data_fifo_i_valid & cstate;	// src/main/scala/streamer/DataWriter.scala:98:23, :164:51
   wire        wait_for_q_ready_write =
     can_send_tcdm_write_req & ~tcdm_write_mem_all_ready;	// src/main/scala/streamer/DataWriter.scala:164:51, :191:{34,37}, :213:59
@@ -1488,85 +625,26 @@ module DataWriter(	// <stdin>:3720:10
     (io_tcdm_ready_i_0 | tcdm_rsp_i_q_ready_reg_0)
     & (io_tcdm_ready_i_1 | tcdm_rsp_i_q_ready_reg_1)
     & (io_tcdm_ready_i_2 | tcdm_rsp_i_q_ready_reg_2)
-    & (io_tcdm_ready_i_3 | tcdm_rsp_i_q_ready_reg_3)
-    & (io_tcdm_ready_i_4 | tcdm_rsp_i_q_ready_reg_4)
-    & (io_tcdm_ready_i_5 | tcdm_rsp_i_q_ready_reg_5)
-    & (io_tcdm_ready_i_6 | tcdm_rsp_i_q_ready_reg_6)
-    & (io_tcdm_ready_i_7 | tcdm_rsp_i_q_ready_reg_7)
-    & (io_tcdm_ready_i_8 | tcdm_rsp_i_q_ready_reg_8)
-    & (io_tcdm_ready_i_9 | tcdm_rsp_i_q_ready_reg_9)
-    & (io_tcdm_ready_i_10 | tcdm_rsp_i_q_ready_reg_10)
-    & (io_tcdm_ready_i_11 | tcdm_rsp_i_q_ready_reg_11)
-    & (io_tcdm_ready_i_12 | tcdm_rsp_i_q_ready_reg_12)
-    & (io_tcdm_ready_i_13 | tcdm_rsp_i_q_ready_reg_13)
-    & (io_tcdm_ready_i_14 | tcdm_rsp_i_q_ready_reg_14)
-    & (io_tcdm_ready_i_15 | tcdm_rsp_i_q_ready_reg_15)
-    & (io_tcdm_ready_i_16 | tcdm_rsp_i_q_ready_reg_16)
-    & (io_tcdm_ready_i_17 | tcdm_rsp_i_q_ready_reg_17)
-    & (io_tcdm_ready_i_18 | tcdm_rsp_i_q_ready_reg_18)
-    & (io_tcdm_ready_i_19 | tcdm_rsp_i_q_ready_reg_19)
-    & (io_tcdm_ready_i_20 | tcdm_rsp_i_q_ready_reg_20)
-    & (io_tcdm_ready_i_21 | tcdm_rsp_i_q_ready_reg_21)
-    & (io_tcdm_ready_i_22 | tcdm_rsp_i_q_ready_reg_22)
-    & (io_tcdm_ready_i_23 | tcdm_rsp_i_q_ready_reg_23)
-    & (io_tcdm_ready_i_24 | tcdm_rsp_i_q_ready_reg_24)
-    & (io_tcdm_ready_i_25 | tcdm_rsp_i_q_ready_reg_25)
-    & (io_tcdm_ready_i_26 | tcdm_rsp_i_q_ready_reg_26)
-    & (io_tcdm_ready_i_27 | tcdm_rsp_i_q_ready_reg_27)
-    & (io_tcdm_ready_i_28 | tcdm_rsp_i_q_ready_reg_28)
-    & (io_tcdm_ready_i_29 | tcdm_rsp_i_q_ready_reg_29)
-    & (io_tcdm_ready_i_30 | tcdm_rsp_i_q_ready_reg_30)
-    & (io_tcdm_ready_i_31 | tcdm_rsp_i_q_ready_reg_31);	// src/main/scala/streamer/DataWriter.scala:87:39, :210:49, :213:59
+    & (io_tcdm_ready_i_3 | tcdm_rsp_i_q_ready_reg_3);	// src/main/scala/streamer/DataWriter.scala:87:39, :210:49, :213:59
   assign _io_ptr_agu_i_ready_output =
     cstate & ~wait_for_q_ready_write & can_send_tcdm_write_req;	// src/main/scala/streamer/DataWriter.scala:98:23, :164:51, :191:34, :214:30, :217:42
-  always @(posedge clock or posedge reset) begin	// <stdin>:3721:11
-    if (reset) begin	// <stdin>:3721:11
+  always @(posedge clock or posedge reset) begin	// <stdin>:1067:11
+    if (reset) begin	// <stdin>:1067:11
       ptr_agu <= 32'h0;	// src/main/scala/streamer/DataWriter.scala:65:24
       unrollingStrides_0 <= 32'h0;	// src/main/scala/streamer/DataWriter.scala:65:24, :71:33
-      unrollingStrides_1 <= 32'h0;	// src/main/scala/streamer/DataWriter.scala:65:24, :71:33
       tcdm_rsp_i_q_ready_reg_0 <= 1'h0;	// src/main/scala/streamer/DataWriter.scala:70:30, :87:39
       tcdm_rsp_i_q_ready_reg_1 <= 1'h0;	// src/main/scala/streamer/DataWriter.scala:70:30, :87:39
       tcdm_rsp_i_q_ready_reg_2 <= 1'h0;	// src/main/scala/streamer/DataWriter.scala:70:30, :87:39
       tcdm_rsp_i_q_ready_reg_3 <= 1'h0;	// src/main/scala/streamer/DataWriter.scala:70:30, :87:39
-      tcdm_rsp_i_q_ready_reg_4 <= 1'h0;	// src/main/scala/streamer/DataWriter.scala:70:30, :87:39
-      tcdm_rsp_i_q_ready_reg_5 <= 1'h0;	// src/main/scala/streamer/DataWriter.scala:70:30, :87:39
-      tcdm_rsp_i_q_ready_reg_6 <= 1'h0;	// src/main/scala/streamer/DataWriter.scala:70:30, :87:39
-      tcdm_rsp_i_q_ready_reg_7 <= 1'h0;	// src/main/scala/streamer/DataWriter.scala:70:30, :87:39
-      tcdm_rsp_i_q_ready_reg_8 <= 1'h0;	// src/main/scala/streamer/DataWriter.scala:70:30, :87:39
-      tcdm_rsp_i_q_ready_reg_9 <= 1'h0;	// src/main/scala/streamer/DataWriter.scala:70:30, :87:39
-      tcdm_rsp_i_q_ready_reg_10 <= 1'h0;	// src/main/scala/streamer/DataWriter.scala:70:30, :87:39
-      tcdm_rsp_i_q_ready_reg_11 <= 1'h0;	// src/main/scala/streamer/DataWriter.scala:70:30, :87:39
-      tcdm_rsp_i_q_ready_reg_12 <= 1'h0;	// src/main/scala/streamer/DataWriter.scala:70:30, :87:39
-      tcdm_rsp_i_q_ready_reg_13 <= 1'h0;	// src/main/scala/streamer/DataWriter.scala:70:30, :87:39
-      tcdm_rsp_i_q_ready_reg_14 <= 1'h0;	// src/main/scala/streamer/DataWriter.scala:70:30, :87:39
-      tcdm_rsp_i_q_ready_reg_15 <= 1'h0;	// src/main/scala/streamer/DataWriter.scala:70:30, :87:39
-      tcdm_rsp_i_q_ready_reg_16 <= 1'h0;	// src/main/scala/streamer/DataWriter.scala:70:30, :87:39
-      tcdm_rsp_i_q_ready_reg_17 <= 1'h0;	// src/main/scala/streamer/DataWriter.scala:70:30, :87:39
-      tcdm_rsp_i_q_ready_reg_18 <= 1'h0;	// src/main/scala/streamer/DataWriter.scala:70:30, :87:39
-      tcdm_rsp_i_q_ready_reg_19 <= 1'h0;	// src/main/scala/streamer/DataWriter.scala:70:30, :87:39
-      tcdm_rsp_i_q_ready_reg_20 <= 1'h0;	// src/main/scala/streamer/DataWriter.scala:70:30, :87:39
-      tcdm_rsp_i_q_ready_reg_21 <= 1'h0;	// src/main/scala/streamer/DataWriter.scala:70:30, :87:39
-      tcdm_rsp_i_q_ready_reg_22 <= 1'h0;	// src/main/scala/streamer/DataWriter.scala:70:30, :87:39
-      tcdm_rsp_i_q_ready_reg_23 <= 1'h0;	// src/main/scala/streamer/DataWriter.scala:70:30, :87:39
-      tcdm_rsp_i_q_ready_reg_24 <= 1'h0;	// src/main/scala/streamer/DataWriter.scala:70:30, :87:39
-      tcdm_rsp_i_q_ready_reg_25 <= 1'h0;	// src/main/scala/streamer/DataWriter.scala:70:30, :87:39
-      tcdm_rsp_i_q_ready_reg_26 <= 1'h0;	// src/main/scala/streamer/DataWriter.scala:70:30, :87:39
-      tcdm_rsp_i_q_ready_reg_27 <= 1'h0;	// src/main/scala/streamer/DataWriter.scala:70:30, :87:39
-      tcdm_rsp_i_q_ready_reg_28 <= 1'h0;	// src/main/scala/streamer/DataWriter.scala:70:30, :87:39
-      tcdm_rsp_i_q_ready_reg_29 <= 1'h0;	// src/main/scala/streamer/DataWriter.scala:70:30, :87:39
-      tcdm_rsp_i_q_ready_reg_30 <= 1'h0;	// src/main/scala/streamer/DataWriter.scala:70:30, :87:39
-      tcdm_rsp_i_q_ready_reg_31 <= 1'h0;	// src/main/scala/streamer/DataWriter.scala:70:30, :87:39
       cstate <= 1'h0;	// src/main/scala/streamer/DataWriter.scala:70:30, :98:23
     end
-    else begin	// <stdin>:3721:11
+    else begin	// <stdin>:1067:11
       automatic logic config_valid;	// src/main/scala/chisel3/util/Decoupled.scala:52:35
       config_valid = ~cstate & io_unrollingStrides_csr_i_valid;	// src/main/scala/chisel3/util/Decoupled.scala:52:35, src/main/scala/streamer/DataWriter.scala:98:23, :105:18
-      if (_T_228)	// src/main/scala/chisel3/util/Decoupled.scala:52:35
+      if (_T_32)	// src/main/scala/chisel3/util/Decoupled.scala:52:35
         ptr_agu <= io_ptr_agu_i_bits;	// src/main/scala/streamer/DataWriter.scala:65:24
-      if (config_valid) begin	// src/main/scala/chisel3/util/Decoupled.scala:52:35
+      if (config_valid)	// src/main/scala/chisel3/util/Decoupled.scala:52:35
         unrollingStrides_0 <= io_unrollingStrides_csr_i_bits_0;	// src/main/scala/streamer/DataWriter.scala:71:33
-        unrollingStrides_1 <= io_unrollingStrides_csr_i_bits_1;	// src/main/scala/streamer/DataWriter.scala:71:33
-      end
       tcdm_rsp_i_q_ready_reg_0 <=
         wait_for_q_ready_write & ~tcdm_write_mem_all_ready
         & (io_tcdm_ready_i_0 ? io_tcdm_ready_i_0 : tcdm_rsp_i_q_ready_reg_0);	// src/main/scala/streamer/DataWriter.scala:87:39, :191:{34,37}, :200:63, :201:32, :202:35, :205:33, :213:59
@@ -1579,97 +657,13 @@ module DataWriter(	// <stdin>:3720:10
       tcdm_rsp_i_q_ready_reg_3 <=
         wait_for_q_ready_write & ~tcdm_write_mem_all_ready
         & (io_tcdm_ready_i_3 ? io_tcdm_ready_i_3 : tcdm_rsp_i_q_ready_reg_3);	// src/main/scala/streamer/DataWriter.scala:87:39, :191:{34,37}, :200:63, :201:32, :202:35, :205:33, :213:59
-      tcdm_rsp_i_q_ready_reg_4 <=
-        wait_for_q_ready_write & ~tcdm_write_mem_all_ready
-        & (io_tcdm_ready_i_4 ? io_tcdm_ready_i_4 : tcdm_rsp_i_q_ready_reg_4);	// src/main/scala/streamer/DataWriter.scala:87:39, :191:{34,37}, :200:63, :201:32, :202:35, :205:33, :213:59
-      tcdm_rsp_i_q_ready_reg_5 <=
-        wait_for_q_ready_write & ~tcdm_write_mem_all_ready
-        & (io_tcdm_ready_i_5 ? io_tcdm_ready_i_5 : tcdm_rsp_i_q_ready_reg_5);	// src/main/scala/streamer/DataWriter.scala:87:39, :191:{34,37}, :200:63, :201:32, :202:35, :205:33, :213:59
-      tcdm_rsp_i_q_ready_reg_6 <=
-        wait_for_q_ready_write & ~tcdm_write_mem_all_ready
-        & (io_tcdm_ready_i_6 ? io_tcdm_ready_i_6 : tcdm_rsp_i_q_ready_reg_6);	// src/main/scala/streamer/DataWriter.scala:87:39, :191:{34,37}, :200:63, :201:32, :202:35, :205:33, :213:59
-      tcdm_rsp_i_q_ready_reg_7 <=
-        wait_for_q_ready_write & ~tcdm_write_mem_all_ready
-        & (io_tcdm_ready_i_7 ? io_tcdm_ready_i_7 : tcdm_rsp_i_q_ready_reg_7);	// src/main/scala/streamer/DataWriter.scala:87:39, :191:{34,37}, :200:63, :201:32, :202:35, :205:33, :213:59
-      tcdm_rsp_i_q_ready_reg_8 <=
-        wait_for_q_ready_write & ~tcdm_write_mem_all_ready
-        & (io_tcdm_ready_i_8 ? io_tcdm_ready_i_8 : tcdm_rsp_i_q_ready_reg_8);	// src/main/scala/streamer/DataWriter.scala:87:39, :191:{34,37}, :200:63, :201:32, :202:35, :205:33, :213:59
-      tcdm_rsp_i_q_ready_reg_9 <=
-        wait_for_q_ready_write & ~tcdm_write_mem_all_ready
-        & (io_tcdm_ready_i_9 ? io_tcdm_ready_i_9 : tcdm_rsp_i_q_ready_reg_9);	// src/main/scala/streamer/DataWriter.scala:87:39, :191:{34,37}, :200:63, :201:32, :202:35, :205:33, :213:59
-      tcdm_rsp_i_q_ready_reg_10 <=
-        wait_for_q_ready_write & ~tcdm_write_mem_all_ready
-        & (io_tcdm_ready_i_10 ? io_tcdm_ready_i_10 : tcdm_rsp_i_q_ready_reg_10);	// src/main/scala/streamer/DataWriter.scala:87:39, :191:{34,37}, :200:63, :201:32, :202:35, :205:33, :213:59
-      tcdm_rsp_i_q_ready_reg_11 <=
-        wait_for_q_ready_write & ~tcdm_write_mem_all_ready
-        & (io_tcdm_ready_i_11 ? io_tcdm_ready_i_11 : tcdm_rsp_i_q_ready_reg_11);	// src/main/scala/streamer/DataWriter.scala:87:39, :191:{34,37}, :200:63, :201:32, :202:35, :205:33, :213:59
-      tcdm_rsp_i_q_ready_reg_12 <=
-        wait_for_q_ready_write & ~tcdm_write_mem_all_ready
-        & (io_tcdm_ready_i_12 ? io_tcdm_ready_i_12 : tcdm_rsp_i_q_ready_reg_12);	// src/main/scala/streamer/DataWriter.scala:87:39, :191:{34,37}, :200:63, :201:32, :202:35, :205:33, :213:59
-      tcdm_rsp_i_q_ready_reg_13 <=
-        wait_for_q_ready_write & ~tcdm_write_mem_all_ready
-        & (io_tcdm_ready_i_13 ? io_tcdm_ready_i_13 : tcdm_rsp_i_q_ready_reg_13);	// src/main/scala/streamer/DataWriter.scala:87:39, :191:{34,37}, :200:63, :201:32, :202:35, :205:33, :213:59
-      tcdm_rsp_i_q_ready_reg_14 <=
-        wait_for_q_ready_write & ~tcdm_write_mem_all_ready
-        & (io_tcdm_ready_i_14 ? io_tcdm_ready_i_14 : tcdm_rsp_i_q_ready_reg_14);	// src/main/scala/streamer/DataWriter.scala:87:39, :191:{34,37}, :200:63, :201:32, :202:35, :205:33, :213:59
-      tcdm_rsp_i_q_ready_reg_15 <=
-        wait_for_q_ready_write & ~tcdm_write_mem_all_ready
-        & (io_tcdm_ready_i_15 ? io_tcdm_ready_i_15 : tcdm_rsp_i_q_ready_reg_15);	// src/main/scala/streamer/DataWriter.scala:87:39, :191:{34,37}, :200:63, :201:32, :202:35, :205:33, :213:59
-      tcdm_rsp_i_q_ready_reg_16 <=
-        wait_for_q_ready_write & ~tcdm_write_mem_all_ready
-        & (io_tcdm_ready_i_16 ? io_tcdm_ready_i_16 : tcdm_rsp_i_q_ready_reg_16);	// src/main/scala/streamer/DataWriter.scala:87:39, :191:{34,37}, :200:63, :201:32, :202:35, :205:33, :213:59
-      tcdm_rsp_i_q_ready_reg_17 <=
-        wait_for_q_ready_write & ~tcdm_write_mem_all_ready
-        & (io_tcdm_ready_i_17 ? io_tcdm_ready_i_17 : tcdm_rsp_i_q_ready_reg_17);	// src/main/scala/streamer/DataWriter.scala:87:39, :191:{34,37}, :200:63, :201:32, :202:35, :205:33, :213:59
-      tcdm_rsp_i_q_ready_reg_18 <=
-        wait_for_q_ready_write & ~tcdm_write_mem_all_ready
-        & (io_tcdm_ready_i_18 ? io_tcdm_ready_i_18 : tcdm_rsp_i_q_ready_reg_18);	// src/main/scala/streamer/DataWriter.scala:87:39, :191:{34,37}, :200:63, :201:32, :202:35, :205:33, :213:59
-      tcdm_rsp_i_q_ready_reg_19 <=
-        wait_for_q_ready_write & ~tcdm_write_mem_all_ready
-        & (io_tcdm_ready_i_19 ? io_tcdm_ready_i_19 : tcdm_rsp_i_q_ready_reg_19);	// src/main/scala/streamer/DataWriter.scala:87:39, :191:{34,37}, :200:63, :201:32, :202:35, :205:33, :213:59
-      tcdm_rsp_i_q_ready_reg_20 <=
-        wait_for_q_ready_write & ~tcdm_write_mem_all_ready
-        & (io_tcdm_ready_i_20 ? io_tcdm_ready_i_20 : tcdm_rsp_i_q_ready_reg_20);	// src/main/scala/streamer/DataWriter.scala:87:39, :191:{34,37}, :200:63, :201:32, :202:35, :205:33, :213:59
-      tcdm_rsp_i_q_ready_reg_21 <=
-        wait_for_q_ready_write & ~tcdm_write_mem_all_ready
-        & (io_tcdm_ready_i_21 ? io_tcdm_ready_i_21 : tcdm_rsp_i_q_ready_reg_21);	// src/main/scala/streamer/DataWriter.scala:87:39, :191:{34,37}, :200:63, :201:32, :202:35, :205:33, :213:59
-      tcdm_rsp_i_q_ready_reg_22 <=
-        wait_for_q_ready_write & ~tcdm_write_mem_all_ready
-        & (io_tcdm_ready_i_22 ? io_tcdm_ready_i_22 : tcdm_rsp_i_q_ready_reg_22);	// src/main/scala/streamer/DataWriter.scala:87:39, :191:{34,37}, :200:63, :201:32, :202:35, :205:33, :213:59
-      tcdm_rsp_i_q_ready_reg_23 <=
-        wait_for_q_ready_write & ~tcdm_write_mem_all_ready
-        & (io_tcdm_ready_i_23 ? io_tcdm_ready_i_23 : tcdm_rsp_i_q_ready_reg_23);	// src/main/scala/streamer/DataWriter.scala:87:39, :191:{34,37}, :200:63, :201:32, :202:35, :205:33, :213:59
-      tcdm_rsp_i_q_ready_reg_24 <=
-        wait_for_q_ready_write & ~tcdm_write_mem_all_ready
-        & (io_tcdm_ready_i_24 ? io_tcdm_ready_i_24 : tcdm_rsp_i_q_ready_reg_24);	// src/main/scala/streamer/DataWriter.scala:87:39, :191:{34,37}, :200:63, :201:32, :202:35, :205:33, :213:59
-      tcdm_rsp_i_q_ready_reg_25 <=
-        wait_for_q_ready_write & ~tcdm_write_mem_all_ready
-        & (io_tcdm_ready_i_25 ? io_tcdm_ready_i_25 : tcdm_rsp_i_q_ready_reg_25);	// src/main/scala/streamer/DataWriter.scala:87:39, :191:{34,37}, :200:63, :201:32, :202:35, :205:33, :213:59
-      tcdm_rsp_i_q_ready_reg_26 <=
-        wait_for_q_ready_write & ~tcdm_write_mem_all_ready
-        & (io_tcdm_ready_i_26 ? io_tcdm_ready_i_26 : tcdm_rsp_i_q_ready_reg_26);	// src/main/scala/streamer/DataWriter.scala:87:39, :191:{34,37}, :200:63, :201:32, :202:35, :205:33, :213:59
-      tcdm_rsp_i_q_ready_reg_27 <=
-        wait_for_q_ready_write & ~tcdm_write_mem_all_ready
-        & (io_tcdm_ready_i_27 ? io_tcdm_ready_i_27 : tcdm_rsp_i_q_ready_reg_27);	// src/main/scala/streamer/DataWriter.scala:87:39, :191:{34,37}, :200:63, :201:32, :202:35, :205:33, :213:59
-      tcdm_rsp_i_q_ready_reg_28 <=
-        wait_for_q_ready_write & ~tcdm_write_mem_all_ready
-        & (io_tcdm_ready_i_28 ? io_tcdm_ready_i_28 : tcdm_rsp_i_q_ready_reg_28);	// src/main/scala/streamer/DataWriter.scala:87:39, :191:{34,37}, :200:63, :201:32, :202:35, :205:33, :213:59
-      tcdm_rsp_i_q_ready_reg_29 <=
-        wait_for_q_ready_write & ~tcdm_write_mem_all_ready
-        & (io_tcdm_ready_i_29 ? io_tcdm_ready_i_29 : tcdm_rsp_i_q_ready_reg_29);	// src/main/scala/streamer/DataWriter.scala:87:39, :191:{34,37}, :200:63, :201:32, :202:35, :205:33, :213:59
-      tcdm_rsp_i_q_ready_reg_30 <=
-        wait_for_q_ready_write & ~tcdm_write_mem_all_ready
-        & (io_tcdm_ready_i_30 ? io_tcdm_ready_i_30 : tcdm_rsp_i_q_ready_reg_30);	// src/main/scala/streamer/DataWriter.scala:87:39, :191:{34,37}, :200:63, :201:32, :202:35, :205:33, :213:59
-      tcdm_rsp_i_q_ready_reg_31 <=
-        wait_for_q_ready_write & ~tcdm_write_mem_all_ready
-        & (io_tcdm_ready_i_31 ? io_tcdm_ready_i_31 : tcdm_rsp_i_q_ready_reg_31);	// src/main/scala/streamer/DataWriter.scala:87:39, :191:{34,37}, :200:63, :201:32, :202:35, :205:33, :213:59
       if (cstate)	// src/main/scala/streamer/DataWriter.scala:98:23
         cstate <= cstate & ~io_data_move_done;	// src/main/scala/streamer/DataWriter.scala:70:30, :98:23, :99:24, :105:18, :108:16, :115:31, :116:16, :118:16
       else	// src/main/scala/streamer/DataWriter.scala:98:23
         cstate <= config_valid;	// src/main/scala/chisel3/util/Decoupled.scala:52:35, src/main/scala/streamer/DataWriter.scala:98:23
     end
   end // always @(posedge, posedge)
-  `ifndef SYNTHESIS	// <stdin>:3720:10
+  `ifndef SYNTHESIS	// <stdin>:1066:10
     always @(posedge clock) begin	// src/main/scala/streamer/DataWriter.scala:154:15
       if (cstate & ~reset
           & _unrolling_addr_gen_unit_io_unrolling_addr_o_1 != _unrolling_addr_gen_unit_io_unrolling_addr_o_0
@@ -1703,328 +697,45 @@ module DataWriter(	// <stdin>:3720:10
         if (`STOP_COND_)	// src/main/scala/streamer/DataWriter.scala:154:15
           $fatal;	// src/main/scala/streamer/DataWriter.scala:154:15
       end
-      if (cstate & ~reset
-          & _unrolling_addr_gen_unit_io_unrolling_addr_o_9 != _unrolling_addr_gen_unit_io_unrolling_addr_o_8
-          + 32'h1) begin	// src/main/scala/streamer/DataWriter.scala:98:23, :141:39, :154:15, :155:55, :157:13
-        if (`ASSERT_VERBOSE_COND_)	// src/main/scala/streamer/DataWriter.scala:154:15
-          $error("Assertion failed: write address in not consecutive in the same bank!\n    at DataWriter.scala:154 assert(\n");	// src/main/scala/streamer/DataWriter.scala:154:15
-        if (`STOP_COND_)	// src/main/scala/streamer/DataWriter.scala:154:15
-          $fatal;	// src/main/scala/streamer/DataWriter.scala:154:15
-      end
-      if (cstate & ~reset
-          & _unrolling_addr_gen_unit_io_unrolling_addr_o_11 != _unrolling_addr_gen_unit_io_unrolling_addr_o_10
-          + 32'h1) begin	// src/main/scala/streamer/DataWriter.scala:98:23, :141:39, :154:15, :155:55, :157:13
-        if (`ASSERT_VERBOSE_COND_)	// src/main/scala/streamer/DataWriter.scala:154:15
-          $error("Assertion failed: write address in not consecutive in the same bank!\n    at DataWriter.scala:154 assert(\n");	// src/main/scala/streamer/DataWriter.scala:154:15
-        if (`STOP_COND_)	// src/main/scala/streamer/DataWriter.scala:154:15
-          $fatal;	// src/main/scala/streamer/DataWriter.scala:154:15
-      end
-      if (cstate & ~reset
-          & _unrolling_addr_gen_unit_io_unrolling_addr_o_13 != _unrolling_addr_gen_unit_io_unrolling_addr_o_12
-          + 32'h1) begin	// src/main/scala/streamer/DataWriter.scala:98:23, :141:39, :154:15, :155:55, :157:13
-        if (`ASSERT_VERBOSE_COND_)	// src/main/scala/streamer/DataWriter.scala:154:15
-          $error("Assertion failed: write address in not consecutive in the same bank!\n    at DataWriter.scala:154 assert(\n");	// src/main/scala/streamer/DataWriter.scala:154:15
-        if (`STOP_COND_)	// src/main/scala/streamer/DataWriter.scala:154:15
-          $fatal;	// src/main/scala/streamer/DataWriter.scala:154:15
-      end
-      if (cstate & ~reset
-          & _unrolling_addr_gen_unit_io_unrolling_addr_o_15 != _unrolling_addr_gen_unit_io_unrolling_addr_o_14
-          + 32'h1) begin	// src/main/scala/streamer/DataWriter.scala:98:23, :141:39, :154:15, :155:55, :157:13
-        if (`ASSERT_VERBOSE_COND_)	// src/main/scala/streamer/DataWriter.scala:154:15
-          $error("Assertion failed: write address in not consecutive in the same bank!\n    at DataWriter.scala:154 assert(\n");	// src/main/scala/streamer/DataWriter.scala:154:15
-        if (`STOP_COND_)	// src/main/scala/streamer/DataWriter.scala:154:15
-          $fatal;	// src/main/scala/streamer/DataWriter.scala:154:15
-      end
-      if (cstate & ~reset
-          & _unrolling_addr_gen_unit_io_unrolling_addr_o_17 != _unrolling_addr_gen_unit_io_unrolling_addr_o_16
-          + 32'h1) begin	// src/main/scala/streamer/DataWriter.scala:98:23, :141:39, :154:15, :155:55, :157:13
-        if (`ASSERT_VERBOSE_COND_)	// src/main/scala/streamer/DataWriter.scala:154:15
-          $error("Assertion failed: write address in not consecutive in the same bank!\n    at DataWriter.scala:154 assert(\n");	// src/main/scala/streamer/DataWriter.scala:154:15
-        if (`STOP_COND_)	// src/main/scala/streamer/DataWriter.scala:154:15
-          $fatal;	// src/main/scala/streamer/DataWriter.scala:154:15
-      end
-      if (cstate & ~reset
-          & _unrolling_addr_gen_unit_io_unrolling_addr_o_19 != _unrolling_addr_gen_unit_io_unrolling_addr_o_18
-          + 32'h1) begin	// src/main/scala/streamer/DataWriter.scala:98:23, :141:39, :154:15, :155:55, :157:13
-        if (`ASSERT_VERBOSE_COND_)	// src/main/scala/streamer/DataWriter.scala:154:15
-          $error("Assertion failed: write address in not consecutive in the same bank!\n    at DataWriter.scala:154 assert(\n");	// src/main/scala/streamer/DataWriter.scala:154:15
-        if (`STOP_COND_)	// src/main/scala/streamer/DataWriter.scala:154:15
-          $fatal;	// src/main/scala/streamer/DataWriter.scala:154:15
-      end
-      if (cstate & ~reset
-          & _unrolling_addr_gen_unit_io_unrolling_addr_o_21 != _unrolling_addr_gen_unit_io_unrolling_addr_o_20
-          + 32'h1) begin	// src/main/scala/streamer/DataWriter.scala:98:23, :141:39, :154:15, :155:55, :157:13
-        if (`ASSERT_VERBOSE_COND_)	// src/main/scala/streamer/DataWriter.scala:154:15
-          $error("Assertion failed: write address in not consecutive in the same bank!\n    at DataWriter.scala:154 assert(\n");	// src/main/scala/streamer/DataWriter.scala:154:15
-        if (`STOP_COND_)	// src/main/scala/streamer/DataWriter.scala:154:15
-          $fatal;	// src/main/scala/streamer/DataWriter.scala:154:15
-      end
-      if (cstate & ~reset
-          & _unrolling_addr_gen_unit_io_unrolling_addr_o_23 != _unrolling_addr_gen_unit_io_unrolling_addr_o_22
-          + 32'h1) begin	// src/main/scala/streamer/DataWriter.scala:98:23, :141:39, :154:15, :155:55, :157:13
-        if (`ASSERT_VERBOSE_COND_)	// src/main/scala/streamer/DataWriter.scala:154:15
-          $error("Assertion failed: write address in not consecutive in the same bank!\n    at DataWriter.scala:154 assert(\n");	// src/main/scala/streamer/DataWriter.scala:154:15
-        if (`STOP_COND_)	// src/main/scala/streamer/DataWriter.scala:154:15
-          $fatal;	// src/main/scala/streamer/DataWriter.scala:154:15
-      end
-      if (cstate & ~reset
-          & _unrolling_addr_gen_unit_io_unrolling_addr_o_25 != _unrolling_addr_gen_unit_io_unrolling_addr_o_24
-          + 32'h1) begin	// src/main/scala/streamer/DataWriter.scala:98:23, :141:39, :154:15, :155:55, :157:13
-        if (`ASSERT_VERBOSE_COND_)	// src/main/scala/streamer/DataWriter.scala:154:15
-          $error("Assertion failed: write address in not consecutive in the same bank!\n    at DataWriter.scala:154 assert(\n");	// src/main/scala/streamer/DataWriter.scala:154:15
-        if (`STOP_COND_)	// src/main/scala/streamer/DataWriter.scala:154:15
-          $fatal;	// src/main/scala/streamer/DataWriter.scala:154:15
-      end
-      if (cstate & ~reset
-          & _unrolling_addr_gen_unit_io_unrolling_addr_o_27 != _unrolling_addr_gen_unit_io_unrolling_addr_o_26
-          + 32'h1) begin	// src/main/scala/streamer/DataWriter.scala:98:23, :141:39, :154:15, :155:55, :157:13
-        if (`ASSERT_VERBOSE_COND_)	// src/main/scala/streamer/DataWriter.scala:154:15
-          $error("Assertion failed: write address in not consecutive in the same bank!\n    at DataWriter.scala:154 assert(\n");	// src/main/scala/streamer/DataWriter.scala:154:15
-        if (`STOP_COND_)	// src/main/scala/streamer/DataWriter.scala:154:15
-          $fatal;	// src/main/scala/streamer/DataWriter.scala:154:15
-      end
-      if (cstate & ~reset
-          & _unrolling_addr_gen_unit_io_unrolling_addr_o_29 != _unrolling_addr_gen_unit_io_unrolling_addr_o_28
-          + 32'h1) begin	// src/main/scala/streamer/DataWriter.scala:98:23, :141:39, :154:15, :155:55, :157:13
-        if (`ASSERT_VERBOSE_COND_)	// src/main/scala/streamer/DataWriter.scala:154:15
-          $error("Assertion failed: write address in not consecutive in the same bank!\n    at DataWriter.scala:154 assert(\n");	// src/main/scala/streamer/DataWriter.scala:154:15
-        if (`STOP_COND_)	// src/main/scala/streamer/DataWriter.scala:154:15
-          $fatal;	// src/main/scala/streamer/DataWriter.scala:154:15
-      end
-      if (cstate & ~reset
-          & _unrolling_addr_gen_unit_io_unrolling_addr_o_31 != _unrolling_addr_gen_unit_io_unrolling_addr_o_30
-          + 32'h1) begin	// src/main/scala/streamer/DataWriter.scala:98:23, :141:39, :154:15, :155:55, :157:13
-        if (`ASSERT_VERBOSE_COND_)	// src/main/scala/streamer/DataWriter.scala:154:15
-          $error("Assertion failed: write address in not consecutive in the same bank!\n    at DataWriter.scala:154 assert(\n");	// src/main/scala/streamer/DataWriter.scala:154:15
-        if (`STOP_COND_)	// src/main/scala/streamer/DataWriter.scala:154:15
-          $fatal;	// src/main/scala/streamer/DataWriter.scala:154:15
-      end
-      if (cstate & ~reset
-          & _unrolling_addr_gen_unit_io_unrolling_addr_o_33 != _unrolling_addr_gen_unit_io_unrolling_addr_o_32
-          + 32'h1) begin	// src/main/scala/streamer/DataWriter.scala:98:23, :141:39, :154:15, :155:55, :157:13
-        if (`ASSERT_VERBOSE_COND_)	// src/main/scala/streamer/DataWriter.scala:154:15
-          $error("Assertion failed: write address in not consecutive in the same bank!\n    at DataWriter.scala:154 assert(\n");	// src/main/scala/streamer/DataWriter.scala:154:15
-        if (`STOP_COND_)	// src/main/scala/streamer/DataWriter.scala:154:15
-          $fatal;	// src/main/scala/streamer/DataWriter.scala:154:15
-      end
-      if (cstate & ~reset
-          & _unrolling_addr_gen_unit_io_unrolling_addr_o_35 != _unrolling_addr_gen_unit_io_unrolling_addr_o_34
-          + 32'h1) begin	// src/main/scala/streamer/DataWriter.scala:98:23, :141:39, :154:15, :155:55, :157:13
-        if (`ASSERT_VERBOSE_COND_)	// src/main/scala/streamer/DataWriter.scala:154:15
-          $error("Assertion failed: write address in not consecutive in the same bank!\n    at DataWriter.scala:154 assert(\n");	// src/main/scala/streamer/DataWriter.scala:154:15
-        if (`STOP_COND_)	// src/main/scala/streamer/DataWriter.scala:154:15
-          $fatal;	// src/main/scala/streamer/DataWriter.scala:154:15
-      end
-      if (cstate & ~reset
-          & _unrolling_addr_gen_unit_io_unrolling_addr_o_37 != _unrolling_addr_gen_unit_io_unrolling_addr_o_36
-          + 32'h1) begin	// src/main/scala/streamer/DataWriter.scala:98:23, :141:39, :154:15, :155:55, :157:13
-        if (`ASSERT_VERBOSE_COND_)	// src/main/scala/streamer/DataWriter.scala:154:15
-          $error("Assertion failed: write address in not consecutive in the same bank!\n    at DataWriter.scala:154 assert(\n");	// src/main/scala/streamer/DataWriter.scala:154:15
-        if (`STOP_COND_)	// src/main/scala/streamer/DataWriter.scala:154:15
-          $fatal;	// src/main/scala/streamer/DataWriter.scala:154:15
-      end
-      if (cstate & ~reset
-          & _unrolling_addr_gen_unit_io_unrolling_addr_o_39 != _unrolling_addr_gen_unit_io_unrolling_addr_o_38
-          + 32'h1) begin	// src/main/scala/streamer/DataWriter.scala:98:23, :141:39, :154:15, :155:55, :157:13
-        if (`ASSERT_VERBOSE_COND_)	// src/main/scala/streamer/DataWriter.scala:154:15
-          $error("Assertion failed: write address in not consecutive in the same bank!\n    at DataWriter.scala:154 assert(\n");	// src/main/scala/streamer/DataWriter.scala:154:15
-        if (`STOP_COND_)	// src/main/scala/streamer/DataWriter.scala:154:15
-          $fatal;	// src/main/scala/streamer/DataWriter.scala:154:15
-      end
-      if (cstate & ~reset
-          & _unrolling_addr_gen_unit_io_unrolling_addr_o_41 != _unrolling_addr_gen_unit_io_unrolling_addr_o_40
-          + 32'h1) begin	// src/main/scala/streamer/DataWriter.scala:98:23, :141:39, :154:15, :155:55, :157:13
-        if (`ASSERT_VERBOSE_COND_)	// src/main/scala/streamer/DataWriter.scala:154:15
-          $error("Assertion failed: write address in not consecutive in the same bank!\n    at DataWriter.scala:154 assert(\n");	// src/main/scala/streamer/DataWriter.scala:154:15
-        if (`STOP_COND_)	// src/main/scala/streamer/DataWriter.scala:154:15
-          $fatal;	// src/main/scala/streamer/DataWriter.scala:154:15
-      end
-      if (cstate & ~reset
-          & _unrolling_addr_gen_unit_io_unrolling_addr_o_43 != _unrolling_addr_gen_unit_io_unrolling_addr_o_42
-          + 32'h1) begin	// src/main/scala/streamer/DataWriter.scala:98:23, :141:39, :154:15, :155:55, :157:13
-        if (`ASSERT_VERBOSE_COND_)	// src/main/scala/streamer/DataWriter.scala:154:15
-          $error("Assertion failed: write address in not consecutive in the same bank!\n    at DataWriter.scala:154 assert(\n");	// src/main/scala/streamer/DataWriter.scala:154:15
-        if (`STOP_COND_)	// src/main/scala/streamer/DataWriter.scala:154:15
-          $fatal;	// src/main/scala/streamer/DataWriter.scala:154:15
-      end
-      if (cstate & ~reset
-          & _unrolling_addr_gen_unit_io_unrolling_addr_o_45 != _unrolling_addr_gen_unit_io_unrolling_addr_o_44
-          + 32'h1) begin	// src/main/scala/streamer/DataWriter.scala:98:23, :141:39, :154:15, :155:55, :157:13
-        if (`ASSERT_VERBOSE_COND_)	// src/main/scala/streamer/DataWriter.scala:154:15
-          $error("Assertion failed: write address in not consecutive in the same bank!\n    at DataWriter.scala:154 assert(\n");	// src/main/scala/streamer/DataWriter.scala:154:15
-        if (`STOP_COND_)	// src/main/scala/streamer/DataWriter.scala:154:15
-          $fatal;	// src/main/scala/streamer/DataWriter.scala:154:15
-      end
-      if (cstate & ~reset
-          & _unrolling_addr_gen_unit_io_unrolling_addr_o_47 != _unrolling_addr_gen_unit_io_unrolling_addr_o_46
-          + 32'h1) begin	// src/main/scala/streamer/DataWriter.scala:98:23, :141:39, :154:15, :155:55, :157:13
-        if (`ASSERT_VERBOSE_COND_)	// src/main/scala/streamer/DataWriter.scala:154:15
-          $error("Assertion failed: write address in not consecutive in the same bank!\n    at DataWriter.scala:154 assert(\n");	// src/main/scala/streamer/DataWriter.scala:154:15
-        if (`STOP_COND_)	// src/main/scala/streamer/DataWriter.scala:154:15
-          $fatal;	// src/main/scala/streamer/DataWriter.scala:154:15
-      end
-      if (cstate & ~reset
-          & _unrolling_addr_gen_unit_io_unrolling_addr_o_49 != _unrolling_addr_gen_unit_io_unrolling_addr_o_48
-          + 32'h1) begin	// src/main/scala/streamer/DataWriter.scala:98:23, :141:39, :154:15, :155:55, :157:13
-        if (`ASSERT_VERBOSE_COND_)	// src/main/scala/streamer/DataWriter.scala:154:15
-          $error("Assertion failed: write address in not consecutive in the same bank!\n    at DataWriter.scala:154 assert(\n");	// src/main/scala/streamer/DataWriter.scala:154:15
-        if (`STOP_COND_)	// src/main/scala/streamer/DataWriter.scala:154:15
-          $fatal;	// src/main/scala/streamer/DataWriter.scala:154:15
-      end
-      if (cstate & ~reset
-          & _unrolling_addr_gen_unit_io_unrolling_addr_o_51 != _unrolling_addr_gen_unit_io_unrolling_addr_o_50
-          + 32'h1) begin	// src/main/scala/streamer/DataWriter.scala:98:23, :141:39, :154:15, :155:55, :157:13
-        if (`ASSERT_VERBOSE_COND_)	// src/main/scala/streamer/DataWriter.scala:154:15
-          $error("Assertion failed: write address in not consecutive in the same bank!\n    at DataWriter.scala:154 assert(\n");	// src/main/scala/streamer/DataWriter.scala:154:15
-        if (`STOP_COND_)	// src/main/scala/streamer/DataWriter.scala:154:15
-          $fatal;	// src/main/scala/streamer/DataWriter.scala:154:15
-      end
-      if (cstate & ~reset
-          & _unrolling_addr_gen_unit_io_unrolling_addr_o_53 != _unrolling_addr_gen_unit_io_unrolling_addr_o_52
-          + 32'h1) begin	// src/main/scala/streamer/DataWriter.scala:98:23, :141:39, :154:15, :155:55, :157:13
-        if (`ASSERT_VERBOSE_COND_)	// src/main/scala/streamer/DataWriter.scala:154:15
-          $error("Assertion failed: write address in not consecutive in the same bank!\n    at DataWriter.scala:154 assert(\n");	// src/main/scala/streamer/DataWriter.scala:154:15
-        if (`STOP_COND_)	// src/main/scala/streamer/DataWriter.scala:154:15
-          $fatal;	// src/main/scala/streamer/DataWriter.scala:154:15
-      end
-      if (cstate & ~reset
-          & _unrolling_addr_gen_unit_io_unrolling_addr_o_55 != _unrolling_addr_gen_unit_io_unrolling_addr_o_54
-          + 32'h1) begin	// src/main/scala/streamer/DataWriter.scala:98:23, :141:39, :154:15, :155:55, :157:13
-        if (`ASSERT_VERBOSE_COND_)	// src/main/scala/streamer/DataWriter.scala:154:15
-          $error("Assertion failed: write address in not consecutive in the same bank!\n    at DataWriter.scala:154 assert(\n");	// src/main/scala/streamer/DataWriter.scala:154:15
-        if (`STOP_COND_)	// src/main/scala/streamer/DataWriter.scala:154:15
-          $fatal;	// src/main/scala/streamer/DataWriter.scala:154:15
-      end
-      if (cstate & ~reset
-          & _unrolling_addr_gen_unit_io_unrolling_addr_o_57 != _unrolling_addr_gen_unit_io_unrolling_addr_o_56
-          + 32'h1) begin	// src/main/scala/streamer/DataWriter.scala:98:23, :141:39, :154:15, :155:55, :157:13
-        if (`ASSERT_VERBOSE_COND_)	// src/main/scala/streamer/DataWriter.scala:154:15
-          $error("Assertion failed: write address in not consecutive in the same bank!\n    at DataWriter.scala:154 assert(\n");	// src/main/scala/streamer/DataWriter.scala:154:15
-        if (`STOP_COND_)	// src/main/scala/streamer/DataWriter.scala:154:15
-          $fatal;	// src/main/scala/streamer/DataWriter.scala:154:15
-      end
-      if (cstate & ~reset
-          & _unrolling_addr_gen_unit_io_unrolling_addr_o_59 != _unrolling_addr_gen_unit_io_unrolling_addr_o_58
-          + 32'h1) begin	// src/main/scala/streamer/DataWriter.scala:98:23, :141:39, :154:15, :155:55, :157:13
-        if (`ASSERT_VERBOSE_COND_)	// src/main/scala/streamer/DataWriter.scala:154:15
-          $error("Assertion failed: write address in not consecutive in the same bank!\n    at DataWriter.scala:154 assert(\n");	// src/main/scala/streamer/DataWriter.scala:154:15
-        if (`STOP_COND_)	// src/main/scala/streamer/DataWriter.scala:154:15
-          $fatal;	// src/main/scala/streamer/DataWriter.scala:154:15
-      end
-      if (cstate & ~reset
-          & _unrolling_addr_gen_unit_io_unrolling_addr_o_61 != _unrolling_addr_gen_unit_io_unrolling_addr_o_60
-          + 32'h1) begin	// src/main/scala/streamer/DataWriter.scala:98:23, :141:39, :154:15, :155:55, :157:13
-        if (`ASSERT_VERBOSE_COND_)	// src/main/scala/streamer/DataWriter.scala:154:15
-          $error("Assertion failed: write address in not consecutive in the same bank!\n    at DataWriter.scala:154 assert(\n");	// src/main/scala/streamer/DataWriter.scala:154:15
-        if (`STOP_COND_)	// src/main/scala/streamer/DataWriter.scala:154:15
-          $fatal;	// src/main/scala/streamer/DataWriter.scala:154:15
-      end
-      if (cstate & ~reset
-          & _unrolling_addr_gen_unit_io_unrolling_addr_o_63 != _unrolling_addr_gen_unit_io_unrolling_addr_o_62
-          + 32'h1) begin	// src/main/scala/streamer/DataWriter.scala:98:23, :141:39, :154:15, :155:55, :157:13
-        if (`ASSERT_VERBOSE_COND_)	// src/main/scala/streamer/DataWriter.scala:154:15
-          $error("Assertion failed: write address in not consecutive in the same bank!\n    at DataWriter.scala:154 assert(\n");	// src/main/scala/streamer/DataWriter.scala:154:15
-        if (`STOP_COND_)	// src/main/scala/streamer/DataWriter.scala:154:15
-          $fatal;	// src/main/scala/streamer/DataWriter.scala:154:15
-      end
     end // always @(posedge)
-    `ifdef FIRRTL_BEFORE_INITIAL	// <stdin>:3720:10
-      `FIRRTL_BEFORE_INITIAL	// <stdin>:3720:10
+    `ifdef FIRRTL_BEFORE_INITIAL	// <stdin>:1066:10
+      `FIRRTL_BEFORE_INITIAL	// <stdin>:1066:10
     `endif // FIRRTL_BEFORE_INITIAL
-    initial begin	// <stdin>:3720:10
-      automatic logic [31:0] _RANDOM[0:4];	// <stdin>:3720:10
-      `ifdef INIT_RANDOM_PROLOG_	// <stdin>:3720:10
-        `INIT_RANDOM_PROLOG_	// <stdin>:3720:10
+    initial begin	// <stdin>:1066:10
+      automatic logic [31:0] _RANDOM[0:2];	// <stdin>:1066:10
+      `ifdef INIT_RANDOM_PROLOG_	// <stdin>:1066:10
+        `INIT_RANDOM_PROLOG_	// <stdin>:1066:10
       `endif // INIT_RANDOM_PROLOG_
-      `ifdef RANDOMIZE_REG_INIT	// <stdin>:3720:10
-        for (logic [2:0] i = 3'h0; i < 3'h5; i += 3'h1) begin
-          _RANDOM[i] = `RANDOM;	// <stdin>:3720:10
-        end	// <stdin>:3720:10
-        ptr_agu = _RANDOM[3'h0];	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:65:24
-        unrollingStrides_0 = _RANDOM[3'h1];	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:71:33
-        unrollingStrides_1 = _RANDOM[3'h2];	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:71:33
-        tcdm_rsp_i_q_ready_reg_0 = _RANDOM[3'h3][0];	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:87:39
-        tcdm_rsp_i_q_ready_reg_1 = _RANDOM[3'h3][1];	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:87:39
-        tcdm_rsp_i_q_ready_reg_2 = _RANDOM[3'h3][2];	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:87:39
-        tcdm_rsp_i_q_ready_reg_3 = _RANDOM[3'h3][3];	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:87:39
-        tcdm_rsp_i_q_ready_reg_4 = _RANDOM[3'h3][4];	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:87:39
-        tcdm_rsp_i_q_ready_reg_5 = _RANDOM[3'h3][5];	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:87:39
-        tcdm_rsp_i_q_ready_reg_6 = _RANDOM[3'h3][6];	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:87:39
-        tcdm_rsp_i_q_ready_reg_7 = _RANDOM[3'h3][7];	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:87:39
-        tcdm_rsp_i_q_ready_reg_8 = _RANDOM[3'h3][8];	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:87:39
-        tcdm_rsp_i_q_ready_reg_9 = _RANDOM[3'h3][9];	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:87:39
-        tcdm_rsp_i_q_ready_reg_10 = _RANDOM[3'h3][10];	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:87:39
-        tcdm_rsp_i_q_ready_reg_11 = _RANDOM[3'h3][11];	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:87:39
-        tcdm_rsp_i_q_ready_reg_12 = _RANDOM[3'h3][12];	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:87:39
-        tcdm_rsp_i_q_ready_reg_13 = _RANDOM[3'h3][13];	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:87:39
-        tcdm_rsp_i_q_ready_reg_14 = _RANDOM[3'h3][14];	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:87:39
-        tcdm_rsp_i_q_ready_reg_15 = _RANDOM[3'h3][15];	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:87:39
-        tcdm_rsp_i_q_ready_reg_16 = _RANDOM[3'h3][16];	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:87:39
-        tcdm_rsp_i_q_ready_reg_17 = _RANDOM[3'h3][17];	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:87:39
-        tcdm_rsp_i_q_ready_reg_18 = _RANDOM[3'h3][18];	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:87:39
-        tcdm_rsp_i_q_ready_reg_19 = _RANDOM[3'h3][19];	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:87:39
-        tcdm_rsp_i_q_ready_reg_20 = _RANDOM[3'h3][20];	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:87:39
-        tcdm_rsp_i_q_ready_reg_21 = _RANDOM[3'h3][21];	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:87:39
-        tcdm_rsp_i_q_ready_reg_22 = _RANDOM[3'h3][22];	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:87:39
-        tcdm_rsp_i_q_ready_reg_23 = _RANDOM[3'h3][23];	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:87:39
-        tcdm_rsp_i_q_ready_reg_24 = _RANDOM[3'h3][24];	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:87:39
-        tcdm_rsp_i_q_ready_reg_25 = _RANDOM[3'h3][25];	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:87:39
-        tcdm_rsp_i_q_ready_reg_26 = _RANDOM[3'h3][26];	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:87:39
-        tcdm_rsp_i_q_ready_reg_27 = _RANDOM[3'h3][27];	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:87:39
-        tcdm_rsp_i_q_ready_reg_28 = _RANDOM[3'h3][28];	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:87:39
-        tcdm_rsp_i_q_ready_reg_29 = _RANDOM[3'h3][29];	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:87:39
-        tcdm_rsp_i_q_ready_reg_30 = _RANDOM[3'h3][30];	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:87:39
-        tcdm_rsp_i_q_ready_reg_31 = _RANDOM[3'h3][31];	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:87:39
-        cstate = _RANDOM[3'h4][0];	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:98:23
+      `ifdef RANDOMIZE_REG_INIT	// <stdin>:1066:10
+        for (logic [1:0] i = 2'h0; i < 2'h3; i += 2'h1) begin
+          _RANDOM[i] = `RANDOM;	// <stdin>:1066:10
+        end	// <stdin>:1066:10
+        ptr_agu = _RANDOM[2'h0];	// <stdin>:1066:10, src/main/scala/streamer/DataWriter.scala:65:24
+        unrollingStrides_0 = _RANDOM[2'h1];	// <stdin>:1066:10, src/main/scala/streamer/DataWriter.scala:71:33
+        tcdm_rsp_i_q_ready_reg_0 = _RANDOM[2'h2][0];	// <stdin>:1066:10, src/main/scala/streamer/DataWriter.scala:87:39
+        tcdm_rsp_i_q_ready_reg_1 = _RANDOM[2'h2][1];	// <stdin>:1066:10, src/main/scala/streamer/DataWriter.scala:87:39
+        tcdm_rsp_i_q_ready_reg_2 = _RANDOM[2'h2][2];	// <stdin>:1066:10, src/main/scala/streamer/DataWriter.scala:87:39
+        tcdm_rsp_i_q_ready_reg_3 = _RANDOM[2'h2][3];	// <stdin>:1066:10, src/main/scala/streamer/DataWriter.scala:87:39
+        cstate = _RANDOM[2'h2][4];	// <stdin>:1066:10, src/main/scala/streamer/DataWriter.scala:87:39, :98:23
       `endif // RANDOMIZE_REG_INIT
-      if (reset) begin	// <stdin>:3720:10
+      if (reset) begin	// <stdin>:1066:10
         ptr_agu = 32'h0;	// src/main/scala/streamer/DataWriter.scala:65:24
         unrollingStrides_0 = 32'h0;	// src/main/scala/streamer/DataWriter.scala:65:24, :71:33
-        unrollingStrides_1 = 32'h0;	// src/main/scala/streamer/DataWriter.scala:65:24, :71:33
         tcdm_rsp_i_q_ready_reg_0 = 1'h0;	// src/main/scala/streamer/DataWriter.scala:70:30, :87:39
         tcdm_rsp_i_q_ready_reg_1 = 1'h0;	// src/main/scala/streamer/DataWriter.scala:70:30, :87:39
         tcdm_rsp_i_q_ready_reg_2 = 1'h0;	// src/main/scala/streamer/DataWriter.scala:70:30, :87:39
         tcdm_rsp_i_q_ready_reg_3 = 1'h0;	// src/main/scala/streamer/DataWriter.scala:70:30, :87:39
-        tcdm_rsp_i_q_ready_reg_4 = 1'h0;	// src/main/scala/streamer/DataWriter.scala:70:30, :87:39
-        tcdm_rsp_i_q_ready_reg_5 = 1'h0;	// src/main/scala/streamer/DataWriter.scala:70:30, :87:39
-        tcdm_rsp_i_q_ready_reg_6 = 1'h0;	// src/main/scala/streamer/DataWriter.scala:70:30, :87:39
-        tcdm_rsp_i_q_ready_reg_7 = 1'h0;	// src/main/scala/streamer/DataWriter.scala:70:30, :87:39
-        tcdm_rsp_i_q_ready_reg_8 = 1'h0;	// src/main/scala/streamer/DataWriter.scala:70:30, :87:39
-        tcdm_rsp_i_q_ready_reg_9 = 1'h0;	// src/main/scala/streamer/DataWriter.scala:70:30, :87:39
-        tcdm_rsp_i_q_ready_reg_10 = 1'h0;	// src/main/scala/streamer/DataWriter.scala:70:30, :87:39
-        tcdm_rsp_i_q_ready_reg_11 = 1'h0;	// src/main/scala/streamer/DataWriter.scala:70:30, :87:39
-        tcdm_rsp_i_q_ready_reg_12 = 1'h0;	// src/main/scala/streamer/DataWriter.scala:70:30, :87:39
-        tcdm_rsp_i_q_ready_reg_13 = 1'h0;	// src/main/scala/streamer/DataWriter.scala:70:30, :87:39
-        tcdm_rsp_i_q_ready_reg_14 = 1'h0;	// src/main/scala/streamer/DataWriter.scala:70:30, :87:39
-        tcdm_rsp_i_q_ready_reg_15 = 1'h0;	// src/main/scala/streamer/DataWriter.scala:70:30, :87:39
-        tcdm_rsp_i_q_ready_reg_16 = 1'h0;	// src/main/scala/streamer/DataWriter.scala:70:30, :87:39
-        tcdm_rsp_i_q_ready_reg_17 = 1'h0;	// src/main/scala/streamer/DataWriter.scala:70:30, :87:39
-        tcdm_rsp_i_q_ready_reg_18 = 1'h0;	// src/main/scala/streamer/DataWriter.scala:70:30, :87:39
-        tcdm_rsp_i_q_ready_reg_19 = 1'h0;	// src/main/scala/streamer/DataWriter.scala:70:30, :87:39
-        tcdm_rsp_i_q_ready_reg_20 = 1'h0;	// src/main/scala/streamer/DataWriter.scala:70:30, :87:39
-        tcdm_rsp_i_q_ready_reg_21 = 1'h0;	// src/main/scala/streamer/DataWriter.scala:70:30, :87:39
-        tcdm_rsp_i_q_ready_reg_22 = 1'h0;	// src/main/scala/streamer/DataWriter.scala:70:30, :87:39
-        tcdm_rsp_i_q_ready_reg_23 = 1'h0;	// src/main/scala/streamer/DataWriter.scala:70:30, :87:39
-        tcdm_rsp_i_q_ready_reg_24 = 1'h0;	// src/main/scala/streamer/DataWriter.scala:70:30, :87:39
-        tcdm_rsp_i_q_ready_reg_25 = 1'h0;	// src/main/scala/streamer/DataWriter.scala:70:30, :87:39
-        tcdm_rsp_i_q_ready_reg_26 = 1'h0;	// src/main/scala/streamer/DataWriter.scala:70:30, :87:39
-        tcdm_rsp_i_q_ready_reg_27 = 1'h0;	// src/main/scala/streamer/DataWriter.scala:70:30, :87:39
-        tcdm_rsp_i_q_ready_reg_28 = 1'h0;	// src/main/scala/streamer/DataWriter.scala:70:30, :87:39
-        tcdm_rsp_i_q_ready_reg_29 = 1'h0;	// src/main/scala/streamer/DataWriter.scala:70:30, :87:39
-        tcdm_rsp_i_q_ready_reg_30 = 1'h0;	// src/main/scala/streamer/DataWriter.scala:70:30, :87:39
-        tcdm_rsp_i_q_ready_reg_31 = 1'h0;	// src/main/scala/streamer/DataWriter.scala:70:30, :87:39
         cstate = 1'h0;	// src/main/scala/streamer/DataWriter.scala:70:30, :98:23
       end
     end // initial
-    `ifdef FIRRTL_AFTER_INITIAL	// <stdin>:3720:10
-      `FIRRTL_AFTER_INITIAL	// <stdin>:3720:10
+    `ifdef FIRRTL_AFTER_INITIAL	// <stdin>:1066:10
+      `FIRRTL_AFTER_INITIAL	// <stdin>:1066:10
     `endif // FIRRTL_AFTER_INITIAL
   `endif // not def SYNTHESIS
   UnrollingAddrGenUint unrolling_addr_gen_unit (	// src/main/scala/streamer/DataWriter.scala:141:39
     .io_valid_i              (cstate),	// src/main/scala/streamer/DataWriter.scala:98:23
-    .io_start_ptr_i          (_T_228 ? io_ptr_agu_i_bits : ptr_agu),	// src/main/scala/chisel3/util/Decoupled.scala:52:35, src/main/scala/streamer/DataWriter.scala:65:24, :130:27, :131:13
+    .io_start_ptr_i          (_T_32 ? io_ptr_agu_i_bits : ptr_agu),	// src/main/scala/chisel3/util/Decoupled.scala:52:35, src/main/scala/streamer/DataWriter.scala:65:24, :130:27, :131:13
     .io_unrollingStrides_i_0 (unrollingStrides_0),	// src/main/scala/streamer/DataWriter.scala:71:33
-    .io_unrollingStrides_i_1 (unrollingStrides_1),	// src/main/scala/streamer/DataWriter.scala:71:33
     .io_unrolling_addr_o_0   (_unrolling_addr_gen_unit_io_unrolling_addr_o_0),
     .io_unrolling_addr_o_1   (_unrolling_addr_gen_unit_io_unrolling_addr_o_1),
     .io_unrolling_addr_o_2   (_unrolling_addr_gen_unit_io_unrolling_addr_o_2),
@@ -2032,238 +743,38 @@ module DataWriter(	// <stdin>:3720:10
     .io_unrolling_addr_o_4   (_unrolling_addr_gen_unit_io_unrolling_addr_o_4),
     .io_unrolling_addr_o_5   (_unrolling_addr_gen_unit_io_unrolling_addr_o_5),
     .io_unrolling_addr_o_6   (_unrolling_addr_gen_unit_io_unrolling_addr_o_6),
-    .io_unrolling_addr_o_7   (_unrolling_addr_gen_unit_io_unrolling_addr_o_7),
-    .io_unrolling_addr_o_8   (_unrolling_addr_gen_unit_io_unrolling_addr_o_8),
-    .io_unrolling_addr_o_9   (_unrolling_addr_gen_unit_io_unrolling_addr_o_9),
-    .io_unrolling_addr_o_10  (_unrolling_addr_gen_unit_io_unrolling_addr_o_10),
-    .io_unrolling_addr_o_11  (_unrolling_addr_gen_unit_io_unrolling_addr_o_11),
-    .io_unrolling_addr_o_12  (_unrolling_addr_gen_unit_io_unrolling_addr_o_12),
-    .io_unrolling_addr_o_13  (_unrolling_addr_gen_unit_io_unrolling_addr_o_13),
-    .io_unrolling_addr_o_14  (_unrolling_addr_gen_unit_io_unrolling_addr_o_14),
-    .io_unrolling_addr_o_15  (_unrolling_addr_gen_unit_io_unrolling_addr_o_15),
-    .io_unrolling_addr_o_16  (_unrolling_addr_gen_unit_io_unrolling_addr_o_16),
-    .io_unrolling_addr_o_17  (_unrolling_addr_gen_unit_io_unrolling_addr_o_17),
-    .io_unrolling_addr_o_18  (_unrolling_addr_gen_unit_io_unrolling_addr_o_18),
-    .io_unrolling_addr_o_19  (_unrolling_addr_gen_unit_io_unrolling_addr_o_19),
-    .io_unrolling_addr_o_20  (_unrolling_addr_gen_unit_io_unrolling_addr_o_20),
-    .io_unrolling_addr_o_21  (_unrolling_addr_gen_unit_io_unrolling_addr_o_21),
-    .io_unrolling_addr_o_22  (_unrolling_addr_gen_unit_io_unrolling_addr_o_22),
-    .io_unrolling_addr_o_23  (_unrolling_addr_gen_unit_io_unrolling_addr_o_23),
-    .io_unrolling_addr_o_24  (_unrolling_addr_gen_unit_io_unrolling_addr_o_24),
-    .io_unrolling_addr_o_25  (_unrolling_addr_gen_unit_io_unrolling_addr_o_25),
-    .io_unrolling_addr_o_26  (_unrolling_addr_gen_unit_io_unrolling_addr_o_26),
-    .io_unrolling_addr_o_27  (_unrolling_addr_gen_unit_io_unrolling_addr_o_27),
-    .io_unrolling_addr_o_28  (_unrolling_addr_gen_unit_io_unrolling_addr_o_28),
-    .io_unrolling_addr_o_29  (_unrolling_addr_gen_unit_io_unrolling_addr_o_29),
-    .io_unrolling_addr_o_30  (_unrolling_addr_gen_unit_io_unrolling_addr_o_30),
-    .io_unrolling_addr_o_31  (_unrolling_addr_gen_unit_io_unrolling_addr_o_31),
-    .io_unrolling_addr_o_32  (_unrolling_addr_gen_unit_io_unrolling_addr_o_32),
-    .io_unrolling_addr_o_33  (_unrolling_addr_gen_unit_io_unrolling_addr_o_33),
-    .io_unrolling_addr_o_34  (_unrolling_addr_gen_unit_io_unrolling_addr_o_34),
-    .io_unrolling_addr_o_35  (_unrolling_addr_gen_unit_io_unrolling_addr_o_35),
-    .io_unrolling_addr_o_36  (_unrolling_addr_gen_unit_io_unrolling_addr_o_36),
-    .io_unrolling_addr_o_37  (_unrolling_addr_gen_unit_io_unrolling_addr_o_37),
-    .io_unrolling_addr_o_38  (_unrolling_addr_gen_unit_io_unrolling_addr_o_38),
-    .io_unrolling_addr_o_39  (_unrolling_addr_gen_unit_io_unrolling_addr_o_39),
-    .io_unrolling_addr_o_40  (_unrolling_addr_gen_unit_io_unrolling_addr_o_40),
-    .io_unrolling_addr_o_41  (_unrolling_addr_gen_unit_io_unrolling_addr_o_41),
-    .io_unrolling_addr_o_42  (_unrolling_addr_gen_unit_io_unrolling_addr_o_42),
-    .io_unrolling_addr_o_43  (_unrolling_addr_gen_unit_io_unrolling_addr_o_43),
-    .io_unrolling_addr_o_44  (_unrolling_addr_gen_unit_io_unrolling_addr_o_44),
-    .io_unrolling_addr_o_45  (_unrolling_addr_gen_unit_io_unrolling_addr_o_45),
-    .io_unrolling_addr_o_46  (_unrolling_addr_gen_unit_io_unrolling_addr_o_46),
-    .io_unrolling_addr_o_47  (_unrolling_addr_gen_unit_io_unrolling_addr_o_47),
-    .io_unrolling_addr_o_48  (_unrolling_addr_gen_unit_io_unrolling_addr_o_48),
-    .io_unrolling_addr_o_49  (_unrolling_addr_gen_unit_io_unrolling_addr_o_49),
-    .io_unrolling_addr_o_50  (_unrolling_addr_gen_unit_io_unrolling_addr_o_50),
-    .io_unrolling_addr_o_51  (_unrolling_addr_gen_unit_io_unrolling_addr_o_51),
-    .io_unrolling_addr_o_52  (_unrolling_addr_gen_unit_io_unrolling_addr_o_52),
-    .io_unrolling_addr_o_53  (_unrolling_addr_gen_unit_io_unrolling_addr_o_53),
-    .io_unrolling_addr_o_54  (_unrolling_addr_gen_unit_io_unrolling_addr_o_54),
-    .io_unrolling_addr_o_55  (_unrolling_addr_gen_unit_io_unrolling_addr_o_55),
-    .io_unrolling_addr_o_56  (_unrolling_addr_gen_unit_io_unrolling_addr_o_56),
-    .io_unrolling_addr_o_57  (_unrolling_addr_gen_unit_io_unrolling_addr_o_57),
-    .io_unrolling_addr_o_58  (_unrolling_addr_gen_unit_io_unrolling_addr_o_58),
-    .io_unrolling_addr_o_59  (_unrolling_addr_gen_unit_io_unrolling_addr_o_59),
-    .io_unrolling_addr_o_60  (_unrolling_addr_gen_unit_io_unrolling_addr_o_60),
-    .io_unrolling_addr_o_61  (_unrolling_addr_gen_unit_io_unrolling_addr_o_61),
-    .io_unrolling_addr_o_62  (_unrolling_addr_gen_unit_io_unrolling_addr_o_62),
-    .io_unrolling_addr_o_63  (_unrolling_addr_gen_unit_io_unrolling_addr_o_63)
+    .io_unrolling_addr_o_7   (_unrolling_addr_gen_unit_io_unrolling_addr_o_7)
   );
-  assign io_ptr_agu_i_ready = _io_ptr_agu_i_ready_output;	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:217:42
-  assign io_data_fifo_i_ready = tcdm_write_mem_all_ready;	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:213:59
-  assign io_tcdm_req_addr_0 = _unrolling_addr_gen_unit_io_unrolling_addr_o_0;	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:141:39
-  assign io_tcdm_req_addr_1 = _unrolling_addr_gen_unit_io_unrolling_addr_o_2;	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:141:39
-  assign io_tcdm_req_addr_2 = _unrolling_addr_gen_unit_io_unrolling_addr_o_4;	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:141:39
-  assign io_tcdm_req_addr_3 = _unrolling_addr_gen_unit_io_unrolling_addr_o_6;	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:141:39
-  assign io_tcdm_req_addr_4 = _unrolling_addr_gen_unit_io_unrolling_addr_o_8;	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:141:39
-  assign io_tcdm_req_addr_5 = _unrolling_addr_gen_unit_io_unrolling_addr_o_10;	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:141:39
-  assign io_tcdm_req_addr_6 = _unrolling_addr_gen_unit_io_unrolling_addr_o_12;	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:141:39
-  assign io_tcdm_req_addr_7 = _unrolling_addr_gen_unit_io_unrolling_addr_o_14;	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:141:39
-  assign io_tcdm_req_addr_8 = _unrolling_addr_gen_unit_io_unrolling_addr_o_16;	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:141:39
-  assign io_tcdm_req_addr_9 = _unrolling_addr_gen_unit_io_unrolling_addr_o_18;	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:141:39
-  assign io_tcdm_req_addr_10 = _unrolling_addr_gen_unit_io_unrolling_addr_o_20;	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:141:39
-  assign io_tcdm_req_addr_11 = _unrolling_addr_gen_unit_io_unrolling_addr_o_22;	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:141:39
-  assign io_tcdm_req_addr_12 = _unrolling_addr_gen_unit_io_unrolling_addr_o_24;	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:141:39
-  assign io_tcdm_req_addr_13 = _unrolling_addr_gen_unit_io_unrolling_addr_o_26;	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:141:39
-  assign io_tcdm_req_addr_14 = _unrolling_addr_gen_unit_io_unrolling_addr_o_28;	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:141:39
-  assign io_tcdm_req_addr_15 = _unrolling_addr_gen_unit_io_unrolling_addr_o_30;	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:141:39
-  assign io_tcdm_req_addr_16 = _unrolling_addr_gen_unit_io_unrolling_addr_o_32;	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:141:39
-  assign io_tcdm_req_addr_17 = _unrolling_addr_gen_unit_io_unrolling_addr_o_34;	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:141:39
-  assign io_tcdm_req_addr_18 = _unrolling_addr_gen_unit_io_unrolling_addr_o_36;	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:141:39
-  assign io_tcdm_req_addr_19 = _unrolling_addr_gen_unit_io_unrolling_addr_o_38;	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:141:39
-  assign io_tcdm_req_addr_20 = _unrolling_addr_gen_unit_io_unrolling_addr_o_40;	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:141:39
-  assign io_tcdm_req_addr_21 = _unrolling_addr_gen_unit_io_unrolling_addr_o_42;	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:141:39
-  assign io_tcdm_req_addr_22 = _unrolling_addr_gen_unit_io_unrolling_addr_o_44;	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:141:39
-  assign io_tcdm_req_addr_23 = _unrolling_addr_gen_unit_io_unrolling_addr_o_46;	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:141:39
-  assign io_tcdm_req_addr_24 = _unrolling_addr_gen_unit_io_unrolling_addr_o_48;	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:141:39
-  assign io_tcdm_req_addr_25 = _unrolling_addr_gen_unit_io_unrolling_addr_o_50;	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:141:39
-  assign io_tcdm_req_addr_26 = _unrolling_addr_gen_unit_io_unrolling_addr_o_52;	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:141:39
-  assign io_tcdm_req_addr_27 = _unrolling_addr_gen_unit_io_unrolling_addr_o_54;	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:141:39
-  assign io_tcdm_req_addr_28 = _unrolling_addr_gen_unit_io_unrolling_addr_o_56;	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:141:39
-  assign io_tcdm_req_addr_29 = _unrolling_addr_gen_unit_io_unrolling_addr_o_58;	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:141:39
-  assign io_tcdm_req_addr_30 = _unrolling_addr_gen_unit_io_unrolling_addr_o_60;	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:141:39
-  assign io_tcdm_req_addr_31 = _unrolling_addr_gen_unit_io_unrolling_addr_o_62;	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:141:39
+  assign io_ptr_agu_i_ready = _io_ptr_agu_i_ready_output;	// <stdin>:1066:10, src/main/scala/streamer/DataWriter.scala:217:42
+  assign io_data_fifo_i_ready = tcdm_write_mem_all_ready;	// <stdin>:1066:10, src/main/scala/streamer/DataWriter.scala:213:59
+  assign io_tcdm_req_addr_0 = _unrolling_addr_gen_unit_io_unrolling_addr_o_0;	// <stdin>:1066:10, src/main/scala/streamer/DataWriter.scala:141:39
+  assign io_tcdm_req_addr_1 = _unrolling_addr_gen_unit_io_unrolling_addr_o_2;	// <stdin>:1066:10, src/main/scala/streamer/DataWriter.scala:141:39
+  assign io_tcdm_req_addr_2 = _unrolling_addr_gen_unit_io_unrolling_addr_o_4;	// <stdin>:1066:10, src/main/scala/streamer/DataWriter.scala:141:39
+  assign io_tcdm_req_addr_3 = _unrolling_addr_gen_unit_io_unrolling_addr_o_6;	// <stdin>:1066:10, src/main/scala/streamer/DataWriter.scala:141:39
   assign io_write_tcmd_valid_o_0 =
-    can_send_tcdm_write_req & (_T_228 | ~tcdm_rsp_i_q_ready_reg_0);	// <stdin>:3720:10, src/main/scala/chisel3/util/Decoupled.scala:52:35, src/main/scala/streamer/DataWriter.scala:87:39, :164:51, :174:35, :175:31, :176:34, :178:{34,37}, :185:32
+    can_send_tcdm_write_req & (_T_32 | ~tcdm_rsp_i_q_ready_reg_0);	// <stdin>:1066:10, src/main/scala/chisel3/util/Decoupled.scala:52:35, src/main/scala/streamer/DataWriter.scala:87:39, :164:51, :174:35, :175:31, :176:34, :178:{34,37}, :185:32
   assign io_write_tcmd_valid_o_1 =
-    can_send_tcdm_write_req & (_T_228 | ~tcdm_rsp_i_q_ready_reg_1);	// <stdin>:3720:10, src/main/scala/chisel3/util/Decoupled.scala:52:35, src/main/scala/streamer/DataWriter.scala:87:39, :164:51, :174:35, :175:31, :176:34, :178:{34,37}, :185:32
+    can_send_tcdm_write_req & (_T_32 | ~tcdm_rsp_i_q_ready_reg_1);	// <stdin>:1066:10, src/main/scala/chisel3/util/Decoupled.scala:52:35, src/main/scala/streamer/DataWriter.scala:87:39, :164:51, :174:35, :175:31, :176:34, :178:{34,37}, :185:32
   assign io_write_tcmd_valid_o_2 =
-    can_send_tcdm_write_req & (_T_228 | ~tcdm_rsp_i_q_ready_reg_2);	// <stdin>:3720:10, src/main/scala/chisel3/util/Decoupled.scala:52:35, src/main/scala/streamer/DataWriter.scala:87:39, :164:51, :174:35, :175:31, :176:34, :178:{34,37}, :185:32
+    can_send_tcdm_write_req & (_T_32 | ~tcdm_rsp_i_q_ready_reg_2);	// <stdin>:1066:10, src/main/scala/chisel3/util/Decoupled.scala:52:35, src/main/scala/streamer/DataWriter.scala:87:39, :164:51, :174:35, :175:31, :176:34, :178:{34,37}, :185:32
   assign io_write_tcmd_valid_o_3 =
-    can_send_tcdm_write_req & (_T_228 | ~tcdm_rsp_i_q_ready_reg_3);	// <stdin>:3720:10, src/main/scala/chisel3/util/Decoupled.scala:52:35, src/main/scala/streamer/DataWriter.scala:87:39, :164:51, :174:35, :175:31, :176:34, :178:{34,37}, :185:32
-  assign io_write_tcmd_valid_o_4 =
-    can_send_tcdm_write_req & (_T_228 | ~tcdm_rsp_i_q_ready_reg_4);	// <stdin>:3720:10, src/main/scala/chisel3/util/Decoupled.scala:52:35, src/main/scala/streamer/DataWriter.scala:87:39, :164:51, :174:35, :175:31, :176:34, :178:{34,37}, :185:32
-  assign io_write_tcmd_valid_o_5 =
-    can_send_tcdm_write_req & (_T_228 | ~tcdm_rsp_i_q_ready_reg_5);	// <stdin>:3720:10, src/main/scala/chisel3/util/Decoupled.scala:52:35, src/main/scala/streamer/DataWriter.scala:87:39, :164:51, :174:35, :175:31, :176:34, :178:{34,37}, :185:32
-  assign io_write_tcmd_valid_o_6 =
-    can_send_tcdm_write_req & (_T_228 | ~tcdm_rsp_i_q_ready_reg_6);	// <stdin>:3720:10, src/main/scala/chisel3/util/Decoupled.scala:52:35, src/main/scala/streamer/DataWriter.scala:87:39, :164:51, :174:35, :175:31, :176:34, :178:{34,37}, :185:32
-  assign io_write_tcmd_valid_o_7 =
-    can_send_tcdm_write_req & (_T_228 | ~tcdm_rsp_i_q_ready_reg_7);	// <stdin>:3720:10, src/main/scala/chisel3/util/Decoupled.scala:52:35, src/main/scala/streamer/DataWriter.scala:87:39, :164:51, :174:35, :175:31, :176:34, :178:{34,37}, :185:32
-  assign io_write_tcmd_valid_o_8 =
-    can_send_tcdm_write_req & (_T_228 | ~tcdm_rsp_i_q_ready_reg_8);	// <stdin>:3720:10, src/main/scala/chisel3/util/Decoupled.scala:52:35, src/main/scala/streamer/DataWriter.scala:87:39, :164:51, :174:35, :175:31, :176:34, :178:{34,37}, :185:32
-  assign io_write_tcmd_valid_o_9 =
-    can_send_tcdm_write_req & (_T_228 | ~tcdm_rsp_i_q_ready_reg_9);	// <stdin>:3720:10, src/main/scala/chisel3/util/Decoupled.scala:52:35, src/main/scala/streamer/DataWriter.scala:87:39, :164:51, :174:35, :175:31, :176:34, :178:{34,37}, :185:32
-  assign io_write_tcmd_valid_o_10 =
-    can_send_tcdm_write_req & (_T_228 | ~tcdm_rsp_i_q_ready_reg_10);	// <stdin>:3720:10, src/main/scala/chisel3/util/Decoupled.scala:52:35, src/main/scala/streamer/DataWriter.scala:87:39, :164:51, :174:35, :175:31, :176:34, :178:{34,37}, :185:32
-  assign io_write_tcmd_valid_o_11 =
-    can_send_tcdm_write_req & (_T_228 | ~tcdm_rsp_i_q_ready_reg_11);	// <stdin>:3720:10, src/main/scala/chisel3/util/Decoupled.scala:52:35, src/main/scala/streamer/DataWriter.scala:87:39, :164:51, :174:35, :175:31, :176:34, :178:{34,37}, :185:32
-  assign io_write_tcmd_valid_o_12 =
-    can_send_tcdm_write_req & (_T_228 | ~tcdm_rsp_i_q_ready_reg_12);	// <stdin>:3720:10, src/main/scala/chisel3/util/Decoupled.scala:52:35, src/main/scala/streamer/DataWriter.scala:87:39, :164:51, :174:35, :175:31, :176:34, :178:{34,37}, :185:32
-  assign io_write_tcmd_valid_o_13 =
-    can_send_tcdm_write_req & (_T_228 | ~tcdm_rsp_i_q_ready_reg_13);	// <stdin>:3720:10, src/main/scala/chisel3/util/Decoupled.scala:52:35, src/main/scala/streamer/DataWriter.scala:87:39, :164:51, :174:35, :175:31, :176:34, :178:{34,37}, :185:32
-  assign io_write_tcmd_valid_o_14 =
-    can_send_tcdm_write_req & (_T_228 | ~tcdm_rsp_i_q_ready_reg_14);	// <stdin>:3720:10, src/main/scala/chisel3/util/Decoupled.scala:52:35, src/main/scala/streamer/DataWriter.scala:87:39, :164:51, :174:35, :175:31, :176:34, :178:{34,37}, :185:32
-  assign io_write_tcmd_valid_o_15 =
-    can_send_tcdm_write_req & (_T_228 | ~tcdm_rsp_i_q_ready_reg_15);	// <stdin>:3720:10, src/main/scala/chisel3/util/Decoupled.scala:52:35, src/main/scala/streamer/DataWriter.scala:87:39, :164:51, :174:35, :175:31, :176:34, :178:{34,37}, :185:32
-  assign io_write_tcmd_valid_o_16 =
-    can_send_tcdm_write_req & (_T_228 | ~tcdm_rsp_i_q_ready_reg_16);	// <stdin>:3720:10, src/main/scala/chisel3/util/Decoupled.scala:52:35, src/main/scala/streamer/DataWriter.scala:87:39, :164:51, :174:35, :175:31, :176:34, :178:{34,37}, :185:32
-  assign io_write_tcmd_valid_o_17 =
-    can_send_tcdm_write_req & (_T_228 | ~tcdm_rsp_i_q_ready_reg_17);	// <stdin>:3720:10, src/main/scala/chisel3/util/Decoupled.scala:52:35, src/main/scala/streamer/DataWriter.scala:87:39, :164:51, :174:35, :175:31, :176:34, :178:{34,37}, :185:32
-  assign io_write_tcmd_valid_o_18 =
-    can_send_tcdm_write_req & (_T_228 | ~tcdm_rsp_i_q_ready_reg_18);	// <stdin>:3720:10, src/main/scala/chisel3/util/Decoupled.scala:52:35, src/main/scala/streamer/DataWriter.scala:87:39, :164:51, :174:35, :175:31, :176:34, :178:{34,37}, :185:32
-  assign io_write_tcmd_valid_o_19 =
-    can_send_tcdm_write_req & (_T_228 | ~tcdm_rsp_i_q_ready_reg_19);	// <stdin>:3720:10, src/main/scala/chisel3/util/Decoupled.scala:52:35, src/main/scala/streamer/DataWriter.scala:87:39, :164:51, :174:35, :175:31, :176:34, :178:{34,37}, :185:32
-  assign io_write_tcmd_valid_o_20 =
-    can_send_tcdm_write_req & (_T_228 | ~tcdm_rsp_i_q_ready_reg_20);	// <stdin>:3720:10, src/main/scala/chisel3/util/Decoupled.scala:52:35, src/main/scala/streamer/DataWriter.scala:87:39, :164:51, :174:35, :175:31, :176:34, :178:{34,37}, :185:32
-  assign io_write_tcmd_valid_o_21 =
-    can_send_tcdm_write_req & (_T_228 | ~tcdm_rsp_i_q_ready_reg_21);	// <stdin>:3720:10, src/main/scala/chisel3/util/Decoupled.scala:52:35, src/main/scala/streamer/DataWriter.scala:87:39, :164:51, :174:35, :175:31, :176:34, :178:{34,37}, :185:32
-  assign io_write_tcmd_valid_o_22 =
-    can_send_tcdm_write_req & (_T_228 | ~tcdm_rsp_i_q_ready_reg_22);	// <stdin>:3720:10, src/main/scala/chisel3/util/Decoupled.scala:52:35, src/main/scala/streamer/DataWriter.scala:87:39, :164:51, :174:35, :175:31, :176:34, :178:{34,37}, :185:32
-  assign io_write_tcmd_valid_o_23 =
-    can_send_tcdm_write_req & (_T_228 | ~tcdm_rsp_i_q_ready_reg_23);	// <stdin>:3720:10, src/main/scala/chisel3/util/Decoupled.scala:52:35, src/main/scala/streamer/DataWriter.scala:87:39, :164:51, :174:35, :175:31, :176:34, :178:{34,37}, :185:32
-  assign io_write_tcmd_valid_o_24 =
-    can_send_tcdm_write_req & (_T_228 | ~tcdm_rsp_i_q_ready_reg_24);	// <stdin>:3720:10, src/main/scala/chisel3/util/Decoupled.scala:52:35, src/main/scala/streamer/DataWriter.scala:87:39, :164:51, :174:35, :175:31, :176:34, :178:{34,37}, :185:32
-  assign io_write_tcmd_valid_o_25 =
-    can_send_tcdm_write_req & (_T_228 | ~tcdm_rsp_i_q_ready_reg_25);	// <stdin>:3720:10, src/main/scala/chisel3/util/Decoupled.scala:52:35, src/main/scala/streamer/DataWriter.scala:87:39, :164:51, :174:35, :175:31, :176:34, :178:{34,37}, :185:32
-  assign io_write_tcmd_valid_o_26 =
-    can_send_tcdm_write_req & (_T_228 | ~tcdm_rsp_i_q_ready_reg_26);	// <stdin>:3720:10, src/main/scala/chisel3/util/Decoupled.scala:52:35, src/main/scala/streamer/DataWriter.scala:87:39, :164:51, :174:35, :175:31, :176:34, :178:{34,37}, :185:32
-  assign io_write_tcmd_valid_o_27 =
-    can_send_tcdm_write_req & (_T_228 | ~tcdm_rsp_i_q_ready_reg_27);	// <stdin>:3720:10, src/main/scala/chisel3/util/Decoupled.scala:52:35, src/main/scala/streamer/DataWriter.scala:87:39, :164:51, :174:35, :175:31, :176:34, :178:{34,37}, :185:32
-  assign io_write_tcmd_valid_o_28 =
-    can_send_tcdm_write_req & (_T_228 | ~tcdm_rsp_i_q_ready_reg_28);	// <stdin>:3720:10, src/main/scala/chisel3/util/Decoupled.scala:52:35, src/main/scala/streamer/DataWriter.scala:87:39, :164:51, :174:35, :175:31, :176:34, :178:{34,37}, :185:32
-  assign io_write_tcmd_valid_o_29 =
-    can_send_tcdm_write_req & (_T_228 | ~tcdm_rsp_i_q_ready_reg_29);	// <stdin>:3720:10, src/main/scala/chisel3/util/Decoupled.scala:52:35, src/main/scala/streamer/DataWriter.scala:87:39, :164:51, :174:35, :175:31, :176:34, :178:{34,37}, :185:32
-  assign io_write_tcmd_valid_o_30 =
-    can_send_tcdm_write_req & (_T_228 | ~tcdm_rsp_i_q_ready_reg_30);	// <stdin>:3720:10, src/main/scala/chisel3/util/Decoupled.scala:52:35, src/main/scala/streamer/DataWriter.scala:87:39, :164:51, :174:35, :175:31, :176:34, :178:{34,37}, :185:32
-  assign io_write_tcmd_valid_o_31 =
-    can_send_tcdm_write_req & (_T_228 | ~tcdm_rsp_i_q_ready_reg_31);	// <stdin>:3720:10, src/main/scala/chisel3/util/Decoupled.scala:52:35, src/main/scala/streamer/DataWriter.scala:87:39, :164:51, :174:35, :175:31, :176:34, :178:{34,37}, :185:32
-  assign io_tcdm_req_data_0 = can_send_tcdm_write_req ? io_data_fifo_i_bits[63:0] : 64'h0;	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:164:51, :174:35, :180:{27,49}, :186:27
+    can_send_tcdm_write_req & (_T_32 | ~tcdm_rsp_i_q_ready_reg_3);	// <stdin>:1066:10, src/main/scala/chisel3/util/Decoupled.scala:52:35, src/main/scala/streamer/DataWriter.scala:87:39, :164:51, :174:35, :175:31, :176:34, :178:{34,37}, :185:32
+  assign io_tcdm_req_data_0 = can_send_tcdm_write_req ? io_data_fifo_i_bits[63:0] : 64'h0;	// <stdin>:1066:10, src/main/scala/streamer/DataWriter.scala:164:51, :174:35, :180:{27,49}, :186:27
   assign io_tcdm_req_data_1 =
-    can_send_tcdm_write_req ? io_data_fifo_i_bits[127:64] : 64'h0;	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:164:51, :174:35, :180:{27,49}, :186:27
+    can_send_tcdm_write_req ? io_data_fifo_i_bits[127:64] : 64'h0;	// <stdin>:1066:10, src/main/scala/streamer/DataWriter.scala:164:51, :174:35, :180:{27,49}, :186:27
   assign io_tcdm_req_data_2 =
-    can_send_tcdm_write_req ? io_data_fifo_i_bits[191:128] : 64'h0;	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:164:51, :174:35, :180:{27,49}, :186:27
+    can_send_tcdm_write_req ? io_data_fifo_i_bits[191:128] : 64'h0;	// <stdin>:1066:10, src/main/scala/streamer/DataWriter.scala:164:51, :174:35, :180:{27,49}, :186:27
   assign io_tcdm_req_data_3 =
-    can_send_tcdm_write_req ? io_data_fifo_i_bits[255:192] : 64'h0;	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:164:51, :174:35, :180:{27,49}, :186:27
-  assign io_tcdm_req_data_4 =
-    can_send_tcdm_write_req ? io_data_fifo_i_bits[319:256] : 64'h0;	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:164:51, :174:35, :180:{27,49}, :186:27
-  assign io_tcdm_req_data_5 =
-    can_send_tcdm_write_req ? io_data_fifo_i_bits[383:320] : 64'h0;	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:164:51, :174:35, :180:{27,49}, :186:27
-  assign io_tcdm_req_data_6 =
-    can_send_tcdm_write_req ? io_data_fifo_i_bits[447:384] : 64'h0;	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:164:51, :174:35, :180:{27,49}, :186:27
-  assign io_tcdm_req_data_7 =
-    can_send_tcdm_write_req ? io_data_fifo_i_bits[511:448] : 64'h0;	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:164:51, :174:35, :180:{27,49}, :186:27
-  assign io_tcdm_req_data_8 =
-    can_send_tcdm_write_req ? io_data_fifo_i_bits[575:512] : 64'h0;	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:164:51, :174:35, :180:{27,49}, :186:27
-  assign io_tcdm_req_data_9 =
-    can_send_tcdm_write_req ? io_data_fifo_i_bits[639:576] : 64'h0;	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:164:51, :174:35, :180:{27,49}, :186:27
-  assign io_tcdm_req_data_10 =
-    can_send_tcdm_write_req ? io_data_fifo_i_bits[703:640] : 64'h0;	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:164:51, :174:35, :180:{27,49}, :186:27
-  assign io_tcdm_req_data_11 =
-    can_send_tcdm_write_req ? io_data_fifo_i_bits[767:704] : 64'h0;	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:164:51, :174:35, :180:{27,49}, :186:27
-  assign io_tcdm_req_data_12 =
-    can_send_tcdm_write_req ? io_data_fifo_i_bits[831:768] : 64'h0;	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:164:51, :174:35, :180:{27,49}, :186:27
-  assign io_tcdm_req_data_13 =
-    can_send_tcdm_write_req ? io_data_fifo_i_bits[895:832] : 64'h0;	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:164:51, :174:35, :180:{27,49}, :186:27
-  assign io_tcdm_req_data_14 =
-    can_send_tcdm_write_req ? io_data_fifo_i_bits[959:896] : 64'h0;	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:164:51, :174:35, :180:{27,49}, :186:27
-  assign io_tcdm_req_data_15 =
-    can_send_tcdm_write_req ? io_data_fifo_i_bits[1023:960] : 64'h0;	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:164:51, :174:35, :180:{27,49}, :186:27
-  assign io_tcdm_req_data_16 =
-    can_send_tcdm_write_req ? io_data_fifo_i_bits[1087:1024] : 64'h0;	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:164:51, :174:35, :180:{27,49}, :186:27
-  assign io_tcdm_req_data_17 =
-    can_send_tcdm_write_req ? io_data_fifo_i_bits[1151:1088] : 64'h0;	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:164:51, :174:35, :180:{27,49}, :186:27
-  assign io_tcdm_req_data_18 =
-    can_send_tcdm_write_req ? io_data_fifo_i_bits[1215:1152] : 64'h0;	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:164:51, :174:35, :180:{27,49}, :186:27
-  assign io_tcdm_req_data_19 =
-    can_send_tcdm_write_req ? io_data_fifo_i_bits[1279:1216] : 64'h0;	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:164:51, :174:35, :180:{27,49}, :186:27
-  assign io_tcdm_req_data_20 =
-    can_send_tcdm_write_req ? io_data_fifo_i_bits[1343:1280] : 64'h0;	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:164:51, :174:35, :180:{27,49}, :186:27
-  assign io_tcdm_req_data_21 =
-    can_send_tcdm_write_req ? io_data_fifo_i_bits[1407:1344] : 64'h0;	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:164:51, :174:35, :180:{27,49}, :186:27
-  assign io_tcdm_req_data_22 =
-    can_send_tcdm_write_req ? io_data_fifo_i_bits[1471:1408] : 64'h0;	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:164:51, :174:35, :180:{27,49}, :186:27
-  assign io_tcdm_req_data_23 =
-    can_send_tcdm_write_req ? io_data_fifo_i_bits[1535:1472] : 64'h0;	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:164:51, :174:35, :180:{27,49}, :186:27
-  assign io_tcdm_req_data_24 =
-    can_send_tcdm_write_req ? io_data_fifo_i_bits[1599:1536] : 64'h0;	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:164:51, :174:35, :180:{27,49}, :186:27
-  assign io_tcdm_req_data_25 =
-    can_send_tcdm_write_req ? io_data_fifo_i_bits[1663:1600] : 64'h0;	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:164:51, :174:35, :180:{27,49}, :186:27
-  assign io_tcdm_req_data_26 =
-    can_send_tcdm_write_req ? io_data_fifo_i_bits[1727:1664] : 64'h0;	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:164:51, :174:35, :180:{27,49}, :186:27
-  assign io_tcdm_req_data_27 =
-    can_send_tcdm_write_req ? io_data_fifo_i_bits[1791:1728] : 64'h0;	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:164:51, :174:35, :180:{27,49}, :186:27
-  assign io_tcdm_req_data_28 =
-    can_send_tcdm_write_req ? io_data_fifo_i_bits[1855:1792] : 64'h0;	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:164:51, :174:35, :180:{27,49}, :186:27
-  assign io_tcdm_req_data_29 =
-    can_send_tcdm_write_req ? io_data_fifo_i_bits[1919:1856] : 64'h0;	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:164:51, :174:35, :180:{27,49}, :186:27
-  assign io_tcdm_req_data_30 =
-    can_send_tcdm_write_req ? io_data_fifo_i_bits[1983:1920] : 64'h0;	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:164:51, :174:35, :180:{27,49}, :186:27
-  assign io_tcdm_req_data_31 =
-    can_send_tcdm_write_req ? io_data_fifo_i_bits[2047:1984] : 64'h0;	// <stdin>:3720:10, src/main/scala/streamer/DataWriter.scala:164:51, :174:35, :180:{27,49}, :186:27
+    can_send_tcdm_write_req ? io_data_fifo_i_bits[255:192] : 64'h0;	// <stdin>:1066:10, src/main/scala/streamer/DataWriter.scala:164:51, :174:35, :180:{27,49}, :186:27
 endmodule
 
-module TemporalAdressGenUnit(	// <stdin>:5183:10, :5313:10, :5443:10
-  input         clock,	// <stdin>:5184:11, :5314:11, :5444:11
-                reset,	// <stdin>:5185:11, :5315:11, :5445:11
+module TemporalAdressGenUnit(	// <stdin>:1323:10, :1429:10, :1535:10, :1641:10
+  input         clock,	// <stdin>:1324:11, :1430:11, :1536:11, :1642:11
+                reset,	// <stdin>:1325:11, :1431:11, :1537:11, :1643:11
                 io_temporalLoopBounds_i_valid,	// src/main/scala/streamer/TemporalAddrGenUnit.scala:41:14
   input  [7:0]  io_temporalLoopBounds_i_bits_0,	// src/main/scala/streamer/TemporalAddrGenUnit.scala:41:14
-                io_temporalLoopBounds_i_bits_1,	// src/main/scala/streamer/TemporalAddrGenUnit.scala:41:14
-                io_temporalLoopBounds_i_bits_2,	// src/main/scala/streamer/TemporalAddrGenUnit.scala:41:14
   input         io_temporalStrides_i_valid,	// src/main/scala/streamer/TemporalAddrGenUnit.scala:41:14
   input  [31:0] io_temporalStrides_i_bits_0,	// src/main/scala/streamer/TemporalAddrGenUnit.scala:41:14
-                io_temporalStrides_i_bits_1,	// src/main/scala/streamer/TemporalAddrGenUnit.scala:41:14
-                io_temporalStrides_i_bits_2,	// src/main/scala/streamer/TemporalAddrGenUnit.scala:41:14
   input         io_ptr_i_valid,	// src/main/scala/streamer/TemporalAddrGenUnit.scala:41:14
   input  [31:0] io_ptr_i_bits,	// src/main/scala/streamer/TemporalAddrGenUnit.scala:41:14
   input         io_ptr_o_ready,	// src/main/scala/streamer/TemporalAddrGenUnit.scala:41:14
@@ -2275,250 +786,143 @@ module TemporalAdressGenUnit(	// <stdin>:5183:10, :5313:10, :5443:10
   wire        _io_ptr_o_valid_output;	// src/main/scala/streamer/TemporalAddrGenUnit.scala:181:38
   wire        addr_gen_finish;	// src/main/scala/streamer/TemporalAddrGenUnit.scala:127:5
   reg  [7:0]  temporalLoopBounds_0;	// src/main/scala/streamer/TemporalAddrGenUnit.scala:55:35
-  reg  [7:0]  temporalLoopBounds_1;	// src/main/scala/streamer/TemporalAddrGenUnit.scala:55:35
-  reg  [7:0]  temporalLoopBounds_2;	// src/main/scala/streamer/TemporalAddrGenUnit.scala:55:35
   reg  [31:0] temporalStrides_0;	// src/main/scala/streamer/TemporalAddrGenUnit.scala:58:32
-  reg  [31:0] temporalStrides_1;	// src/main/scala/streamer/TemporalAddrGenUnit.scala:58:32
-  reg  [31:0] temporalStrides_2;	// src/main/scala/streamer/TemporalAddrGenUnit.scala:58:32
   reg  [7:0]  ptr;	// src/main/scala/streamer/TemporalAddrGenUnit.scala:61:20
-  reg  [23:0] addr_gen_counter;	// src/main/scala/streamer/TemporalAddrGenUnit.scala:65:33
+  reg  [7:0]  addr_gen_counter;	// src/main/scala/streamer/TemporalAddrGenUnit.scala:65:33
   reg         cstate;	// src/main/scala/streamer/TemporalAddrGenUnit.scala:78:23
   wire        addr_gen_counter_inc = io_ptr_o_ready & cstate & ~addr_gen_finish;	// src/main/scala/streamer/TemporalAddrGenUnit.scala:74:34, :78:23, :115:{70,73}, :127:5
-  wire [23:0] _GEN = {16'h0, temporalLoopBounds_2};	// src/main/scala/streamer/TemporalAddrGenUnit.scala:55:35, :126:7
-  assign addr_gen_finish =
-    addr_gen_counter == {8'h0,
-                         {8'h0, temporalLoopBounds_0} * {8'h0, temporalLoopBounds_1}}
-    * _GEN & cstate;	// src/main/scala/streamer/TemporalAddrGenUnit.scala:55:35, :56:12, :65:33, :78:23, :125:39, :126:7, :127:5
-  wire [23:0] _GEN_0 = {16'h0, temporalLoopBounds_0};	// src/main/scala/streamer/TemporalAddrGenUnit.scala:55:35, :126:7, :154:59
-  wire [23:0] _loop_counters_0_T = addr_gen_counter % _GEN_0;	// src/main/scala/streamer/TemporalAddrGenUnit.scala:65:33, :154:59
-  wire [23:0] addr_gen_counter_next_loop_1 =
-    _io_ptr_o_valid_output ? addr_gen_counter / _GEN_0 : 24'h0;	// src/main/scala/streamer/TemporalAddrGenUnit.scala:65:33, :141:46, :152:17, :154:59, :157:43, :159:11, :181:38
-  wire [23:0] _GEN_1 = {16'h0, temporalLoopBounds_1};	// src/main/scala/streamer/TemporalAddrGenUnit.scala:55:35, :126:7, :154:59
-  wire [23:0] _loop_counters_1_T = addr_gen_counter_next_loop_1 % _GEN_1;	// src/main/scala/streamer/TemporalAddrGenUnit.scala:141:46, :152:17, :154:59, :157:43
-  wire [23:0] _loop_counters_2_T =
-    (_io_ptr_o_valid_output ? addr_gen_counter_next_loop_1 / _GEN_1 : 24'h0) % _GEN;	// src/main/scala/streamer/TemporalAddrGenUnit.scala:65:33, :126:7, :141:46, :152:17, :154:59, :157:43, :159:11, :181:38
+  assign addr_gen_finish = addr_gen_counter == temporalLoopBounds_0 & cstate;	// src/main/scala/streamer/TemporalAddrGenUnit.scala:55:35, :65:33, :78:23, :125:39, :127:5
   assign _io_ptr_o_valid_output = cstate & ~addr_gen_finish;	// src/main/scala/streamer/TemporalAddrGenUnit.scala:78:23, :115:73, :127:5, :181:38
-  always @(posedge clock or posedge reset) begin	// <stdin>:5184:11, :5314:11, :5444:11
-    if (reset) begin	// <stdin>:5184:11, :5314:11, :5444:11
+  always @(posedge clock or posedge reset) begin	// <stdin>:1324:11, :1430:11, :1536:11, :1642:11
+    if (reset) begin	// <stdin>:1324:11, :1430:11, :1536:11, :1642:11
       temporalLoopBounds_0 <= 8'h0;	// src/main/scala/streamer/TemporalAddrGenUnit.scala:55:35, :56:12
-      temporalLoopBounds_1 <= 8'h0;	// src/main/scala/streamer/TemporalAddrGenUnit.scala:55:35, :56:12
-      temporalLoopBounds_2 <= 8'h0;	// src/main/scala/streamer/TemporalAddrGenUnit.scala:55:35, :56:12
       temporalStrides_0 <= 32'h0;	// src/main/scala/streamer/TemporalAddrGenUnit.scala:58:32, :59:12
-      temporalStrides_1 <= 32'h0;	// src/main/scala/streamer/TemporalAddrGenUnit.scala:58:32, :59:12
-      temporalStrides_2 <= 32'h0;	// src/main/scala/streamer/TemporalAddrGenUnit.scala:58:32, :59:12
       ptr <= 8'h0;	// src/main/scala/streamer/TemporalAddrGenUnit.scala:56:12, :61:20
-      addr_gen_counter <= 24'h0;	// src/main/scala/streamer/TemporalAddrGenUnit.scala:65:33
-      cstate <= 1'h0;	// src/main/scala/streamer/TemporalAddrGenUnit.scala:50:30, :78:23
+      addr_gen_counter <= 8'h0;	// src/main/scala/streamer/TemporalAddrGenUnit.scala:56:12, :65:33
+      cstate <= 1'h0;	// <stdin>:1323:10, :1429:10, :1535:10, :1641:10, src/main/scala/streamer/TemporalAddrGenUnit.scala:78:23
     end
-    else begin	// <stdin>:5184:11, :5314:11, :5444:11
+    else begin	// <stdin>:1324:11, :1430:11, :1536:11, :1642:11
       automatic logic config_valid;	// src/main/scala/streamer/TemporalAddrGenUnit.scala:105:77
       config_valid =
         ~cstate & io_temporalLoopBounds_i_valid & io_temporalStrides_i_valid
         & io_ptr_i_valid;	// src/main/scala/streamer/TemporalAddrGenUnit.scala:78:23, :85:18, :105:77
       if (config_valid) begin	// src/main/scala/streamer/TemporalAddrGenUnit.scala:105:77
         temporalLoopBounds_0 <= io_temporalLoopBounds_i_bits_0;	// src/main/scala/streamer/TemporalAddrGenUnit.scala:55:35
-        temporalLoopBounds_1 <= io_temporalLoopBounds_i_bits_1;	// src/main/scala/streamer/TemporalAddrGenUnit.scala:55:35
-        temporalLoopBounds_2 <= io_temporalLoopBounds_i_bits_2;	// src/main/scala/streamer/TemporalAddrGenUnit.scala:55:35
         temporalStrides_0 <= io_temporalStrides_i_bits_0;	// src/main/scala/streamer/TemporalAddrGenUnit.scala:58:32
-        temporalStrides_1 <= io_temporalStrides_i_bits_1;	// src/main/scala/streamer/TemporalAddrGenUnit.scala:58:32
-        temporalStrides_2 <= io_temporalStrides_i_bits_2;	// src/main/scala/streamer/TemporalAddrGenUnit.scala:58:32
         ptr <= io_ptr_i_bits[7:0];	// src/main/scala/streamer/TemporalAddrGenUnit.scala:61:20, :110:9
       end
       if (addr_gen_counter_inc)	// src/main/scala/streamer/TemporalAddrGenUnit.scala:74:34
-        addr_gen_counter <= addr_gen_counter + 24'h1;	// src/main/scala/streamer/TemporalAddrGenUnit.scala:65:33, :118:42
+        addr_gen_counter <= addr_gen_counter + 8'h1;	// src/main/scala/streamer/TemporalAddrGenUnit.scala:65:33, :118:42
       else if (cstate) begin	// src/main/scala/streamer/TemporalAddrGenUnit.scala:78:23
       end
       else	// src/main/scala/streamer/TemporalAddrGenUnit.scala:78:23
-        addr_gen_counter <= 24'h0;	// src/main/scala/streamer/TemporalAddrGenUnit.scala:65:33
+        addr_gen_counter <= 8'h0;	// src/main/scala/streamer/TemporalAddrGenUnit.scala:56:12, :65:33
       if (cstate)	// src/main/scala/streamer/TemporalAddrGenUnit.scala:78:23
         cstate <= cstate & ~addr_gen_finish;	// src/main/scala/streamer/TemporalAddrGenUnit.scala:50:30, :78:23, :79:24, :85:18, :88:16, :95:29, :96:16, :98:16, :127:5
       else	// src/main/scala/streamer/TemporalAddrGenUnit.scala:78:23
         cstate <= config_valid;	// src/main/scala/streamer/TemporalAddrGenUnit.scala:78:23, :105:77
     end
   end // always @(posedge, posedge)
-  `ifndef SYNTHESIS	// <stdin>:5183:10, :5313:10, :5443:10
-    `ifdef FIRRTL_BEFORE_INITIAL	// <stdin>:5183:10, :5313:10, :5443:10
-      `FIRRTL_BEFORE_INITIAL	// <stdin>:5183:10, :5313:10, :5443:10
+  `ifndef SYNTHESIS	// <stdin>:1323:10, :1429:10, :1535:10, :1641:10
+    `ifdef FIRRTL_BEFORE_INITIAL	// <stdin>:1323:10, :1429:10, :1535:10, :1641:10
+      `FIRRTL_BEFORE_INITIAL	// <stdin>:1323:10, :1429:10, :1535:10, :1641:10
     `endif // FIRRTL_BEFORE_INITIAL
-    initial begin	// <stdin>:5183:10, :5313:10, :5443:10
-      automatic logic [31:0] _RANDOM[0:4];	// <stdin>:5183:10, :5313:10, :5443:10
-      `ifdef INIT_RANDOM_PROLOG_	// <stdin>:5183:10, :5313:10, :5443:10
-        `INIT_RANDOM_PROLOG_	// <stdin>:5183:10, :5313:10, :5443:10
+    initial begin	// <stdin>:1323:10, :1429:10, :1535:10, :1641:10
+      automatic logic [31:0] _RANDOM[0:1];	// <stdin>:1323:10, :1429:10, :1535:10, :1641:10
+      `ifdef INIT_RANDOM_PROLOG_	// <stdin>:1323:10, :1429:10, :1535:10, :1641:10
+        `INIT_RANDOM_PROLOG_	// <stdin>:1323:10, :1429:10, :1535:10, :1641:10
       `endif // INIT_RANDOM_PROLOG_
-      `ifdef RANDOMIZE_REG_INIT	// <stdin>:5183:10, :5313:10, :5443:10
-        for (logic [2:0] i = 3'h0; i < 3'h5; i += 3'h1) begin
-          _RANDOM[i] = `RANDOM;	// <stdin>:5183:10, :5313:10, :5443:10
-        end	// <stdin>:5183:10, :5313:10, :5443:10
-        temporalLoopBounds_0 = _RANDOM[3'h0][7:0];	// <stdin>:5183:10, :5313:10, :5443:10, src/main/scala/streamer/TemporalAddrGenUnit.scala:55:35
-        temporalLoopBounds_1 = _RANDOM[3'h0][15:8];	// <stdin>:5183:10, :5313:10, :5443:10, src/main/scala/streamer/TemporalAddrGenUnit.scala:55:35
-        temporalLoopBounds_2 = _RANDOM[3'h0][23:16];	// <stdin>:5183:10, :5313:10, :5443:10, src/main/scala/streamer/TemporalAddrGenUnit.scala:55:35
-        temporalStrides_0 = {_RANDOM[3'h0][31:24], _RANDOM[3'h1][23:0]};	// <stdin>:5183:10, :5313:10, :5443:10, src/main/scala/streamer/TemporalAddrGenUnit.scala:55:35, :58:32
-        temporalStrides_1 = {_RANDOM[3'h1][31:24], _RANDOM[3'h2][23:0]};	// <stdin>:5183:10, :5313:10, :5443:10, src/main/scala/streamer/TemporalAddrGenUnit.scala:58:32
-        temporalStrides_2 = {_RANDOM[3'h2][31:24], _RANDOM[3'h3][23:0]};	// <stdin>:5183:10, :5313:10, :5443:10, src/main/scala/streamer/TemporalAddrGenUnit.scala:58:32
-        ptr = _RANDOM[3'h3][31:24];	// <stdin>:5183:10, :5313:10, :5443:10, src/main/scala/streamer/TemporalAddrGenUnit.scala:58:32, :61:20
-        addr_gen_counter = _RANDOM[3'h4][23:0];	// <stdin>:5183:10, :5313:10, :5443:10, src/main/scala/streamer/TemporalAddrGenUnit.scala:65:33
-        cstate = _RANDOM[3'h4][24];	// <stdin>:5183:10, :5313:10, :5443:10, src/main/scala/streamer/TemporalAddrGenUnit.scala:65:33, :78:23
+      `ifdef RANDOMIZE_REG_INIT	// <stdin>:1323:10, :1429:10, :1535:10, :1641:10
+        for (logic [1:0] i = 2'h0; i < 2'h2; i += 2'h1) begin
+          _RANDOM[i[0]] = `RANDOM;	// <stdin>:1323:10, :1429:10, :1535:10, :1641:10
+        end	// <stdin>:1323:10, :1429:10, :1535:10, :1641:10
+        temporalLoopBounds_0 = _RANDOM[1'h0][7:0];	// <stdin>:1323:10, :1429:10, :1535:10, :1641:10, src/main/scala/streamer/TemporalAddrGenUnit.scala:55:35
+        temporalStrides_0 = {_RANDOM[1'h0][31:8], _RANDOM[1'h1][7:0]};	// <stdin>:1323:10, :1429:10, :1535:10, :1641:10, src/main/scala/streamer/TemporalAddrGenUnit.scala:55:35, :58:32
+        ptr = _RANDOM[1'h1][15:8];	// <stdin>:1323:10, :1429:10, :1535:10, :1641:10, src/main/scala/streamer/TemporalAddrGenUnit.scala:58:32, :61:20
+        addr_gen_counter = _RANDOM[1'h1][23:16];	// <stdin>:1323:10, :1429:10, :1535:10, :1641:10, src/main/scala/streamer/TemporalAddrGenUnit.scala:58:32, :65:33
+        cstate = _RANDOM[1'h1][24];	// <stdin>:1323:10, :1429:10, :1535:10, :1641:10, src/main/scala/streamer/TemporalAddrGenUnit.scala:58:32, :78:23
       `endif // RANDOMIZE_REG_INIT
-      if (reset) begin	// <stdin>:5183:10, :5313:10, :5443:10
+      if (reset) begin	// <stdin>:1323:10, :1429:10, :1535:10, :1641:10
         temporalLoopBounds_0 = 8'h0;	// src/main/scala/streamer/TemporalAddrGenUnit.scala:55:35, :56:12
-        temporalLoopBounds_1 = 8'h0;	// src/main/scala/streamer/TemporalAddrGenUnit.scala:55:35, :56:12
-        temporalLoopBounds_2 = 8'h0;	// src/main/scala/streamer/TemporalAddrGenUnit.scala:55:35, :56:12
         temporalStrides_0 = 32'h0;	// src/main/scala/streamer/TemporalAddrGenUnit.scala:58:32, :59:12
-        temporalStrides_1 = 32'h0;	// src/main/scala/streamer/TemporalAddrGenUnit.scala:58:32, :59:12
-        temporalStrides_2 = 32'h0;	// src/main/scala/streamer/TemporalAddrGenUnit.scala:58:32, :59:12
         ptr = 8'h0;	// src/main/scala/streamer/TemporalAddrGenUnit.scala:56:12, :61:20
-        addr_gen_counter = 24'h0;	// src/main/scala/streamer/TemporalAddrGenUnit.scala:65:33
-        cstate = 1'h0;	// src/main/scala/streamer/TemporalAddrGenUnit.scala:50:30, :78:23
+        addr_gen_counter = 8'h0;	// src/main/scala/streamer/TemporalAddrGenUnit.scala:56:12, :65:33
+        cstate = 1'h0;	// <stdin>:1323:10, :1429:10, :1535:10, :1641:10, src/main/scala/streamer/TemporalAddrGenUnit.scala:78:23
       end
     end // initial
-    `ifdef FIRRTL_AFTER_INITIAL	// <stdin>:5183:10, :5313:10, :5443:10
-      `FIRRTL_AFTER_INITIAL	// <stdin>:5183:10, :5313:10, :5443:10
+    `ifdef FIRRTL_AFTER_INITIAL	// <stdin>:1323:10, :1429:10, :1535:10, :1641:10
+      `FIRRTL_AFTER_INITIAL	// <stdin>:1323:10, :1429:10, :1535:10, :1641:10
     `endif // FIRRTL_AFTER_INITIAL
   `endif // not def SYNTHESIS
-  assign io_ptr_o_valid = _io_ptr_o_valid_output;	// <stdin>:5183:10, :5313:10, :5443:10, src/main/scala/streamer/TemporalAddrGenUnit.scala:181:38
+  assign io_ptr_o_valid = _io_ptr_o_valid_output;	// <stdin>:1323:10, :1429:10, :1535:10, :1641:10, src/main/scala/streamer/TemporalAddrGenUnit.scala:181:38
   assign io_ptr_o_bits =
-    {24'h0, _io_ptr_o_valid_output ? _loop_counters_0_T[7:0] : 8'h0} * temporalStrides_0
-    + {24'h0, _io_ptr_o_valid_output ? _loop_counters_1_T[7:0] : 8'h0} * temporalStrides_1
-    + {24'h0, _io_ptr_o_valid_output ? _loop_counters_2_T[7:0] : 8'h0} * temporalStrides_2
-    + {24'h0, ptr};	// <stdin>:5183:10, :5313:10, :5443:10, src/main/scala/streamer/TemporalAddrGenUnit.scala:56:12, :58:32, :61:20, :65:33, :136:33, :152:17, :154:{26,59}, :177:29, :178:21, :181:38
-  assign io_data_move_done = addr_gen_finish;	// <stdin>:5183:10, :5313:10, :5443:10, src/main/scala/streamer/TemporalAddrGenUnit.scala:127:5
+    {24'h0, _io_ptr_o_valid_output ? addr_gen_counter % temporalLoopBounds_0 : 8'h0}
+    * temporalStrides_0 + {24'h0, ptr};	// <stdin>:1323:10, :1429:10, :1535:10, :1641:10, src/main/scala/streamer/TemporalAddrGenUnit.scala:55:35, :56:12, :58:32, :61:20, :65:33, :136:33, :152:17, :154:{26,59}, :177:29, :178:21, :181:38
+  assign io_data_move_done = addr_gen_finish;	// <stdin>:1323:10, :1429:10, :1535:10, :1641:10, src/main/scala/streamer/TemporalAddrGenUnit.scala:127:5
 endmodule
 
-module Queue4_UInt512(	// <stdin>:5573:10, :5627:10
-  input          clock,	// <stdin>:5574:11, :5628:11
-                 reset,	// <stdin>:5575:11, :5629:11
+module Queue2_UInt256(	// <stdin>:1747:10, :1801:10, :1909:10
+  input          clock,	// <stdin>:1748:11, :1802:11, :1910:11
+                 reset,	// <stdin>:1749:11, :1803:11, :1911:11
                  io_enq_valid,	// src/main/scala/chisel3/util/Decoupled.scala:256:14
-  input  [511:0] io_enq_bits,	// src/main/scala/chisel3/util/Decoupled.scala:256:14
+  input  [255:0] io_enq_bits,	// src/main/scala/chisel3/util/Decoupled.scala:256:14
   input          io_deq_ready,	// src/main/scala/chisel3/util/Decoupled.scala:256:14
   output         io_enq_ready,	// src/main/scala/chisel3/util/Decoupled.scala:256:14
                  io_deq_valid,	// src/main/scala/chisel3/util/Decoupled.scala:256:14
-  output [511:0] io_deq_bits	// src/main/scala/chisel3/util/Decoupled.scala:256:14
+  output [255:0] io_deq_bits	// src/main/scala/chisel3/util/Decoupled.scala:256:14
 );
 
-  reg  [1:0] enq_ptr_value;	// src/main/scala/chisel3/util/Counter.scala:61:40
-  reg  [1:0] deq_ptr_value;	// src/main/scala/chisel3/util/Counter.scala:61:40
-  reg        maybe_full;	// src/main/scala/chisel3/util/Decoupled.scala:260:27
-  wire       ptr_match = enq_ptr_value == deq_ptr_value;	// src/main/scala/chisel3/util/Counter.scala:61:40, src/main/scala/chisel3/util/Decoupled.scala:261:33
-  wire       empty = ptr_match & ~maybe_full;	// src/main/scala/chisel3/util/Decoupled.scala:260:27, :261:33, :262:{25,28}
-  wire       full = ptr_match & maybe_full;	// src/main/scala/chisel3/util/Decoupled.scala:260:27, :261:33, :263:24
-  wire       do_enq = ~full & io_enq_valid;	// src/main/scala/chisel3/util/Decoupled.scala:52:35, :263:24, :287:19
-  always @(posedge clock or posedge reset) begin	// <stdin>:5574:11, :5628:11
-    if (reset) begin	// <stdin>:5574:11, :5628:11
-      enq_ptr_value <= 2'h0;	// src/main/scala/chisel3/util/Counter.scala:61:40
-      deq_ptr_value <= 2'h0;	// src/main/scala/chisel3/util/Counter.scala:61:40
-      maybe_full <= 1'h0;	// <stdin>:5573:10, :5627:10, src/main/scala/chisel3/util/Decoupled.scala:260:27
+  reg  enq_ptr_value;	// src/main/scala/chisel3/util/Counter.scala:61:40
+  reg  deq_ptr_value;	// src/main/scala/chisel3/util/Counter.scala:61:40
+  reg  maybe_full;	// src/main/scala/chisel3/util/Decoupled.scala:260:27
+  wire ptr_match = enq_ptr_value == deq_ptr_value;	// src/main/scala/chisel3/util/Counter.scala:61:40, src/main/scala/chisel3/util/Decoupled.scala:261:33
+  wire empty = ptr_match & ~maybe_full;	// src/main/scala/chisel3/util/Decoupled.scala:260:27, :261:33, :262:{25,28}
+  wire full = ptr_match & maybe_full;	// src/main/scala/chisel3/util/Decoupled.scala:260:27, :261:33, :263:24
+  wire do_enq = ~full & io_enq_valid;	// src/main/scala/chisel3/util/Decoupled.scala:52:35, :263:24, :287:19
+  always @(posedge clock or posedge reset) begin	// <stdin>:1748:11, :1802:11, :1910:11
+    if (reset) begin	// <stdin>:1748:11, :1802:11, :1910:11
+      enq_ptr_value <= 1'h0;	// <stdin>:1747:10, :1801:10, :1909:10, src/main/scala/chisel3/util/Counter.scala:61:40
+      deq_ptr_value <= 1'h0;	// <stdin>:1747:10, :1801:10, :1909:10, src/main/scala/chisel3/util/Counter.scala:61:40
+      maybe_full <= 1'h0;	// <stdin>:1747:10, :1801:10, :1909:10, src/main/scala/chisel3/util/Decoupled.scala:260:27
     end
-    else begin	// <stdin>:5574:11, :5628:11
+    else begin	// <stdin>:1748:11, :1802:11, :1910:11
       automatic logic do_deq = io_deq_ready & ~empty;	// src/main/scala/chisel3/util/Decoupled.scala:52:35, :262:25, :286:19
       if (do_enq)	// src/main/scala/chisel3/util/Decoupled.scala:52:35
-        enq_ptr_value <= enq_ptr_value + 2'h1;	// src/main/scala/chisel3/util/Counter.scala:61:40, :77:24
+        enq_ptr_value <= enq_ptr_value - 1'h1;	// src/main/scala/chisel3/util/Counter.scala:61:40, :77:24
       if (do_deq)	// src/main/scala/chisel3/util/Decoupled.scala:52:35
-        deq_ptr_value <= deq_ptr_value + 2'h1;	// src/main/scala/chisel3/util/Counter.scala:61:40, :77:24
+        deq_ptr_value <= deq_ptr_value - 1'h1;	// src/main/scala/chisel3/util/Counter.scala:61:40, :77:24
       if (do_enq != do_deq)	// src/main/scala/chisel3/util/Decoupled.scala:52:35, :277:15
         maybe_full <= do_enq;	// src/main/scala/chisel3/util/Decoupled.scala:52:35, :260:27
     end
   end // always @(posedge, posedge)
-  `ifndef SYNTHESIS	// <stdin>:5573:10, :5627:10
-    `ifdef FIRRTL_BEFORE_INITIAL	// <stdin>:5573:10, :5627:10
-      `FIRRTL_BEFORE_INITIAL	// <stdin>:5573:10, :5627:10
+  `ifndef SYNTHESIS	// <stdin>:1747:10, :1801:10, :1909:10
+    `ifdef FIRRTL_BEFORE_INITIAL	// <stdin>:1747:10, :1801:10, :1909:10
+      `FIRRTL_BEFORE_INITIAL	// <stdin>:1747:10, :1801:10, :1909:10
     `endif // FIRRTL_BEFORE_INITIAL
-    initial begin	// <stdin>:5573:10, :5627:10
-      automatic logic [31:0] _RANDOM[0:0];	// <stdin>:5573:10, :5627:10
-      `ifdef INIT_RANDOM_PROLOG_	// <stdin>:5573:10, :5627:10
-        `INIT_RANDOM_PROLOG_	// <stdin>:5573:10, :5627:10
+    initial begin	// <stdin>:1747:10, :1801:10, :1909:10
+      automatic logic [31:0] _RANDOM[0:0];	// <stdin>:1747:10, :1801:10, :1909:10
+      `ifdef INIT_RANDOM_PROLOG_	// <stdin>:1747:10, :1801:10, :1909:10
+        `INIT_RANDOM_PROLOG_	// <stdin>:1747:10, :1801:10, :1909:10
       `endif // INIT_RANDOM_PROLOG_
-      `ifdef RANDOMIZE_REG_INIT	// <stdin>:5573:10, :5627:10
-        _RANDOM[/*Zero width*/ 1'b0] = `RANDOM;	// <stdin>:5573:10, :5627:10
-        enq_ptr_value = _RANDOM[/*Zero width*/ 1'b0][1:0];	// <stdin>:5573:10, :5627:10, src/main/scala/chisel3/util/Counter.scala:61:40
-        deq_ptr_value = _RANDOM[/*Zero width*/ 1'b0][3:2];	// <stdin>:5573:10, :5627:10, src/main/scala/chisel3/util/Counter.scala:61:40
-        maybe_full = _RANDOM[/*Zero width*/ 1'b0][4];	// <stdin>:5573:10, :5627:10, src/main/scala/chisel3/util/Counter.scala:61:40, src/main/scala/chisel3/util/Decoupled.scala:260:27
+      `ifdef RANDOMIZE_REG_INIT	// <stdin>:1747:10, :1801:10, :1909:10
+        _RANDOM[/*Zero width*/ 1'b0] = `RANDOM;	// <stdin>:1747:10, :1801:10, :1909:10
+        enq_ptr_value = _RANDOM[/*Zero width*/ 1'b0][0];	// <stdin>:1747:10, :1801:10, :1909:10, src/main/scala/chisel3/util/Counter.scala:61:40
+        deq_ptr_value = _RANDOM[/*Zero width*/ 1'b0][1];	// <stdin>:1747:10, :1801:10, :1909:10, src/main/scala/chisel3/util/Counter.scala:61:40
+        maybe_full = _RANDOM[/*Zero width*/ 1'b0][2];	// <stdin>:1747:10, :1801:10, :1909:10, src/main/scala/chisel3/util/Counter.scala:61:40, src/main/scala/chisel3/util/Decoupled.scala:260:27
       `endif // RANDOMIZE_REG_INIT
-      if (reset) begin	// <stdin>:5573:10, :5627:10
-        enq_ptr_value = 2'h0;	// src/main/scala/chisel3/util/Counter.scala:61:40
-        deq_ptr_value = 2'h0;	// src/main/scala/chisel3/util/Counter.scala:61:40
-        maybe_full = 1'h0;	// <stdin>:5573:10, :5627:10, src/main/scala/chisel3/util/Decoupled.scala:260:27
+      if (reset) begin	// <stdin>:1747:10, :1801:10, :1909:10
+        enq_ptr_value = 1'h0;	// <stdin>:1747:10, :1801:10, :1909:10, src/main/scala/chisel3/util/Counter.scala:61:40
+        deq_ptr_value = 1'h0;	// <stdin>:1747:10, :1801:10, :1909:10, src/main/scala/chisel3/util/Counter.scala:61:40
+        maybe_full = 1'h0;	// <stdin>:1747:10, :1801:10, :1909:10, src/main/scala/chisel3/util/Decoupled.scala:260:27
       end
     end // initial
-    `ifdef FIRRTL_AFTER_INITIAL	// <stdin>:5573:10, :5627:10
-      `FIRRTL_AFTER_INITIAL	// <stdin>:5573:10, :5627:10
-    `endif // FIRRTL_AFTER_INITIAL
-  `endif // not def SYNTHESIS
-  ram_combMem ram_ext (	// src/main/scala/chisel3/util/Decoupled.scala:257:91
-    .R0_addr (deq_ptr_value),	// src/main/scala/chisel3/util/Counter.scala:61:40
-    .R0_en   (1'h1),	// <stdin>:5573:10, :5627:10
-    .R0_clk  (clock),
-    .W0_addr (enq_ptr_value),	// src/main/scala/chisel3/util/Counter.scala:61:40
-    .W0_en   (do_enq),	// src/main/scala/chisel3/util/Decoupled.scala:52:35
-    .W0_clk  (clock),
-    .W0_data (io_enq_bits),
-    .R0_data (io_deq_bits)
-  );
-  assign io_enq_ready = ~full;	// <stdin>:5573:10, :5627:10, src/main/scala/chisel3/util/Decoupled.scala:263:24, :287:19
-  assign io_deq_valid = ~empty;	// <stdin>:5573:10, :5627:10, src/main/scala/chisel3/util/Decoupled.scala:262:25, :286:19
-endmodule
-
-module Queue4_UInt2048(	// <stdin>:5681:10
-  input           clock,	// <stdin>:5682:11
-                  reset,	// <stdin>:5683:11
-                  io_enq_valid,	// src/main/scala/chisel3/util/Decoupled.scala:256:14
-  input  [2047:0] io_enq_bits,	// src/main/scala/chisel3/util/Decoupled.scala:256:14
-  input           io_deq_ready,	// src/main/scala/chisel3/util/Decoupled.scala:256:14
-  output          io_enq_ready,	// src/main/scala/chisel3/util/Decoupled.scala:256:14
-                  io_deq_valid,	// src/main/scala/chisel3/util/Decoupled.scala:256:14
-  output [2047:0] io_deq_bits	// src/main/scala/chisel3/util/Decoupled.scala:256:14
-);
-
-  reg  [1:0] enq_ptr_value;	// src/main/scala/chisel3/util/Counter.scala:61:40
-  reg  [1:0] deq_ptr_value;	// src/main/scala/chisel3/util/Counter.scala:61:40
-  reg        maybe_full;	// src/main/scala/chisel3/util/Decoupled.scala:260:27
-  wire       ptr_match = enq_ptr_value == deq_ptr_value;	// src/main/scala/chisel3/util/Counter.scala:61:40, src/main/scala/chisel3/util/Decoupled.scala:261:33
-  wire       empty = ptr_match & ~maybe_full;	// src/main/scala/chisel3/util/Decoupled.scala:260:27, :261:33, :262:{25,28}
-  wire       full = ptr_match & maybe_full;	// src/main/scala/chisel3/util/Decoupled.scala:260:27, :261:33, :263:24
-  wire       do_enq = ~full & io_enq_valid;	// src/main/scala/chisel3/util/Decoupled.scala:52:35, :263:24, :287:19
-  always @(posedge clock or posedge reset) begin	// <stdin>:5682:11
-    if (reset) begin	// <stdin>:5682:11
-      enq_ptr_value <= 2'h0;	// src/main/scala/chisel3/util/Counter.scala:61:40
-      deq_ptr_value <= 2'h0;	// src/main/scala/chisel3/util/Counter.scala:61:40
-      maybe_full <= 1'h0;	// <stdin>:5681:10, src/main/scala/chisel3/util/Decoupled.scala:260:27
-    end
-    else begin	// <stdin>:5682:11
-      automatic logic do_deq = io_deq_ready & ~empty;	// src/main/scala/chisel3/util/Decoupled.scala:52:35, :262:25, :286:19
-      if (do_enq)	// src/main/scala/chisel3/util/Decoupled.scala:52:35
-        enq_ptr_value <= enq_ptr_value + 2'h1;	// src/main/scala/chisel3/util/Counter.scala:61:40, :77:24
-      if (do_deq)	// src/main/scala/chisel3/util/Decoupled.scala:52:35
-        deq_ptr_value <= deq_ptr_value + 2'h1;	// src/main/scala/chisel3/util/Counter.scala:61:40, :77:24
-      if (do_enq != do_deq)	// src/main/scala/chisel3/util/Decoupled.scala:52:35, :277:15
-        maybe_full <= do_enq;	// src/main/scala/chisel3/util/Decoupled.scala:52:35, :260:27
-    end
-  end // always @(posedge, posedge)
-  `ifndef SYNTHESIS	// <stdin>:5681:10
-    `ifdef FIRRTL_BEFORE_INITIAL	// <stdin>:5681:10
-      `FIRRTL_BEFORE_INITIAL	// <stdin>:5681:10
-    `endif // FIRRTL_BEFORE_INITIAL
-    initial begin	// <stdin>:5681:10
-      automatic logic [31:0] _RANDOM[0:0];	// <stdin>:5681:10
-      `ifdef INIT_RANDOM_PROLOG_	// <stdin>:5681:10
-        `INIT_RANDOM_PROLOG_	// <stdin>:5681:10
-      `endif // INIT_RANDOM_PROLOG_
-      `ifdef RANDOMIZE_REG_INIT	// <stdin>:5681:10
-        _RANDOM[/*Zero width*/ 1'b0] = `RANDOM;	// <stdin>:5681:10
-        enq_ptr_value = _RANDOM[/*Zero width*/ 1'b0][1:0];	// <stdin>:5681:10, src/main/scala/chisel3/util/Counter.scala:61:40
-        deq_ptr_value = _RANDOM[/*Zero width*/ 1'b0][3:2];	// <stdin>:5681:10, src/main/scala/chisel3/util/Counter.scala:61:40
-        maybe_full = _RANDOM[/*Zero width*/ 1'b0][4];	// <stdin>:5681:10, src/main/scala/chisel3/util/Counter.scala:61:40, src/main/scala/chisel3/util/Decoupled.scala:260:27
-      `endif // RANDOMIZE_REG_INIT
-      if (reset) begin	// <stdin>:5681:10
-        enq_ptr_value = 2'h0;	// src/main/scala/chisel3/util/Counter.scala:61:40
-        deq_ptr_value = 2'h0;	// src/main/scala/chisel3/util/Counter.scala:61:40
-        maybe_full = 1'h0;	// <stdin>:5681:10, src/main/scala/chisel3/util/Decoupled.scala:260:27
-      end
-    end // initial
-    `ifdef FIRRTL_AFTER_INITIAL	// <stdin>:5681:10
-      `FIRRTL_AFTER_INITIAL	// <stdin>:5681:10
+    `ifdef FIRRTL_AFTER_INITIAL	// <stdin>:1747:10, :1801:10, :1909:10
+      `FIRRTL_AFTER_INITIAL	// <stdin>:1747:10, :1801:10, :1909:10
     `endif // FIRRTL_AFTER_INITIAL
   `endif // not def SYNTHESIS
   ram_combMem_0 ram_ext (	// src/main/scala/chisel3/util/Decoupled.scala:257:91
     .R0_addr (deq_ptr_value),	// src/main/scala/chisel3/util/Counter.scala:61:40
-    .R0_en   (1'h1),	// <stdin>:5681:10
+    .R0_en   (1'h1),	// <stdin>:1747:10, :1801:10, :1909:10
     .R0_clk  (clock),
     .W0_addr (enq_ptr_value),	// src/main/scala/chisel3/util/Counter.scala:61:40
     .W0_en   (do_enq),	// src/main/scala/chisel3/util/Decoupled.scala:52:35
@@ -2526,288 +930,218 @@ module Queue4_UInt2048(	// <stdin>:5681:10
     .W0_data (io_enq_bits),
     .R0_data (io_deq_bits)
   );
-  assign io_enq_ready = ~full;	// <stdin>:5681:10, src/main/scala/chisel3/util/Decoupled.scala:263:24, :287:19
-  assign io_deq_valid = ~empty;	// <stdin>:5681:10, src/main/scala/chisel3/util/Decoupled.scala:262:25, :286:19
+  assign io_enq_ready = ~full;	// <stdin>:1747:10, :1801:10, :1909:10, src/main/scala/chisel3/util/Decoupled.scala:263:24, :287:19
+  assign io_deq_valid = ~empty;	// <stdin>:1747:10, :1801:10, :1909:10, src/main/scala/chisel3/util/Decoupled.scala:262:25, :286:19
 endmodule
 
-module Streamer(	// <stdin>:5735:10
-  input           clock,	// <stdin>:5736:11
-                  reset,	// <stdin>:5737:11
-                  io_csr_valid,	// src/main/scala/streamer/Streamer.scala:145:14
-  input  [7:0]    io_csr_bits_temporalLoopBounds_i_0,	// src/main/scala/streamer/Streamer.scala:145:14
-                  io_csr_bits_temporalLoopBounds_i_1,	// src/main/scala/streamer/Streamer.scala:145:14
-                  io_csr_bits_temporalLoopBounds_i_2,	// src/main/scala/streamer/Streamer.scala:145:14
-  input  [31:0]   io_csr_bits_temporalStrides_i_0_0,	// src/main/scala/streamer/Streamer.scala:145:14
-                  io_csr_bits_temporalStrides_i_0_1,	// src/main/scala/streamer/Streamer.scala:145:14
-                  io_csr_bits_temporalStrides_i_0_2,	// src/main/scala/streamer/Streamer.scala:145:14
-                  io_csr_bits_temporalStrides_i_1_0,	// src/main/scala/streamer/Streamer.scala:145:14
-                  io_csr_bits_temporalStrides_i_1_1,	// src/main/scala/streamer/Streamer.scala:145:14
-                  io_csr_bits_temporalStrides_i_1_2,	// src/main/scala/streamer/Streamer.scala:145:14
-                  io_csr_bits_temporalStrides_i_2_0,	// src/main/scala/streamer/Streamer.scala:145:14
-                  io_csr_bits_temporalStrides_i_2_1,	// src/main/scala/streamer/Streamer.scala:145:14
-                  io_csr_bits_temporalStrides_i_2_2,	// src/main/scala/streamer/Streamer.scala:145:14
-                  io_csr_bits_unrollingStrides_i_2_0,	// src/main/scala/streamer/Streamer.scala:145:14
-                  io_csr_bits_unrollingStrides_i_2_1,	// src/main/scala/streamer/Streamer.scala:145:14
-                  io_csr_bits_unrollingStrides_i_1_0,	// src/main/scala/streamer/Streamer.scala:145:14
-                  io_csr_bits_unrollingStrides_i_1_1,	// src/main/scala/streamer/Streamer.scala:145:14
-                  io_csr_bits_unrollingStrides_i_0_0,	// src/main/scala/streamer/Streamer.scala:145:14
-                  io_csr_bits_unrollingStrides_i_0_1,	// src/main/scala/streamer/Streamer.scala:145:14
-                  io_csr_bits_ptr_i_0,	// src/main/scala/streamer/Streamer.scala:145:14
-                  io_csr_bits_ptr_i_1,	// src/main/scala/streamer/Streamer.scala:145:14
-                  io_csr_bits_ptr_i_2,	// src/main/scala/streamer/Streamer.scala:145:14
-  input           io_data_streamer2accelerator_data_1_ready,	// src/main/scala/streamer/Streamer.scala:145:14
-                  io_data_streamer2accelerator_data_0_ready,	// src/main/scala/streamer/Streamer.scala:145:14
-                  io_data_accelerator2streamer_data_0_valid,	// src/main/scala/streamer/Streamer.scala:145:14
-  input  [2047:0] io_data_accelerator2streamer_data_0_bits,	// src/main/scala/streamer/Streamer.scala:145:14
-  input           io_data_tcdm_req_0_ready,	// src/main/scala/streamer/Streamer.scala:145:14
-                  io_data_tcdm_req_1_ready,	// src/main/scala/streamer/Streamer.scala:145:14
-                  io_data_tcdm_req_2_ready,	// src/main/scala/streamer/Streamer.scala:145:14
-                  io_data_tcdm_req_3_ready,	// src/main/scala/streamer/Streamer.scala:145:14
-                  io_data_tcdm_req_4_ready,	// src/main/scala/streamer/Streamer.scala:145:14
-                  io_data_tcdm_req_5_ready,	// src/main/scala/streamer/Streamer.scala:145:14
-                  io_data_tcdm_req_6_ready,	// src/main/scala/streamer/Streamer.scala:145:14
-                  io_data_tcdm_req_7_ready,	// src/main/scala/streamer/Streamer.scala:145:14
-                  io_data_tcdm_req_8_ready,	// src/main/scala/streamer/Streamer.scala:145:14
-                  io_data_tcdm_req_9_ready,	// src/main/scala/streamer/Streamer.scala:145:14
-                  io_data_tcdm_req_10_ready,	// src/main/scala/streamer/Streamer.scala:145:14
-                  io_data_tcdm_req_11_ready,	// src/main/scala/streamer/Streamer.scala:145:14
-                  io_data_tcdm_req_12_ready,	// src/main/scala/streamer/Streamer.scala:145:14
-                  io_data_tcdm_req_13_ready,	// src/main/scala/streamer/Streamer.scala:145:14
-                  io_data_tcdm_req_14_ready,	// src/main/scala/streamer/Streamer.scala:145:14
-                  io_data_tcdm_req_15_ready,	// src/main/scala/streamer/Streamer.scala:145:14
-                  io_data_tcdm_req_16_ready,	// src/main/scala/streamer/Streamer.scala:145:14
-                  io_data_tcdm_req_17_ready,	// src/main/scala/streamer/Streamer.scala:145:14
-                  io_data_tcdm_req_18_ready,	// src/main/scala/streamer/Streamer.scala:145:14
-                  io_data_tcdm_req_19_ready,	// src/main/scala/streamer/Streamer.scala:145:14
-                  io_data_tcdm_req_20_ready,	// src/main/scala/streamer/Streamer.scala:145:14
-                  io_data_tcdm_req_21_ready,	// src/main/scala/streamer/Streamer.scala:145:14
-                  io_data_tcdm_req_22_ready,	// src/main/scala/streamer/Streamer.scala:145:14
-                  io_data_tcdm_req_23_ready,	// src/main/scala/streamer/Streamer.scala:145:14
-                  io_data_tcdm_req_24_ready,	// src/main/scala/streamer/Streamer.scala:145:14
-                  io_data_tcdm_req_25_ready,	// src/main/scala/streamer/Streamer.scala:145:14
-                  io_data_tcdm_req_26_ready,	// src/main/scala/streamer/Streamer.scala:145:14
-                  io_data_tcdm_req_27_ready,	// src/main/scala/streamer/Streamer.scala:145:14
-                  io_data_tcdm_req_28_ready,	// src/main/scala/streamer/Streamer.scala:145:14
-                  io_data_tcdm_req_29_ready,	// src/main/scala/streamer/Streamer.scala:145:14
-                  io_data_tcdm_req_30_ready,	// src/main/scala/streamer/Streamer.scala:145:14
-                  io_data_tcdm_req_31_ready,	// src/main/scala/streamer/Streamer.scala:145:14
-                  io_data_tcdm_req_32_ready,	// src/main/scala/streamer/Streamer.scala:145:14
-                  io_data_tcdm_req_33_ready,	// src/main/scala/streamer/Streamer.scala:145:14
-                  io_data_tcdm_req_34_ready,	// src/main/scala/streamer/Streamer.scala:145:14
-                  io_data_tcdm_req_35_ready,	// src/main/scala/streamer/Streamer.scala:145:14
-                  io_data_tcdm_req_36_ready,	// src/main/scala/streamer/Streamer.scala:145:14
-                  io_data_tcdm_req_37_ready,	// src/main/scala/streamer/Streamer.scala:145:14
-                  io_data_tcdm_req_38_ready,	// src/main/scala/streamer/Streamer.scala:145:14
-                  io_data_tcdm_req_39_ready,	// src/main/scala/streamer/Streamer.scala:145:14
-                  io_data_tcdm_req_40_ready,	// src/main/scala/streamer/Streamer.scala:145:14
-                  io_data_tcdm_req_41_ready,	// src/main/scala/streamer/Streamer.scala:145:14
-                  io_data_tcdm_req_42_ready,	// src/main/scala/streamer/Streamer.scala:145:14
-                  io_data_tcdm_req_43_ready,	// src/main/scala/streamer/Streamer.scala:145:14
-                  io_data_tcdm_req_44_ready,	// src/main/scala/streamer/Streamer.scala:145:14
-                  io_data_tcdm_req_45_ready,	// src/main/scala/streamer/Streamer.scala:145:14
-                  io_data_tcdm_req_46_ready,	// src/main/scala/streamer/Streamer.scala:145:14
-                  io_data_tcdm_req_47_ready,	// src/main/scala/streamer/Streamer.scala:145:14
-                  io_data_tcdm_rsp_0_valid,	// src/main/scala/streamer/Streamer.scala:145:14
-  input  [63:0]   io_data_tcdm_rsp_0_bits_data,	// src/main/scala/streamer/Streamer.scala:145:14
-  input           io_data_tcdm_rsp_1_valid,	// src/main/scala/streamer/Streamer.scala:145:14
-  input  [63:0]   io_data_tcdm_rsp_1_bits_data,	// src/main/scala/streamer/Streamer.scala:145:14
-  input           io_data_tcdm_rsp_2_valid,	// src/main/scala/streamer/Streamer.scala:145:14
-  input  [63:0]   io_data_tcdm_rsp_2_bits_data,	// src/main/scala/streamer/Streamer.scala:145:14
-  input           io_data_tcdm_rsp_3_valid,	// src/main/scala/streamer/Streamer.scala:145:14
-  input  [63:0]   io_data_tcdm_rsp_3_bits_data,	// src/main/scala/streamer/Streamer.scala:145:14
-  input           io_data_tcdm_rsp_4_valid,	// src/main/scala/streamer/Streamer.scala:145:14
-  input  [63:0]   io_data_tcdm_rsp_4_bits_data,	// src/main/scala/streamer/Streamer.scala:145:14
-  input           io_data_tcdm_rsp_5_valid,	// src/main/scala/streamer/Streamer.scala:145:14
-  input  [63:0]   io_data_tcdm_rsp_5_bits_data,	// src/main/scala/streamer/Streamer.scala:145:14
-  input           io_data_tcdm_rsp_6_valid,	// src/main/scala/streamer/Streamer.scala:145:14
-  input  [63:0]   io_data_tcdm_rsp_6_bits_data,	// src/main/scala/streamer/Streamer.scala:145:14
-  input           io_data_tcdm_rsp_7_valid,	// src/main/scala/streamer/Streamer.scala:145:14
-  input  [63:0]   io_data_tcdm_rsp_7_bits_data,	// src/main/scala/streamer/Streamer.scala:145:14
-  input           io_data_tcdm_rsp_8_valid,	// src/main/scala/streamer/Streamer.scala:145:14
-  input  [63:0]   io_data_tcdm_rsp_8_bits_data,	// src/main/scala/streamer/Streamer.scala:145:14
-  input           io_data_tcdm_rsp_9_valid,	// src/main/scala/streamer/Streamer.scala:145:14
-  input  [63:0]   io_data_tcdm_rsp_9_bits_data,	// src/main/scala/streamer/Streamer.scala:145:14
-  input           io_data_tcdm_rsp_10_valid,	// src/main/scala/streamer/Streamer.scala:145:14
-  input  [63:0]   io_data_tcdm_rsp_10_bits_data,	// src/main/scala/streamer/Streamer.scala:145:14
-  input           io_data_tcdm_rsp_11_valid,	// src/main/scala/streamer/Streamer.scala:145:14
-  input  [63:0]   io_data_tcdm_rsp_11_bits_data,	// src/main/scala/streamer/Streamer.scala:145:14
-  input           io_data_tcdm_rsp_12_valid,	// src/main/scala/streamer/Streamer.scala:145:14
-  input  [63:0]   io_data_tcdm_rsp_12_bits_data,	// src/main/scala/streamer/Streamer.scala:145:14
-  input           io_data_tcdm_rsp_13_valid,	// src/main/scala/streamer/Streamer.scala:145:14
-  input  [63:0]   io_data_tcdm_rsp_13_bits_data,	// src/main/scala/streamer/Streamer.scala:145:14
-  input           io_data_tcdm_rsp_14_valid,	// src/main/scala/streamer/Streamer.scala:145:14
-  input  [63:0]   io_data_tcdm_rsp_14_bits_data,	// src/main/scala/streamer/Streamer.scala:145:14
-  input           io_data_tcdm_rsp_15_valid,	// src/main/scala/streamer/Streamer.scala:145:14
-  input  [63:0]   io_data_tcdm_rsp_15_bits_data,	// src/main/scala/streamer/Streamer.scala:145:14
-  output          io_csr_ready,	// src/main/scala/streamer/Streamer.scala:145:14
-                  io_data_streamer2accelerator_data_1_valid,	// src/main/scala/streamer/Streamer.scala:145:14
-  output [511:0]  io_data_streamer2accelerator_data_1_bits,	// src/main/scala/streamer/Streamer.scala:145:14
-  output          io_data_streamer2accelerator_data_0_valid,	// src/main/scala/streamer/Streamer.scala:145:14
-  output [511:0]  io_data_streamer2accelerator_data_0_bits,	// src/main/scala/streamer/Streamer.scala:145:14
-  output          io_data_accelerator2streamer_data_0_ready,	// src/main/scala/streamer/Streamer.scala:145:14
-                  io_data_tcdm_req_0_valid,	// src/main/scala/streamer/Streamer.scala:145:14
-  output [31:0]   io_data_tcdm_req_0_bits_addr,	// src/main/scala/streamer/Streamer.scala:145:14
-  output          io_data_tcdm_req_1_valid,	// src/main/scala/streamer/Streamer.scala:145:14
-  output [31:0]   io_data_tcdm_req_1_bits_addr,	// src/main/scala/streamer/Streamer.scala:145:14
-  output          io_data_tcdm_req_2_valid,	// src/main/scala/streamer/Streamer.scala:145:14
-  output [31:0]   io_data_tcdm_req_2_bits_addr,	// src/main/scala/streamer/Streamer.scala:145:14
-  output          io_data_tcdm_req_3_valid,	// src/main/scala/streamer/Streamer.scala:145:14
-  output [31:0]   io_data_tcdm_req_3_bits_addr,	// src/main/scala/streamer/Streamer.scala:145:14
-  output          io_data_tcdm_req_4_valid,	// src/main/scala/streamer/Streamer.scala:145:14
-  output [31:0]   io_data_tcdm_req_4_bits_addr,	// src/main/scala/streamer/Streamer.scala:145:14
-  output          io_data_tcdm_req_5_valid,	// src/main/scala/streamer/Streamer.scala:145:14
-  output [31:0]   io_data_tcdm_req_5_bits_addr,	// src/main/scala/streamer/Streamer.scala:145:14
-  output          io_data_tcdm_req_6_valid,	// src/main/scala/streamer/Streamer.scala:145:14
-  output [31:0]   io_data_tcdm_req_6_bits_addr,	// src/main/scala/streamer/Streamer.scala:145:14
-  output          io_data_tcdm_req_7_valid,	// src/main/scala/streamer/Streamer.scala:145:14
-  output [31:0]   io_data_tcdm_req_7_bits_addr,	// src/main/scala/streamer/Streamer.scala:145:14
-  output          io_data_tcdm_req_8_valid,	// src/main/scala/streamer/Streamer.scala:145:14
-  output [31:0]   io_data_tcdm_req_8_bits_addr,	// src/main/scala/streamer/Streamer.scala:145:14
-  output          io_data_tcdm_req_9_valid,	// src/main/scala/streamer/Streamer.scala:145:14
-  output [31:0]   io_data_tcdm_req_9_bits_addr,	// src/main/scala/streamer/Streamer.scala:145:14
-  output          io_data_tcdm_req_10_valid,	// src/main/scala/streamer/Streamer.scala:145:14
-  output [31:0]   io_data_tcdm_req_10_bits_addr,	// src/main/scala/streamer/Streamer.scala:145:14
-  output          io_data_tcdm_req_11_valid,	// src/main/scala/streamer/Streamer.scala:145:14
-  output [31:0]   io_data_tcdm_req_11_bits_addr,	// src/main/scala/streamer/Streamer.scala:145:14
-  output          io_data_tcdm_req_12_valid,	// src/main/scala/streamer/Streamer.scala:145:14
-  output [31:0]   io_data_tcdm_req_12_bits_addr,	// src/main/scala/streamer/Streamer.scala:145:14
-  output          io_data_tcdm_req_13_valid,	// src/main/scala/streamer/Streamer.scala:145:14
-  output [31:0]   io_data_tcdm_req_13_bits_addr,	// src/main/scala/streamer/Streamer.scala:145:14
-  output          io_data_tcdm_req_14_valid,	// src/main/scala/streamer/Streamer.scala:145:14
-  output [31:0]   io_data_tcdm_req_14_bits_addr,	// src/main/scala/streamer/Streamer.scala:145:14
-  output          io_data_tcdm_req_15_valid,	// src/main/scala/streamer/Streamer.scala:145:14
-  output [31:0]   io_data_tcdm_req_15_bits_addr,	// src/main/scala/streamer/Streamer.scala:145:14
-  output          io_data_tcdm_req_16_valid,	// src/main/scala/streamer/Streamer.scala:145:14
-  output [31:0]   io_data_tcdm_req_16_bits_addr,	// src/main/scala/streamer/Streamer.scala:145:14
-  output [63:0]   io_data_tcdm_req_16_bits_data,	// src/main/scala/streamer/Streamer.scala:145:14
-  output          io_data_tcdm_req_17_valid,	// src/main/scala/streamer/Streamer.scala:145:14
-  output [31:0]   io_data_tcdm_req_17_bits_addr,	// src/main/scala/streamer/Streamer.scala:145:14
-  output [63:0]   io_data_tcdm_req_17_bits_data,	// src/main/scala/streamer/Streamer.scala:145:14
-  output          io_data_tcdm_req_18_valid,	// src/main/scala/streamer/Streamer.scala:145:14
-  output [31:0]   io_data_tcdm_req_18_bits_addr,	// src/main/scala/streamer/Streamer.scala:145:14
-  output [63:0]   io_data_tcdm_req_18_bits_data,	// src/main/scala/streamer/Streamer.scala:145:14
-  output          io_data_tcdm_req_19_valid,	// src/main/scala/streamer/Streamer.scala:145:14
-  output [31:0]   io_data_tcdm_req_19_bits_addr,	// src/main/scala/streamer/Streamer.scala:145:14
-  output [63:0]   io_data_tcdm_req_19_bits_data,	// src/main/scala/streamer/Streamer.scala:145:14
-  output          io_data_tcdm_req_20_valid,	// src/main/scala/streamer/Streamer.scala:145:14
-  output [31:0]   io_data_tcdm_req_20_bits_addr,	// src/main/scala/streamer/Streamer.scala:145:14
-  output [63:0]   io_data_tcdm_req_20_bits_data,	// src/main/scala/streamer/Streamer.scala:145:14
-  output          io_data_tcdm_req_21_valid,	// src/main/scala/streamer/Streamer.scala:145:14
-  output [31:0]   io_data_tcdm_req_21_bits_addr,	// src/main/scala/streamer/Streamer.scala:145:14
-  output [63:0]   io_data_tcdm_req_21_bits_data,	// src/main/scala/streamer/Streamer.scala:145:14
-  output          io_data_tcdm_req_22_valid,	// src/main/scala/streamer/Streamer.scala:145:14
-  output [31:0]   io_data_tcdm_req_22_bits_addr,	// src/main/scala/streamer/Streamer.scala:145:14
-  output [63:0]   io_data_tcdm_req_22_bits_data,	// src/main/scala/streamer/Streamer.scala:145:14
-  output          io_data_tcdm_req_23_valid,	// src/main/scala/streamer/Streamer.scala:145:14
-  output [31:0]   io_data_tcdm_req_23_bits_addr,	// src/main/scala/streamer/Streamer.scala:145:14
-  output [63:0]   io_data_tcdm_req_23_bits_data,	// src/main/scala/streamer/Streamer.scala:145:14
-  output          io_data_tcdm_req_24_valid,	// src/main/scala/streamer/Streamer.scala:145:14
-  output [31:0]   io_data_tcdm_req_24_bits_addr,	// src/main/scala/streamer/Streamer.scala:145:14
-  output [63:0]   io_data_tcdm_req_24_bits_data,	// src/main/scala/streamer/Streamer.scala:145:14
-  output          io_data_tcdm_req_25_valid,	// src/main/scala/streamer/Streamer.scala:145:14
-  output [31:0]   io_data_tcdm_req_25_bits_addr,	// src/main/scala/streamer/Streamer.scala:145:14
-  output [63:0]   io_data_tcdm_req_25_bits_data,	// src/main/scala/streamer/Streamer.scala:145:14
-  output          io_data_tcdm_req_26_valid,	// src/main/scala/streamer/Streamer.scala:145:14
-  output [31:0]   io_data_tcdm_req_26_bits_addr,	// src/main/scala/streamer/Streamer.scala:145:14
-  output [63:0]   io_data_tcdm_req_26_bits_data,	// src/main/scala/streamer/Streamer.scala:145:14
-  output          io_data_tcdm_req_27_valid,	// src/main/scala/streamer/Streamer.scala:145:14
-  output [31:0]   io_data_tcdm_req_27_bits_addr,	// src/main/scala/streamer/Streamer.scala:145:14
-  output [63:0]   io_data_tcdm_req_27_bits_data,	// src/main/scala/streamer/Streamer.scala:145:14
-  output          io_data_tcdm_req_28_valid,	// src/main/scala/streamer/Streamer.scala:145:14
-  output [31:0]   io_data_tcdm_req_28_bits_addr,	// src/main/scala/streamer/Streamer.scala:145:14
-  output [63:0]   io_data_tcdm_req_28_bits_data,	// src/main/scala/streamer/Streamer.scala:145:14
-  output          io_data_tcdm_req_29_valid,	// src/main/scala/streamer/Streamer.scala:145:14
-  output [31:0]   io_data_tcdm_req_29_bits_addr,	// src/main/scala/streamer/Streamer.scala:145:14
-  output [63:0]   io_data_tcdm_req_29_bits_data,	// src/main/scala/streamer/Streamer.scala:145:14
-  output          io_data_tcdm_req_30_valid,	// src/main/scala/streamer/Streamer.scala:145:14
-  output [31:0]   io_data_tcdm_req_30_bits_addr,	// src/main/scala/streamer/Streamer.scala:145:14
-  output [63:0]   io_data_tcdm_req_30_bits_data,	// src/main/scala/streamer/Streamer.scala:145:14
-  output          io_data_tcdm_req_31_valid,	// src/main/scala/streamer/Streamer.scala:145:14
-  output [31:0]   io_data_tcdm_req_31_bits_addr,	// src/main/scala/streamer/Streamer.scala:145:14
-  output [63:0]   io_data_tcdm_req_31_bits_data,	// src/main/scala/streamer/Streamer.scala:145:14
-  output          io_data_tcdm_req_32_valid,	// src/main/scala/streamer/Streamer.scala:145:14
-  output [31:0]   io_data_tcdm_req_32_bits_addr,	// src/main/scala/streamer/Streamer.scala:145:14
-  output [63:0]   io_data_tcdm_req_32_bits_data,	// src/main/scala/streamer/Streamer.scala:145:14
-  output          io_data_tcdm_req_33_valid,	// src/main/scala/streamer/Streamer.scala:145:14
-  output [31:0]   io_data_tcdm_req_33_bits_addr,	// src/main/scala/streamer/Streamer.scala:145:14
-  output [63:0]   io_data_tcdm_req_33_bits_data,	// src/main/scala/streamer/Streamer.scala:145:14
-  output          io_data_tcdm_req_34_valid,	// src/main/scala/streamer/Streamer.scala:145:14
-  output [31:0]   io_data_tcdm_req_34_bits_addr,	// src/main/scala/streamer/Streamer.scala:145:14
-  output [63:0]   io_data_tcdm_req_34_bits_data,	// src/main/scala/streamer/Streamer.scala:145:14
-  output          io_data_tcdm_req_35_valid,	// src/main/scala/streamer/Streamer.scala:145:14
-  output [31:0]   io_data_tcdm_req_35_bits_addr,	// src/main/scala/streamer/Streamer.scala:145:14
-  output [63:0]   io_data_tcdm_req_35_bits_data,	// src/main/scala/streamer/Streamer.scala:145:14
-  output          io_data_tcdm_req_36_valid,	// src/main/scala/streamer/Streamer.scala:145:14
-  output [31:0]   io_data_tcdm_req_36_bits_addr,	// src/main/scala/streamer/Streamer.scala:145:14
-  output [63:0]   io_data_tcdm_req_36_bits_data,	// src/main/scala/streamer/Streamer.scala:145:14
-  output          io_data_tcdm_req_37_valid,	// src/main/scala/streamer/Streamer.scala:145:14
-  output [31:0]   io_data_tcdm_req_37_bits_addr,	// src/main/scala/streamer/Streamer.scala:145:14
-  output [63:0]   io_data_tcdm_req_37_bits_data,	// src/main/scala/streamer/Streamer.scala:145:14
-  output          io_data_tcdm_req_38_valid,	// src/main/scala/streamer/Streamer.scala:145:14
-  output [31:0]   io_data_tcdm_req_38_bits_addr,	// src/main/scala/streamer/Streamer.scala:145:14
-  output [63:0]   io_data_tcdm_req_38_bits_data,	// src/main/scala/streamer/Streamer.scala:145:14
-  output          io_data_tcdm_req_39_valid,	// src/main/scala/streamer/Streamer.scala:145:14
-  output [31:0]   io_data_tcdm_req_39_bits_addr,	// src/main/scala/streamer/Streamer.scala:145:14
-  output [63:0]   io_data_tcdm_req_39_bits_data,	// src/main/scala/streamer/Streamer.scala:145:14
-  output          io_data_tcdm_req_40_valid,	// src/main/scala/streamer/Streamer.scala:145:14
-  output [31:0]   io_data_tcdm_req_40_bits_addr,	// src/main/scala/streamer/Streamer.scala:145:14
-  output [63:0]   io_data_tcdm_req_40_bits_data,	// src/main/scala/streamer/Streamer.scala:145:14
-  output          io_data_tcdm_req_41_valid,	// src/main/scala/streamer/Streamer.scala:145:14
-  output [31:0]   io_data_tcdm_req_41_bits_addr,	// src/main/scala/streamer/Streamer.scala:145:14
-  output [63:0]   io_data_tcdm_req_41_bits_data,	// src/main/scala/streamer/Streamer.scala:145:14
-  output          io_data_tcdm_req_42_valid,	// src/main/scala/streamer/Streamer.scala:145:14
-  output [31:0]   io_data_tcdm_req_42_bits_addr,	// src/main/scala/streamer/Streamer.scala:145:14
-  output [63:0]   io_data_tcdm_req_42_bits_data,	// src/main/scala/streamer/Streamer.scala:145:14
-  output          io_data_tcdm_req_43_valid,	// src/main/scala/streamer/Streamer.scala:145:14
-  output [31:0]   io_data_tcdm_req_43_bits_addr,	// src/main/scala/streamer/Streamer.scala:145:14
-  output [63:0]   io_data_tcdm_req_43_bits_data,	// src/main/scala/streamer/Streamer.scala:145:14
-  output          io_data_tcdm_req_44_valid,	// src/main/scala/streamer/Streamer.scala:145:14
-  output [31:0]   io_data_tcdm_req_44_bits_addr,	// src/main/scala/streamer/Streamer.scala:145:14
-  output [63:0]   io_data_tcdm_req_44_bits_data,	// src/main/scala/streamer/Streamer.scala:145:14
-  output          io_data_tcdm_req_45_valid,	// src/main/scala/streamer/Streamer.scala:145:14
-  output [31:0]   io_data_tcdm_req_45_bits_addr,	// src/main/scala/streamer/Streamer.scala:145:14
-  output [63:0]   io_data_tcdm_req_45_bits_data,	// src/main/scala/streamer/Streamer.scala:145:14
-  output          io_data_tcdm_req_46_valid,	// src/main/scala/streamer/Streamer.scala:145:14
-  output [31:0]   io_data_tcdm_req_46_bits_addr,	// src/main/scala/streamer/Streamer.scala:145:14
-  output [63:0]   io_data_tcdm_req_46_bits_data,	// src/main/scala/streamer/Streamer.scala:145:14
-  output          io_data_tcdm_req_47_valid,	// src/main/scala/streamer/Streamer.scala:145:14
-  output [31:0]   io_data_tcdm_req_47_bits_addr,	// src/main/scala/streamer/Streamer.scala:145:14
-  output [63:0]   io_data_tcdm_req_47_bits_data	// src/main/scala/streamer/Streamer.scala:145:14
+module Queue2_UInt64(	// <stdin>:1855:10
+  input         clock,	// <stdin>:1856:11
+                reset,	// <stdin>:1857:11
+                io_enq_valid,	// src/main/scala/chisel3/util/Decoupled.scala:256:14
+  input  [63:0] io_enq_bits,	// src/main/scala/chisel3/util/Decoupled.scala:256:14
+  input         io_deq_ready,	// src/main/scala/chisel3/util/Decoupled.scala:256:14
+  output        io_enq_ready,	// src/main/scala/chisel3/util/Decoupled.scala:256:14
+                io_deq_valid,	// src/main/scala/chisel3/util/Decoupled.scala:256:14
+  output [63:0] io_deq_bits	// src/main/scala/chisel3/util/Decoupled.scala:256:14
 );
 
-  wire          _data_writer_0_io_data_fifo_i_q_io_deq_valid;	// src/main/scala/chisel3/util/Decoupled.scala:364:21
-  wire [2047:0] _data_writer_0_io_data_fifo_i_q_io_deq_bits;	// src/main/scala/chisel3/util/Decoupled.scala:364:21
-  wire          _io_data_streamer2accelerator_data_1_q_io_enq_ready;	// src/main/scala/chisel3/util/Decoupled.scala:364:21
-  wire          _io_data_streamer2accelerator_data_0_q_io_enq_ready;	// src/main/scala/chisel3/util/Decoupled.scala:364:21
-  wire          _address_gen_unit_2_io_ptr_o_valid;	// src/main/scala/streamer/Streamer.scala:197:11
-  wire [31:0]   _address_gen_unit_2_io_ptr_o_bits;	// src/main/scala/streamer/Streamer.scala:197:11
-  wire          _address_gen_unit_2_io_data_move_done;	// src/main/scala/streamer/Streamer.scala:197:11
-  wire          _address_gen_unit_1_io_ptr_o_valid;	// src/main/scala/streamer/Streamer.scala:197:11
-  wire [31:0]   _address_gen_unit_1_io_ptr_o_bits;	// src/main/scala/streamer/Streamer.scala:197:11
-  wire          _address_gen_unit_1_io_data_move_done;	// src/main/scala/streamer/Streamer.scala:197:11
-  wire          _address_gen_unit_0_io_ptr_o_valid;	// src/main/scala/streamer/Streamer.scala:197:11
-  wire [31:0]   _address_gen_unit_0_io_ptr_o_bits;	// src/main/scala/streamer/Streamer.scala:197:11
-  wire          _address_gen_unit_0_io_data_move_done;	// src/main/scala/streamer/Streamer.scala:197:11
-  wire          _data_writer_0_io_ptr_agu_i_ready;	// src/main/scala/streamer/Streamer.scala:181:11
-  wire          _data_writer_0_io_data_fifo_i_ready;	// src/main/scala/streamer/Streamer.scala:181:11
-  wire          _data_reader_1_io_ptr_agu_i_ready;	// src/main/scala/streamer/Streamer.scala:165:11
-  wire          _data_reader_1_io_data_fifo_o_valid;	// src/main/scala/streamer/Streamer.scala:165:11
-  wire [511:0]  _data_reader_1_io_data_fifo_o_bits;	// src/main/scala/streamer/Streamer.scala:165:11
-  wire          _data_reader_0_io_ptr_agu_i_ready;	// src/main/scala/streamer/Streamer.scala:165:11
-  wire          _data_reader_0_io_data_fifo_o_valid;	// src/main/scala/streamer/Streamer.scala:165:11
-  wire [511:0]  _data_reader_0_io_data_fifo_o_bits;	// src/main/scala/streamer/Streamer.scala:165:11
-  reg           datamover_states_0;	// src/main/scala/streamer/Streamer.scala:210:33
-  reg           datamover_states_1;	// src/main/scala/streamer/Streamer.scala:210:33
-  reg           datamover_states_2;	// src/main/scala/streamer/Streamer.scala:210:33
-  reg           cstate;	// src/main/scala/streamer/Streamer.scala:214:23
-  always @(posedge clock or posedge reset) begin	// <stdin>:5736:11
-    if (reset) begin	// <stdin>:5736:11
-      datamover_states_0 <= 1'h0;	// <stdin>:5735:10, src/main/scala/streamer/Streamer.scala:210:33
-      datamover_states_1 <= 1'h0;	// <stdin>:5735:10, src/main/scala/streamer/Streamer.scala:210:33
-      datamover_states_2 <= 1'h0;	// <stdin>:5735:10, src/main/scala/streamer/Streamer.scala:210:33
-      cstate <= 1'h0;	// <stdin>:5735:10, src/main/scala/streamer/Streamer.scala:214:23
+  reg  enq_ptr_value;	// src/main/scala/chisel3/util/Counter.scala:61:40
+  reg  deq_ptr_value;	// src/main/scala/chisel3/util/Counter.scala:61:40
+  reg  maybe_full;	// src/main/scala/chisel3/util/Decoupled.scala:260:27
+  wire ptr_match = enq_ptr_value == deq_ptr_value;	// src/main/scala/chisel3/util/Counter.scala:61:40, src/main/scala/chisel3/util/Decoupled.scala:261:33
+  wire empty = ptr_match & ~maybe_full;	// src/main/scala/chisel3/util/Decoupled.scala:260:27, :261:33, :262:{25,28}
+  wire full = ptr_match & maybe_full;	// src/main/scala/chisel3/util/Decoupled.scala:260:27, :261:33, :263:24
+  wire do_enq = ~full & io_enq_valid;	// src/main/scala/chisel3/util/Decoupled.scala:52:35, :263:24, :287:19
+  always @(posedge clock or posedge reset) begin	// <stdin>:1856:11
+    if (reset) begin	// <stdin>:1856:11
+      enq_ptr_value <= 1'h0;	// <stdin>:1855:10, src/main/scala/chisel3/util/Counter.scala:61:40
+      deq_ptr_value <= 1'h0;	// <stdin>:1855:10, src/main/scala/chisel3/util/Counter.scala:61:40
+      maybe_full <= 1'h0;	// <stdin>:1855:10, src/main/scala/chisel3/util/Decoupled.scala:260:27
     end
-    else begin	// <stdin>:5736:11
+    else begin	// <stdin>:1856:11
+      automatic logic do_deq = io_deq_ready & ~empty;	// src/main/scala/chisel3/util/Decoupled.scala:52:35, :262:25, :286:19
+      if (do_enq)	// src/main/scala/chisel3/util/Decoupled.scala:52:35
+        enq_ptr_value <= enq_ptr_value - 1'h1;	// src/main/scala/chisel3/util/Counter.scala:61:40, :77:24
+      if (do_deq)	// src/main/scala/chisel3/util/Decoupled.scala:52:35
+        deq_ptr_value <= deq_ptr_value - 1'h1;	// src/main/scala/chisel3/util/Counter.scala:61:40, :77:24
+      if (do_enq != do_deq)	// src/main/scala/chisel3/util/Decoupled.scala:52:35, :277:15
+        maybe_full <= do_enq;	// src/main/scala/chisel3/util/Decoupled.scala:52:35, :260:27
+    end
+  end // always @(posedge, posedge)
+  `ifndef SYNTHESIS	// <stdin>:1855:10
+    `ifdef FIRRTL_BEFORE_INITIAL	// <stdin>:1855:10
+      `FIRRTL_BEFORE_INITIAL	// <stdin>:1855:10
+    `endif // FIRRTL_BEFORE_INITIAL
+    initial begin	// <stdin>:1855:10
+      automatic logic [31:0] _RANDOM[0:0];	// <stdin>:1855:10
+      `ifdef INIT_RANDOM_PROLOG_	// <stdin>:1855:10
+        `INIT_RANDOM_PROLOG_	// <stdin>:1855:10
+      `endif // INIT_RANDOM_PROLOG_
+      `ifdef RANDOMIZE_REG_INIT	// <stdin>:1855:10
+        _RANDOM[/*Zero width*/ 1'b0] = `RANDOM;	// <stdin>:1855:10
+        enq_ptr_value = _RANDOM[/*Zero width*/ 1'b0][0];	// <stdin>:1855:10, src/main/scala/chisel3/util/Counter.scala:61:40
+        deq_ptr_value = _RANDOM[/*Zero width*/ 1'b0][1];	// <stdin>:1855:10, src/main/scala/chisel3/util/Counter.scala:61:40
+        maybe_full = _RANDOM[/*Zero width*/ 1'b0][2];	// <stdin>:1855:10, src/main/scala/chisel3/util/Counter.scala:61:40, src/main/scala/chisel3/util/Decoupled.scala:260:27
+      `endif // RANDOMIZE_REG_INIT
+      if (reset) begin	// <stdin>:1855:10
+        enq_ptr_value = 1'h0;	// <stdin>:1855:10, src/main/scala/chisel3/util/Counter.scala:61:40
+        deq_ptr_value = 1'h0;	// <stdin>:1855:10, src/main/scala/chisel3/util/Counter.scala:61:40
+        maybe_full = 1'h0;	// <stdin>:1855:10, src/main/scala/chisel3/util/Decoupled.scala:260:27
+      end
+    end // initial
+    `ifdef FIRRTL_AFTER_INITIAL	// <stdin>:1855:10
+      `FIRRTL_AFTER_INITIAL	// <stdin>:1855:10
+    `endif // FIRRTL_AFTER_INITIAL
+  `endif // not def SYNTHESIS
+  ram_combMem ram_ext (	// src/main/scala/chisel3/util/Decoupled.scala:257:91
+    .R0_addr (deq_ptr_value),	// src/main/scala/chisel3/util/Counter.scala:61:40
+    .R0_en   (1'h1),	// <stdin>:1855:10
+    .R0_clk  (clock),
+    .W0_addr (enq_ptr_value),	// src/main/scala/chisel3/util/Counter.scala:61:40
+    .W0_en   (do_enq),	// src/main/scala/chisel3/util/Decoupled.scala:52:35
+    .W0_clk  (clock),
+    .W0_data (io_enq_bits),
+    .R0_data (io_deq_bits)
+  );
+  assign io_enq_ready = ~full;	// <stdin>:1855:10, src/main/scala/chisel3/util/Decoupled.scala:263:24, :287:19
+  assign io_deq_valid = ~empty;	// <stdin>:1855:10, src/main/scala/chisel3/util/Decoupled.scala:262:25, :286:19
+endmodule
+
+module Streamer(	// <stdin>:1963:10
+  input          clock,	// <stdin>:1964:11
+                 reset,	// <stdin>:1965:11
+                 io_csr_valid,	// src/main/scala/streamer/Streamer.scala:145:14
+  input  [7:0]   io_csr_bits_temporalLoopBounds_i_0,	// src/main/scala/streamer/Streamer.scala:145:14
+  input  [31:0]  io_csr_bits_temporalStrides_i_0_0,	// src/main/scala/streamer/Streamer.scala:145:14
+                 io_csr_bits_temporalStrides_i_1_0,	// src/main/scala/streamer/Streamer.scala:145:14
+                 io_csr_bits_temporalStrides_i_2_0,	// src/main/scala/streamer/Streamer.scala:145:14
+                 io_csr_bits_temporalStrides_i_3_0,	// src/main/scala/streamer/Streamer.scala:145:14
+                 io_csr_bits_unrollingStrides_i_3_0,	// src/main/scala/streamer/Streamer.scala:145:14
+                 io_csr_bits_unrollingStrides_i_2_0,	// src/main/scala/streamer/Streamer.scala:145:14
+                 io_csr_bits_unrollingStrides_i_1_0,	// src/main/scala/streamer/Streamer.scala:145:14
+                 io_csr_bits_unrollingStrides_i_0_0,	// src/main/scala/streamer/Streamer.scala:145:14
+                 io_csr_bits_ptr_i_0,	// src/main/scala/streamer/Streamer.scala:145:14
+                 io_csr_bits_ptr_i_1,	// src/main/scala/streamer/Streamer.scala:145:14
+                 io_csr_bits_ptr_i_2,	// src/main/scala/streamer/Streamer.scala:145:14
+                 io_csr_bits_ptr_i_3,	// src/main/scala/streamer/Streamer.scala:145:14
+  input          io_data_streamer2accelerator_data_2_ready,	// src/main/scala/streamer/Streamer.scala:145:14
+                 io_data_streamer2accelerator_data_1_ready,	// src/main/scala/streamer/Streamer.scala:145:14
+                 io_data_streamer2accelerator_data_0_ready,	// src/main/scala/streamer/Streamer.scala:145:14
+                 io_data_accelerator2streamer_data_0_valid,	// src/main/scala/streamer/Streamer.scala:145:14
+  input  [255:0] io_data_accelerator2streamer_data_0_bits,	// src/main/scala/streamer/Streamer.scala:145:14
+  input          io_data_tcdm_req_0_ready,	// src/main/scala/streamer/Streamer.scala:145:14
+                 io_data_tcdm_req_1_ready,	// src/main/scala/streamer/Streamer.scala:145:14
+                 io_data_tcdm_req_2_ready,	// src/main/scala/streamer/Streamer.scala:145:14
+                 io_data_tcdm_req_3_ready,	// src/main/scala/streamer/Streamer.scala:145:14
+                 io_data_tcdm_req_4_ready,	// src/main/scala/streamer/Streamer.scala:145:14
+                 io_data_tcdm_req_5_ready,	// src/main/scala/streamer/Streamer.scala:145:14
+                 io_data_tcdm_req_6_ready,	// src/main/scala/streamer/Streamer.scala:145:14
+                 io_data_tcdm_req_7_ready,	// src/main/scala/streamer/Streamer.scala:145:14
+                 io_data_tcdm_req_8_ready,	// src/main/scala/streamer/Streamer.scala:145:14
+                 io_data_tcdm_req_9_ready,	// src/main/scala/streamer/Streamer.scala:145:14
+                 io_data_tcdm_req_10_ready,	// src/main/scala/streamer/Streamer.scala:145:14
+                 io_data_tcdm_req_11_ready,	// src/main/scala/streamer/Streamer.scala:145:14
+                 io_data_tcdm_req_12_ready,	// src/main/scala/streamer/Streamer.scala:145:14
+                 io_data_tcdm_rsp_0_valid,	// src/main/scala/streamer/Streamer.scala:145:14
+  input  [63:0]  io_data_tcdm_rsp_0_bits_data,	// src/main/scala/streamer/Streamer.scala:145:14
+  input          io_data_tcdm_rsp_1_valid,	// src/main/scala/streamer/Streamer.scala:145:14
+  input  [63:0]  io_data_tcdm_rsp_1_bits_data,	// src/main/scala/streamer/Streamer.scala:145:14
+  input          io_data_tcdm_rsp_2_valid,	// src/main/scala/streamer/Streamer.scala:145:14
+  input  [63:0]  io_data_tcdm_rsp_2_bits_data,	// src/main/scala/streamer/Streamer.scala:145:14
+  input          io_data_tcdm_rsp_3_valid,	// src/main/scala/streamer/Streamer.scala:145:14
+  input  [63:0]  io_data_tcdm_rsp_3_bits_data,	// src/main/scala/streamer/Streamer.scala:145:14
+  input          io_data_tcdm_rsp_4_valid,	// src/main/scala/streamer/Streamer.scala:145:14
+  input  [63:0]  io_data_tcdm_rsp_4_bits_data,	// src/main/scala/streamer/Streamer.scala:145:14
+  input          io_data_tcdm_rsp_5_valid,	// src/main/scala/streamer/Streamer.scala:145:14
+  input  [63:0]  io_data_tcdm_rsp_5_bits_data,	// src/main/scala/streamer/Streamer.scala:145:14
+  input          io_data_tcdm_rsp_6_valid,	// src/main/scala/streamer/Streamer.scala:145:14
+  input  [63:0]  io_data_tcdm_rsp_6_bits_data,	// src/main/scala/streamer/Streamer.scala:145:14
+  input          io_data_tcdm_rsp_7_valid,	// src/main/scala/streamer/Streamer.scala:145:14
+  input  [63:0]  io_data_tcdm_rsp_7_bits_data,	// src/main/scala/streamer/Streamer.scala:145:14
+  input          io_data_tcdm_rsp_8_valid,	// src/main/scala/streamer/Streamer.scala:145:14
+  input  [63:0]  io_data_tcdm_rsp_8_bits_data,	// src/main/scala/streamer/Streamer.scala:145:14
+  output         io_csr_ready,	// src/main/scala/streamer/Streamer.scala:145:14
+                 io_data_streamer2accelerator_data_2_valid,	// src/main/scala/streamer/Streamer.scala:145:14
+  output [63:0]  io_data_streamer2accelerator_data_2_bits,	// src/main/scala/streamer/Streamer.scala:145:14
+  output         io_data_streamer2accelerator_data_1_valid,	// src/main/scala/streamer/Streamer.scala:145:14
+  output [255:0] io_data_streamer2accelerator_data_1_bits,	// src/main/scala/streamer/Streamer.scala:145:14
+  output         io_data_streamer2accelerator_data_0_valid,	// src/main/scala/streamer/Streamer.scala:145:14
+  output [255:0] io_data_streamer2accelerator_data_0_bits,	// src/main/scala/streamer/Streamer.scala:145:14
+  output         io_data_accelerator2streamer_data_0_ready,	// src/main/scala/streamer/Streamer.scala:145:14
+                 io_data_tcdm_req_0_valid,	// src/main/scala/streamer/Streamer.scala:145:14
+  output [31:0]  io_data_tcdm_req_0_bits_addr,	// src/main/scala/streamer/Streamer.scala:145:14
+  output         io_data_tcdm_req_1_valid,	// src/main/scala/streamer/Streamer.scala:145:14
+  output [31:0]  io_data_tcdm_req_1_bits_addr,	// src/main/scala/streamer/Streamer.scala:145:14
+  output         io_data_tcdm_req_2_valid,	// src/main/scala/streamer/Streamer.scala:145:14
+  output [31:0]  io_data_tcdm_req_2_bits_addr,	// src/main/scala/streamer/Streamer.scala:145:14
+  output         io_data_tcdm_req_3_valid,	// src/main/scala/streamer/Streamer.scala:145:14
+  output [31:0]  io_data_tcdm_req_3_bits_addr,	// src/main/scala/streamer/Streamer.scala:145:14
+  output         io_data_tcdm_req_4_valid,	// src/main/scala/streamer/Streamer.scala:145:14
+  output [31:0]  io_data_tcdm_req_4_bits_addr,	// src/main/scala/streamer/Streamer.scala:145:14
+  output         io_data_tcdm_req_5_valid,	// src/main/scala/streamer/Streamer.scala:145:14
+  output [31:0]  io_data_tcdm_req_5_bits_addr,	// src/main/scala/streamer/Streamer.scala:145:14
+  output         io_data_tcdm_req_6_valid,	// src/main/scala/streamer/Streamer.scala:145:14
+  output [31:0]  io_data_tcdm_req_6_bits_addr,	// src/main/scala/streamer/Streamer.scala:145:14
+  output         io_data_tcdm_req_7_valid,	// src/main/scala/streamer/Streamer.scala:145:14
+  output [31:0]  io_data_tcdm_req_7_bits_addr,	// src/main/scala/streamer/Streamer.scala:145:14
+  output         io_data_tcdm_req_8_valid,	// src/main/scala/streamer/Streamer.scala:145:14
+  output [31:0]  io_data_tcdm_req_8_bits_addr,	// src/main/scala/streamer/Streamer.scala:145:14
+  output         io_data_tcdm_req_9_valid,	// src/main/scala/streamer/Streamer.scala:145:14
+  output [31:0]  io_data_tcdm_req_9_bits_addr,	// src/main/scala/streamer/Streamer.scala:145:14
+  output [63:0]  io_data_tcdm_req_9_bits_data,	// src/main/scala/streamer/Streamer.scala:145:14
+  output         io_data_tcdm_req_10_valid,	// src/main/scala/streamer/Streamer.scala:145:14
+  output [31:0]  io_data_tcdm_req_10_bits_addr,	// src/main/scala/streamer/Streamer.scala:145:14
+  output [63:0]  io_data_tcdm_req_10_bits_data,	// src/main/scala/streamer/Streamer.scala:145:14
+  output         io_data_tcdm_req_11_valid,	// src/main/scala/streamer/Streamer.scala:145:14
+  output [31:0]  io_data_tcdm_req_11_bits_addr,	// src/main/scala/streamer/Streamer.scala:145:14
+  output [63:0]  io_data_tcdm_req_11_bits_data,	// src/main/scala/streamer/Streamer.scala:145:14
+  output         io_data_tcdm_req_12_valid,	// src/main/scala/streamer/Streamer.scala:145:14
+  output [31:0]  io_data_tcdm_req_12_bits_addr,	// src/main/scala/streamer/Streamer.scala:145:14
+  output [63:0]  io_data_tcdm_req_12_bits_data	// src/main/scala/streamer/Streamer.scala:145:14
+);
+
+  wire         _data_writer_0_io_data_fifo_i_q_io_deq_valid;	// src/main/scala/chisel3/util/Decoupled.scala:364:21
+  wire [255:0] _data_writer_0_io_data_fifo_i_q_io_deq_bits;	// src/main/scala/chisel3/util/Decoupled.scala:364:21
+  wire         _io_data_streamer2accelerator_data_2_q_io_enq_ready;	// src/main/scala/chisel3/util/Decoupled.scala:364:21
+  wire         _io_data_streamer2accelerator_data_1_q_io_enq_ready;	// src/main/scala/chisel3/util/Decoupled.scala:364:21
+  wire         _io_data_streamer2accelerator_data_0_q_io_enq_ready;	// src/main/scala/chisel3/util/Decoupled.scala:364:21
+  wire         _address_gen_unit_3_io_ptr_o_valid;	// src/main/scala/streamer/Streamer.scala:197:11
+  wire [31:0]  _address_gen_unit_3_io_ptr_o_bits;	// src/main/scala/streamer/Streamer.scala:197:11
+  wire         _address_gen_unit_3_io_data_move_done;	// src/main/scala/streamer/Streamer.scala:197:11
+  wire         _address_gen_unit_2_io_ptr_o_valid;	// src/main/scala/streamer/Streamer.scala:197:11
+  wire [31:0]  _address_gen_unit_2_io_ptr_o_bits;	// src/main/scala/streamer/Streamer.scala:197:11
+  wire         _address_gen_unit_2_io_data_move_done;	// src/main/scala/streamer/Streamer.scala:197:11
+  wire         _address_gen_unit_1_io_ptr_o_valid;	// src/main/scala/streamer/Streamer.scala:197:11
+  wire [31:0]  _address_gen_unit_1_io_ptr_o_bits;	// src/main/scala/streamer/Streamer.scala:197:11
+  wire         _address_gen_unit_1_io_data_move_done;	// src/main/scala/streamer/Streamer.scala:197:11
+  wire         _address_gen_unit_0_io_ptr_o_valid;	// src/main/scala/streamer/Streamer.scala:197:11
+  wire [31:0]  _address_gen_unit_0_io_ptr_o_bits;	// src/main/scala/streamer/Streamer.scala:197:11
+  wire         _address_gen_unit_0_io_data_move_done;	// src/main/scala/streamer/Streamer.scala:197:11
+  wire         _data_writer_0_io_ptr_agu_i_ready;	// src/main/scala/streamer/Streamer.scala:181:11
+  wire         _data_writer_0_io_data_fifo_i_ready;	// src/main/scala/streamer/Streamer.scala:181:11
+  wire         _data_reader_2_io_ptr_agu_i_ready;	// src/main/scala/streamer/Streamer.scala:165:11
+  wire         _data_reader_2_io_data_fifo_o_valid;	// src/main/scala/streamer/Streamer.scala:165:11
+  wire [63:0]  _data_reader_2_io_data_fifo_o_bits;	// src/main/scala/streamer/Streamer.scala:165:11
+  wire         _data_reader_1_io_ptr_agu_i_ready;	// src/main/scala/streamer/Streamer.scala:165:11
+  wire         _data_reader_1_io_data_fifo_o_valid;	// src/main/scala/streamer/Streamer.scala:165:11
+  wire [255:0] _data_reader_1_io_data_fifo_o_bits;	// src/main/scala/streamer/Streamer.scala:165:11
+  wire         _data_reader_0_io_ptr_agu_i_ready;	// src/main/scala/streamer/Streamer.scala:165:11
+  wire         _data_reader_0_io_data_fifo_o_valid;	// src/main/scala/streamer/Streamer.scala:165:11
+  wire [255:0] _data_reader_0_io_data_fifo_o_bits;	// src/main/scala/streamer/Streamer.scala:165:11
+  reg          datamover_states_0;	// src/main/scala/streamer/Streamer.scala:210:33
+  reg          datamover_states_1;	// src/main/scala/streamer/Streamer.scala:210:33
+  reg          datamover_states_2;	// src/main/scala/streamer/Streamer.scala:210:33
+  reg          datamover_states_3;	// src/main/scala/streamer/Streamer.scala:210:33
+  reg          cstate;	// src/main/scala/streamer/Streamer.scala:214:23
+  always @(posedge clock or posedge reset) begin	// <stdin>:1964:11
+    if (reset) begin	// <stdin>:1964:11
+      datamover_states_0 <= 1'h0;	// <stdin>:1963:10, src/main/scala/streamer/Streamer.scala:210:33
+      datamover_states_1 <= 1'h0;	// <stdin>:1963:10, src/main/scala/streamer/Streamer.scala:210:33
+      datamover_states_2 <= 1'h0;	// <stdin>:1963:10, src/main/scala/streamer/Streamer.scala:210:33
+      datamover_states_3 <= 1'h0;	// <stdin>:1963:10, src/main/scala/streamer/Streamer.scala:210:33
+      cstate <= 1'h0;	// <stdin>:1963:10, src/main/scala/streamer/Streamer.scala:214:23
+    end
+    else begin	// <stdin>:1964:11
       automatic logic config_valid;	// src/main/scala/chisel3/util/Decoupled.scala:52:35
       config_valid = ~cstate & io_csr_valid;	// src/main/scala/chisel3/util/Decoupled.scala:52:35, src/main/scala/streamer/Streamer.scala:214:23, :221:18
       datamover_states_0 <=
@@ -2816,37 +1150,44 @@ module Streamer(	// <stdin>:5735:10
         config_valid | ~_address_gen_unit_1_io_data_move_done & datamover_states_1;	// src/main/scala/chisel3/util/Decoupled.scala:52:35, src/main/scala/streamer/Streamer.scala:197:11, :210:33, :242:24, :243:27, :244:55, :245:27
       datamover_states_2 <=
         config_valid | ~_address_gen_unit_2_io_data_move_done & datamover_states_2;	// src/main/scala/chisel3/util/Decoupled.scala:52:35, src/main/scala/streamer/Streamer.scala:197:11, :210:33, :242:24, :243:27, :244:55, :245:27
+      datamover_states_3 <=
+        config_valid | ~_address_gen_unit_3_io_data_move_done & datamover_states_3;	// src/main/scala/chisel3/util/Decoupled.scala:52:35, src/main/scala/streamer/Streamer.scala:197:11, :210:33, :242:24, :243:27, :244:55, :245:27
       if (cstate)	// src/main/scala/streamer/Streamer.scala:214:23
-        cstate <= cstate & (datamover_states_0 | datamover_states_1 | datamover_states_2);	// src/main/scala/streamer/Streamer.scala:210:33, :214:23, :215:24, :221:18, :231:31, :250:51
+        cstate <=
+          cstate
+          & (datamover_states_0 | datamover_states_1 | datamover_states_2
+             | datamover_states_3);	// src/main/scala/streamer/Streamer.scala:210:33, :214:23, :215:24, :221:18, :231:31, :250:51
       else	// src/main/scala/streamer/Streamer.scala:214:23
         cstate <= config_valid;	// src/main/scala/chisel3/util/Decoupled.scala:52:35, src/main/scala/streamer/Streamer.scala:214:23
     end
   end // always @(posedge, posedge)
-  `ifndef SYNTHESIS	// <stdin>:5735:10
-    `ifdef FIRRTL_BEFORE_INITIAL	// <stdin>:5735:10
-      `FIRRTL_BEFORE_INITIAL	// <stdin>:5735:10
+  `ifndef SYNTHESIS	// <stdin>:1963:10
+    `ifdef FIRRTL_BEFORE_INITIAL	// <stdin>:1963:10
+      `FIRRTL_BEFORE_INITIAL	// <stdin>:1963:10
     `endif // FIRRTL_BEFORE_INITIAL
-    initial begin	// <stdin>:5735:10
-      automatic logic [31:0] _RANDOM[0:0];	// <stdin>:5735:10
-      `ifdef INIT_RANDOM_PROLOG_	// <stdin>:5735:10
-        `INIT_RANDOM_PROLOG_	// <stdin>:5735:10
+    initial begin	// <stdin>:1963:10
+      automatic logic [31:0] _RANDOM[0:0];	// <stdin>:1963:10
+      `ifdef INIT_RANDOM_PROLOG_	// <stdin>:1963:10
+        `INIT_RANDOM_PROLOG_	// <stdin>:1963:10
       `endif // INIT_RANDOM_PROLOG_
-      `ifdef RANDOMIZE_REG_INIT	// <stdin>:5735:10
-        _RANDOM[/*Zero width*/ 1'b0] = `RANDOM;	// <stdin>:5735:10
-        datamover_states_0 = _RANDOM[/*Zero width*/ 1'b0][0];	// <stdin>:5735:10, src/main/scala/streamer/Streamer.scala:210:33
-        datamover_states_1 = _RANDOM[/*Zero width*/ 1'b0][1];	// <stdin>:5735:10, src/main/scala/streamer/Streamer.scala:210:33
-        datamover_states_2 = _RANDOM[/*Zero width*/ 1'b0][2];	// <stdin>:5735:10, src/main/scala/streamer/Streamer.scala:210:33
-        cstate = _RANDOM[/*Zero width*/ 1'b0][3];	// <stdin>:5735:10, src/main/scala/streamer/Streamer.scala:210:33, :214:23
+      `ifdef RANDOMIZE_REG_INIT	// <stdin>:1963:10
+        _RANDOM[/*Zero width*/ 1'b0] = `RANDOM;	// <stdin>:1963:10
+        datamover_states_0 = _RANDOM[/*Zero width*/ 1'b0][0];	// <stdin>:1963:10, src/main/scala/streamer/Streamer.scala:210:33
+        datamover_states_1 = _RANDOM[/*Zero width*/ 1'b0][1];	// <stdin>:1963:10, src/main/scala/streamer/Streamer.scala:210:33
+        datamover_states_2 = _RANDOM[/*Zero width*/ 1'b0][2];	// <stdin>:1963:10, src/main/scala/streamer/Streamer.scala:210:33
+        datamover_states_3 = _RANDOM[/*Zero width*/ 1'b0][3];	// <stdin>:1963:10, src/main/scala/streamer/Streamer.scala:210:33
+        cstate = _RANDOM[/*Zero width*/ 1'b0][4];	// <stdin>:1963:10, src/main/scala/streamer/Streamer.scala:210:33, :214:23
       `endif // RANDOMIZE_REG_INIT
-      if (reset) begin	// <stdin>:5735:10
-        datamover_states_0 = 1'h0;	// <stdin>:5735:10, src/main/scala/streamer/Streamer.scala:210:33
-        datamover_states_1 = 1'h0;	// <stdin>:5735:10, src/main/scala/streamer/Streamer.scala:210:33
-        datamover_states_2 = 1'h0;	// <stdin>:5735:10, src/main/scala/streamer/Streamer.scala:210:33
-        cstate = 1'h0;	// <stdin>:5735:10, src/main/scala/streamer/Streamer.scala:214:23
+      if (reset) begin	// <stdin>:1963:10
+        datamover_states_0 = 1'h0;	// <stdin>:1963:10, src/main/scala/streamer/Streamer.scala:210:33
+        datamover_states_1 = 1'h0;	// <stdin>:1963:10, src/main/scala/streamer/Streamer.scala:210:33
+        datamover_states_2 = 1'h0;	// <stdin>:1963:10, src/main/scala/streamer/Streamer.scala:210:33
+        datamover_states_3 = 1'h0;	// <stdin>:1963:10, src/main/scala/streamer/Streamer.scala:210:33
+        cstate = 1'h0;	// <stdin>:1963:10, src/main/scala/streamer/Streamer.scala:214:23
       end
     end // initial
-    `ifdef FIRRTL_AFTER_INITIAL	// <stdin>:5735:10
-      `FIRRTL_AFTER_INITIAL	// <stdin>:5735:10
+    `ifdef FIRRTL_AFTER_INITIAL	// <stdin>:1963:10
+      `FIRRTL_AFTER_INITIAL	// <stdin>:1963:10
     `endif // FIRRTL_AFTER_INITIAL
   `endif // not def SYNTHESIS
   DataReader data_reader_0 (	// src/main/scala/streamer/Streamer.scala:165:11
@@ -2856,15 +1197,10 @@ module Streamer(	// <stdin>:5735:10
     .io_ptr_agu_i_bits                (_address_gen_unit_0_io_ptr_o_bits),	// src/main/scala/streamer/Streamer.scala:197:11
     .io_unrollingStrides_csr_i_valid  (io_csr_valid),
     .io_unrollingStrides_csr_i_bits_0 (io_csr_bits_unrollingStrides_i_0_0),
-    .io_unrollingStrides_csr_i_bits_1 (io_csr_bits_unrollingStrides_i_0_1),
     .io_tcdm_ready_i_0                (io_data_tcdm_req_0_ready),
     .io_tcdm_ready_i_1                (io_data_tcdm_req_1_ready),
     .io_tcdm_ready_i_2                (io_data_tcdm_req_2_ready),
     .io_tcdm_ready_i_3                (io_data_tcdm_req_3_ready),
-    .io_tcdm_ready_i_4                (io_data_tcdm_req_4_ready),
-    .io_tcdm_ready_i_5                (io_data_tcdm_req_5_ready),
-    .io_tcdm_ready_i_6                (io_data_tcdm_req_6_ready),
-    .io_tcdm_ready_i_7                (io_data_tcdm_req_7_ready),
     .io_data_tcdm_i_0_valid           (io_data_tcdm_rsp_0_valid),
     .io_data_tcdm_i_0_bits            (io_data_tcdm_rsp_0_bits_data),
     .io_data_tcdm_i_1_valid           (io_data_tcdm_rsp_1_valid),
@@ -2873,14 +1209,6 @@ module Streamer(	// <stdin>:5735:10
     .io_data_tcdm_i_2_bits            (io_data_tcdm_rsp_2_bits_data),
     .io_data_tcdm_i_3_valid           (io_data_tcdm_rsp_3_valid),
     .io_data_tcdm_i_3_bits            (io_data_tcdm_rsp_3_bits_data),
-    .io_data_tcdm_i_4_valid           (io_data_tcdm_rsp_4_valid),
-    .io_data_tcdm_i_4_bits            (io_data_tcdm_rsp_4_bits_data),
-    .io_data_tcdm_i_5_valid           (io_data_tcdm_rsp_5_valid),
-    .io_data_tcdm_i_5_bits            (io_data_tcdm_rsp_5_bits_data),
-    .io_data_tcdm_i_6_valid           (io_data_tcdm_rsp_6_valid),
-    .io_data_tcdm_i_6_bits            (io_data_tcdm_rsp_6_bits_data),
-    .io_data_tcdm_i_7_valid           (io_data_tcdm_rsp_7_valid),
-    .io_data_tcdm_i_7_bits            (io_data_tcdm_rsp_7_bits_data),
     .io_data_fifo_o_ready
       (_io_data_streamer2accelerator_data_0_q_io_enq_ready),	// src/main/scala/chisel3/util/Decoupled.scala:364:21
     .io_data_move_done                (_address_gen_unit_0_io_data_move_done),	// src/main/scala/streamer/Streamer.scala:197:11
@@ -2889,18 +1217,10 @@ module Streamer(	// <stdin>:5735:10
     .io_tcdm_req_addr_1               (io_data_tcdm_req_1_bits_addr),
     .io_tcdm_req_addr_2               (io_data_tcdm_req_2_bits_addr),
     .io_tcdm_req_addr_3               (io_data_tcdm_req_3_bits_addr),
-    .io_tcdm_req_addr_4               (io_data_tcdm_req_4_bits_addr),
-    .io_tcdm_req_addr_5               (io_data_tcdm_req_5_bits_addr),
-    .io_tcdm_req_addr_6               (io_data_tcdm_req_6_bits_addr),
-    .io_tcdm_req_addr_7               (io_data_tcdm_req_7_bits_addr),
     .io_read_tcmd_valid_o_0           (io_data_tcdm_req_0_valid),
     .io_read_tcmd_valid_o_1           (io_data_tcdm_req_1_valid),
     .io_read_tcmd_valid_o_2           (io_data_tcdm_req_2_valid),
     .io_read_tcmd_valid_o_3           (io_data_tcdm_req_3_valid),
-    .io_read_tcmd_valid_o_4           (io_data_tcdm_req_4_valid),
-    .io_read_tcmd_valid_o_5           (io_data_tcdm_req_5_valid),
-    .io_read_tcmd_valid_o_6           (io_data_tcdm_req_6_valid),
-    .io_read_tcmd_valid_o_7           (io_data_tcdm_req_7_valid),
     .io_data_fifo_o_valid             (_data_reader_0_io_data_fifo_o_valid),
     .io_data_fifo_o_bits              (_data_reader_0_io_data_fifo_o_bits)
   );
@@ -2911,207 +1231,88 @@ module Streamer(	// <stdin>:5735:10
     .io_ptr_agu_i_bits                (_address_gen_unit_1_io_ptr_o_bits),	// src/main/scala/streamer/Streamer.scala:197:11
     .io_unrollingStrides_csr_i_valid  (io_csr_valid),
     .io_unrollingStrides_csr_i_bits_0 (io_csr_bits_unrollingStrides_i_1_0),
-    .io_unrollingStrides_csr_i_bits_1 (io_csr_bits_unrollingStrides_i_1_1),
-    .io_tcdm_ready_i_0                (io_data_tcdm_req_8_ready),
-    .io_tcdm_ready_i_1                (io_data_tcdm_req_9_ready),
-    .io_tcdm_ready_i_2                (io_data_tcdm_req_10_ready),
-    .io_tcdm_ready_i_3                (io_data_tcdm_req_11_ready),
-    .io_tcdm_ready_i_4                (io_data_tcdm_req_12_ready),
-    .io_tcdm_ready_i_5                (io_data_tcdm_req_13_ready),
-    .io_tcdm_ready_i_6                (io_data_tcdm_req_14_ready),
-    .io_tcdm_ready_i_7                (io_data_tcdm_req_15_ready),
-    .io_data_tcdm_i_0_valid           (io_data_tcdm_rsp_8_valid),
-    .io_data_tcdm_i_0_bits            (io_data_tcdm_rsp_8_bits_data),
-    .io_data_tcdm_i_1_valid           (io_data_tcdm_rsp_9_valid),
-    .io_data_tcdm_i_1_bits            (io_data_tcdm_rsp_9_bits_data),
-    .io_data_tcdm_i_2_valid           (io_data_tcdm_rsp_10_valid),
-    .io_data_tcdm_i_2_bits            (io_data_tcdm_rsp_10_bits_data),
-    .io_data_tcdm_i_3_valid           (io_data_tcdm_rsp_11_valid),
-    .io_data_tcdm_i_3_bits            (io_data_tcdm_rsp_11_bits_data),
-    .io_data_tcdm_i_4_valid           (io_data_tcdm_rsp_12_valid),
-    .io_data_tcdm_i_4_bits            (io_data_tcdm_rsp_12_bits_data),
-    .io_data_tcdm_i_5_valid           (io_data_tcdm_rsp_13_valid),
-    .io_data_tcdm_i_5_bits            (io_data_tcdm_rsp_13_bits_data),
-    .io_data_tcdm_i_6_valid           (io_data_tcdm_rsp_14_valid),
-    .io_data_tcdm_i_6_bits            (io_data_tcdm_rsp_14_bits_data),
-    .io_data_tcdm_i_7_valid           (io_data_tcdm_rsp_15_valid),
-    .io_data_tcdm_i_7_bits            (io_data_tcdm_rsp_15_bits_data),
+    .io_tcdm_ready_i_0                (io_data_tcdm_req_4_ready),
+    .io_tcdm_ready_i_1                (io_data_tcdm_req_5_ready),
+    .io_tcdm_ready_i_2                (io_data_tcdm_req_6_ready),
+    .io_tcdm_ready_i_3                (io_data_tcdm_req_7_ready),
+    .io_data_tcdm_i_0_valid           (io_data_tcdm_rsp_4_valid),
+    .io_data_tcdm_i_0_bits            (io_data_tcdm_rsp_4_bits_data),
+    .io_data_tcdm_i_1_valid           (io_data_tcdm_rsp_5_valid),
+    .io_data_tcdm_i_1_bits            (io_data_tcdm_rsp_5_bits_data),
+    .io_data_tcdm_i_2_valid           (io_data_tcdm_rsp_6_valid),
+    .io_data_tcdm_i_2_bits            (io_data_tcdm_rsp_6_bits_data),
+    .io_data_tcdm_i_3_valid           (io_data_tcdm_rsp_7_valid),
+    .io_data_tcdm_i_3_bits            (io_data_tcdm_rsp_7_bits_data),
     .io_data_fifo_o_ready
       (_io_data_streamer2accelerator_data_1_q_io_enq_ready),	// src/main/scala/chisel3/util/Decoupled.scala:364:21
     .io_data_move_done                (_address_gen_unit_1_io_data_move_done),	// src/main/scala/streamer/Streamer.scala:197:11
     .io_ptr_agu_i_ready               (_data_reader_1_io_ptr_agu_i_ready),
-    .io_tcdm_req_addr_0               (io_data_tcdm_req_8_bits_addr),
-    .io_tcdm_req_addr_1               (io_data_tcdm_req_9_bits_addr),
-    .io_tcdm_req_addr_2               (io_data_tcdm_req_10_bits_addr),
-    .io_tcdm_req_addr_3               (io_data_tcdm_req_11_bits_addr),
-    .io_tcdm_req_addr_4               (io_data_tcdm_req_12_bits_addr),
-    .io_tcdm_req_addr_5               (io_data_tcdm_req_13_bits_addr),
-    .io_tcdm_req_addr_6               (io_data_tcdm_req_14_bits_addr),
-    .io_tcdm_req_addr_7               (io_data_tcdm_req_15_bits_addr),
-    .io_read_tcmd_valid_o_0           (io_data_tcdm_req_8_valid),
-    .io_read_tcmd_valid_o_1           (io_data_tcdm_req_9_valid),
-    .io_read_tcmd_valid_o_2           (io_data_tcdm_req_10_valid),
-    .io_read_tcmd_valid_o_3           (io_data_tcdm_req_11_valid),
-    .io_read_tcmd_valid_o_4           (io_data_tcdm_req_12_valid),
-    .io_read_tcmd_valid_o_5           (io_data_tcdm_req_13_valid),
-    .io_read_tcmd_valid_o_6           (io_data_tcdm_req_14_valid),
-    .io_read_tcmd_valid_o_7           (io_data_tcdm_req_15_valid),
+    .io_tcdm_req_addr_0               (io_data_tcdm_req_4_bits_addr),
+    .io_tcdm_req_addr_1               (io_data_tcdm_req_5_bits_addr),
+    .io_tcdm_req_addr_2               (io_data_tcdm_req_6_bits_addr),
+    .io_tcdm_req_addr_3               (io_data_tcdm_req_7_bits_addr),
+    .io_read_tcmd_valid_o_0           (io_data_tcdm_req_4_valid),
+    .io_read_tcmd_valid_o_1           (io_data_tcdm_req_5_valid),
+    .io_read_tcmd_valid_o_2           (io_data_tcdm_req_6_valid),
+    .io_read_tcmd_valid_o_3           (io_data_tcdm_req_7_valid),
     .io_data_fifo_o_valid             (_data_reader_1_io_data_fifo_o_valid),
     .io_data_fifo_o_bits              (_data_reader_1_io_data_fifo_o_bits)
   );
-  DataWriter data_writer_0 (	// src/main/scala/streamer/Streamer.scala:181:11
+  DataReader_2 data_reader_2 (	// src/main/scala/streamer/Streamer.scala:165:11
     .clock                            (clock),
     .reset                            (reset),
     .io_ptr_agu_i_valid               (_address_gen_unit_2_io_ptr_o_valid),	// src/main/scala/streamer/Streamer.scala:197:11
     .io_ptr_agu_i_bits                (_address_gen_unit_2_io_ptr_o_bits),	// src/main/scala/streamer/Streamer.scala:197:11
     .io_unrollingStrides_csr_i_valid  (io_csr_valid),
     .io_unrollingStrides_csr_i_bits_0 (io_csr_bits_unrollingStrides_i_2_0),
-    .io_unrollingStrides_csr_i_bits_1 (io_csr_bits_unrollingStrides_i_2_1),
+    .io_tcdm_ready_i_0                (io_data_tcdm_req_8_ready),
+    .io_data_tcdm_i_0_valid           (io_data_tcdm_rsp_8_valid),
+    .io_data_tcdm_i_0_bits            (io_data_tcdm_rsp_8_bits_data),
+    .io_data_fifo_o_ready
+      (_io_data_streamer2accelerator_data_2_q_io_enq_ready),	// src/main/scala/chisel3/util/Decoupled.scala:364:21
+    .io_data_move_done                (_address_gen_unit_2_io_data_move_done),	// src/main/scala/streamer/Streamer.scala:197:11
+    .io_ptr_agu_i_ready               (_data_reader_2_io_ptr_agu_i_ready),
+    .io_tcdm_req_addr_0               (io_data_tcdm_req_8_bits_addr),
+    .io_read_tcmd_valid_o_0           (io_data_tcdm_req_8_valid),
+    .io_data_fifo_o_valid             (_data_reader_2_io_data_fifo_o_valid),
+    .io_data_fifo_o_bits              (_data_reader_2_io_data_fifo_o_bits)
+  );
+  DataWriter data_writer_0 (	// src/main/scala/streamer/Streamer.scala:181:11
+    .clock                            (clock),
+    .reset                            (reset),
+    .io_ptr_agu_i_valid               (_address_gen_unit_3_io_ptr_o_valid),	// src/main/scala/streamer/Streamer.scala:197:11
+    .io_ptr_agu_i_bits                (_address_gen_unit_3_io_ptr_o_bits),	// src/main/scala/streamer/Streamer.scala:197:11
+    .io_unrollingStrides_csr_i_valid  (io_csr_valid),
+    .io_unrollingStrides_csr_i_bits_0 (io_csr_bits_unrollingStrides_i_3_0),
     .io_data_fifo_i_valid             (_data_writer_0_io_data_fifo_i_q_io_deq_valid),	// src/main/scala/chisel3/util/Decoupled.scala:364:21
     .io_data_fifo_i_bits              (_data_writer_0_io_data_fifo_i_q_io_deq_bits),	// src/main/scala/chisel3/util/Decoupled.scala:364:21
-    .io_tcdm_ready_i_0                (io_data_tcdm_req_16_ready),
-    .io_tcdm_ready_i_1                (io_data_tcdm_req_17_ready),
-    .io_tcdm_ready_i_2                (io_data_tcdm_req_18_ready),
-    .io_tcdm_ready_i_3                (io_data_tcdm_req_19_ready),
-    .io_tcdm_ready_i_4                (io_data_tcdm_req_20_ready),
-    .io_tcdm_ready_i_5                (io_data_tcdm_req_21_ready),
-    .io_tcdm_ready_i_6                (io_data_tcdm_req_22_ready),
-    .io_tcdm_ready_i_7                (io_data_tcdm_req_23_ready),
-    .io_tcdm_ready_i_8                (io_data_tcdm_req_24_ready),
-    .io_tcdm_ready_i_9                (io_data_tcdm_req_25_ready),
-    .io_tcdm_ready_i_10               (io_data_tcdm_req_26_ready),
-    .io_tcdm_ready_i_11               (io_data_tcdm_req_27_ready),
-    .io_tcdm_ready_i_12               (io_data_tcdm_req_28_ready),
-    .io_tcdm_ready_i_13               (io_data_tcdm_req_29_ready),
-    .io_tcdm_ready_i_14               (io_data_tcdm_req_30_ready),
-    .io_tcdm_ready_i_15               (io_data_tcdm_req_31_ready),
-    .io_tcdm_ready_i_16               (io_data_tcdm_req_32_ready),
-    .io_tcdm_ready_i_17               (io_data_tcdm_req_33_ready),
-    .io_tcdm_ready_i_18               (io_data_tcdm_req_34_ready),
-    .io_tcdm_ready_i_19               (io_data_tcdm_req_35_ready),
-    .io_tcdm_ready_i_20               (io_data_tcdm_req_36_ready),
-    .io_tcdm_ready_i_21               (io_data_tcdm_req_37_ready),
-    .io_tcdm_ready_i_22               (io_data_tcdm_req_38_ready),
-    .io_tcdm_ready_i_23               (io_data_tcdm_req_39_ready),
-    .io_tcdm_ready_i_24               (io_data_tcdm_req_40_ready),
-    .io_tcdm_ready_i_25               (io_data_tcdm_req_41_ready),
-    .io_tcdm_ready_i_26               (io_data_tcdm_req_42_ready),
-    .io_tcdm_ready_i_27               (io_data_tcdm_req_43_ready),
-    .io_tcdm_ready_i_28               (io_data_tcdm_req_44_ready),
-    .io_tcdm_ready_i_29               (io_data_tcdm_req_45_ready),
-    .io_tcdm_ready_i_30               (io_data_tcdm_req_46_ready),
-    .io_tcdm_ready_i_31               (io_data_tcdm_req_47_ready),
-    .io_data_move_done                (_address_gen_unit_2_io_data_move_done),	// src/main/scala/streamer/Streamer.scala:197:11
+    .io_tcdm_ready_i_0                (io_data_tcdm_req_9_ready),
+    .io_tcdm_ready_i_1                (io_data_tcdm_req_10_ready),
+    .io_tcdm_ready_i_2                (io_data_tcdm_req_11_ready),
+    .io_tcdm_ready_i_3                (io_data_tcdm_req_12_ready),
+    .io_data_move_done                (_address_gen_unit_3_io_data_move_done),	// src/main/scala/streamer/Streamer.scala:197:11
     .io_ptr_agu_i_ready               (_data_writer_0_io_ptr_agu_i_ready),
     .io_data_fifo_i_ready             (_data_writer_0_io_data_fifo_i_ready),
-    .io_tcdm_req_addr_0               (io_data_tcdm_req_16_bits_addr),
-    .io_tcdm_req_addr_1               (io_data_tcdm_req_17_bits_addr),
-    .io_tcdm_req_addr_2               (io_data_tcdm_req_18_bits_addr),
-    .io_tcdm_req_addr_3               (io_data_tcdm_req_19_bits_addr),
-    .io_tcdm_req_addr_4               (io_data_tcdm_req_20_bits_addr),
-    .io_tcdm_req_addr_5               (io_data_tcdm_req_21_bits_addr),
-    .io_tcdm_req_addr_6               (io_data_tcdm_req_22_bits_addr),
-    .io_tcdm_req_addr_7               (io_data_tcdm_req_23_bits_addr),
-    .io_tcdm_req_addr_8               (io_data_tcdm_req_24_bits_addr),
-    .io_tcdm_req_addr_9               (io_data_tcdm_req_25_bits_addr),
-    .io_tcdm_req_addr_10              (io_data_tcdm_req_26_bits_addr),
-    .io_tcdm_req_addr_11              (io_data_tcdm_req_27_bits_addr),
-    .io_tcdm_req_addr_12              (io_data_tcdm_req_28_bits_addr),
-    .io_tcdm_req_addr_13              (io_data_tcdm_req_29_bits_addr),
-    .io_tcdm_req_addr_14              (io_data_tcdm_req_30_bits_addr),
-    .io_tcdm_req_addr_15              (io_data_tcdm_req_31_bits_addr),
-    .io_tcdm_req_addr_16              (io_data_tcdm_req_32_bits_addr),
-    .io_tcdm_req_addr_17              (io_data_tcdm_req_33_bits_addr),
-    .io_tcdm_req_addr_18              (io_data_tcdm_req_34_bits_addr),
-    .io_tcdm_req_addr_19              (io_data_tcdm_req_35_bits_addr),
-    .io_tcdm_req_addr_20              (io_data_tcdm_req_36_bits_addr),
-    .io_tcdm_req_addr_21              (io_data_tcdm_req_37_bits_addr),
-    .io_tcdm_req_addr_22              (io_data_tcdm_req_38_bits_addr),
-    .io_tcdm_req_addr_23              (io_data_tcdm_req_39_bits_addr),
-    .io_tcdm_req_addr_24              (io_data_tcdm_req_40_bits_addr),
-    .io_tcdm_req_addr_25              (io_data_tcdm_req_41_bits_addr),
-    .io_tcdm_req_addr_26              (io_data_tcdm_req_42_bits_addr),
-    .io_tcdm_req_addr_27              (io_data_tcdm_req_43_bits_addr),
-    .io_tcdm_req_addr_28              (io_data_tcdm_req_44_bits_addr),
-    .io_tcdm_req_addr_29              (io_data_tcdm_req_45_bits_addr),
-    .io_tcdm_req_addr_30              (io_data_tcdm_req_46_bits_addr),
-    .io_tcdm_req_addr_31              (io_data_tcdm_req_47_bits_addr),
-    .io_write_tcmd_valid_o_0          (io_data_tcdm_req_16_valid),
-    .io_write_tcmd_valid_o_1          (io_data_tcdm_req_17_valid),
-    .io_write_tcmd_valid_o_2          (io_data_tcdm_req_18_valid),
-    .io_write_tcmd_valid_o_3          (io_data_tcdm_req_19_valid),
-    .io_write_tcmd_valid_o_4          (io_data_tcdm_req_20_valid),
-    .io_write_tcmd_valid_o_5          (io_data_tcdm_req_21_valid),
-    .io_write_tcmd_valid_o_6          (io_data_tcdm_req_22_valid),
-    .io_write_tcmd_valid_o_7          (io_data_tcdm_req_23_valid),
-    .io_write_tcmd_valid_o_8          (io_data_tcdm_req_24_valid),
-    .io_write_tcmd_valid_o_9          (io_data_tcdm_req_25_valid),
-    .io_write_tcmd_valid_o_10         (io_data_tcdm_req_26_valid),
-    .io_write_tcmd_valid_o_11         (io_data_tcdm_req_27_valid),
-    .io_write_tcmd_valid_o_12         (io_data_tcdm_req_28_valid),
-    .io_write_tcmd_valid_o_13         (io_data_tcdm_req_29_valid),
-    .io_write_tcmd_valid_o_14         (io_data_tcdm_req_30_valid),
-    .io_write_tcmd_valid_o_15         (io_data_tcdm_req_31_valid),
-    .io_write_tcmd_valid_o_16         (io_data_tcdm_req_32_valid),
-    .io_write_tcmd_valid_o_17         (io_data_tcdm_req_33_valid),
-    .io_write_tcmd_valid_o_18         (io_data_tcdm_req_34_valid),
-    .io_write_tcmd_valid_o_19         (io_data_tcdm_req_35_valid),
-    .io_write_tcmd_valid_o_20         (io_data_tcdm_req_36_valid),
-    .io_write_tcmd_valid_o_21         (io_data_tcdm_req_37_valid),
-    .io_write_tcmd_valid_o_22         (io_data_tcdm_req_38_valid),
-    .io_write_tcmd_valid_o_23         (io_data_tcdm_req_39_valid),
-    .io_write_tcmd_valid_o_24         (io_data_tcdm_req_40_valid),
-    .io_write_tcmd_valid_o_25         (io_data_tcdm_req_41_valid),
-    .io_write_tcmd_valid_o_26         (io_data_tcdm_req_42_valid),
-    .io_write_tcmd_valid_o_27         (io_data_tcdm_req_43_valid),
-    .io_write_tcmd_valid_o_28         (io_data_tcdm_req_44_valid),
-    .io_write_tcmd_valid_o_29         (io_data_tcdm_req_45_valid),
-    .io_write_tcmd_valid_o_30         (io_data_tcdm_req_46_valid),
-    .io_write_tcmd_valid_o_31         (io_data_tcdm_req_47_valid),
-    .io_tcdm_req_data_0               (io_data_tcdm_req_16_bits_data),
-    .io_tcdm_req_data_1               (io_data_tcdm_req_17_bits_data),
-    .io_tcdm_req_data_2               (io_data_tcdm_req_18_bits_data),
-    .io_tcdm_req_data_3               (io_data_tcdm_req_19_bits_data),
-    .io_tcdm_req_data_4               (io_data_tcdm_req_20_bits_data),
-    .io_tcdm_req_data_5               (io_data_tcdm_req_21_bits_data),
-    .io_tcdm_req_data_6               (io_data_tcdm_req_22_bits_data),
-    .io_tcdm_req_data_7               (io_data_tcdm_req_23_bits_data),
-    .io_tcdm_req_data_8               (io_data_tcdm_req_24_bits_data),
-    .io_tcdm_req_data_9               (io_data_tcdm_req_25_bits_data),
-    .io_tcdm_req_data_10              (io_data_tcdm_req_26_bits_data),
-    .io_tcdm_req_data_11              (io_data_tcdm_req_27_bits_data),
-    .io_tcdm_req_data_12              (io_data_tcdm_req_28_bits_data),
-    .io_tcdm_req_data_13              (io_data_tcdm_req_29_bits_data),
-    .io_tcdm_req_data_14              (io_data_tcdm_req_30_bits_data),
-    .io_tcdm_req_data_15              (io_data_tcdm_req_31_bits_data),
-    .io_tcdm_req_data_16              (io_data_tcdm_req_32_bits_data),
-    .io_tcdm_req_data_17              (io_data_tcdm_req_33_bits_data),
-    .io_tcdm_req_data_18              (io_data_tcdm_req_34_bits_data),
-    .io_tcdm_req_data_19              (io_data_tcdm_req_35_bits_data),
-    .io_tcdm_req_data_20              (io_data_tcdm_req_36_bits_data),
-    .io_tcdm_req_data_21              (io_data_tcdm_req_37_bits_data),
-    .io_tcdm_req_data_22              (io_data_tcdm_req_38_bits_data),
-    .io_tcdm_req_data_23              (io_data_tcdm_req_39_bits_data),
-    .io_tcdm_req_data_24              (io_data_tcdm_req_40_bits_data),
-    .io_tcdm_req_data_25              (io_data_tcdm_req_41_bits_data),
-    .io_tcdm_req_data_26              (io_data_tcdm_req_42_bits_data),
-    .io_tcdm_req_data_27              (io_data_tcdm_req_43_bits_data),
-    .io_tcdm_req_data_28              (io_data_tcdm_req_44_bits_data),
-    .io_tcdm_req_data_29              (io_data_tcdm_req_45_bits_data),
-    .io_tcdm_req_data_30              (io_data_tcdm_req_46_bits_data),
-    .io_tcdm_req_data_31              (io_data_tcdm_req_47_bits_data)
+    .io_tcdm_req_addr_0               (io_data_tcdm_req_9_bits_addr),
+    .io_tcdm_req_addr_1               (io_data_tcdm_req_10_bits_addr),
+    .io_tcdm_req_addr_2               (io_data_tcdm_req_11_bits_addr),
+    .io_tcdm_req_addr_3               (io_data_tcdm_req_12_bits_addr),
+    .io_write_tcmd_valid_o_0          (io_data_tcdm_req_9_valid),
+    .io_write_tcmd_valid_o_1          (io_data_tcdm_req_10_valid),
+    .io_write_tcmd_valid_o_2          (io_data_tcdm_req_11_valid),
+    .io_write_tcmd_valid_o_3          (io_data_tcdm_req_12_valid),
+    .io_tcdm_req_data_0               (io_data_tcdm_req_9_bits_data),
+    .io_tcdm_req_data_1               (io_data_tcdm_req_10_bits_data),
+    .io_tcdm_req_data_2               (io_data_tcdm_req_11_bits_data),
+    .io_tcdm_req_data_3               (io_data_tcdm_req_12_bits_data)
   );
   TemporalAdressGenUnit address_gen_unit_0 (	// src/main/scala/streamer/Streamer.scala:197:11
     .clock                          (clock),
     .reset                          (reset),
     .io_temporalLoopBounds_i_valid  (io_csr_valid),
     .io_temporalLoopBounds_i_bits_0 (io_csr_bits_temporalLoopBounds_i_0),
-    .io_temporalLoopBounds_i_bits_1 (io_csr_bits_temporalLoopBounds_i_1),
-    .io_temporalLoopBounds_i_bits_2 (io_csr_bits_temporalLoopBounds_i_2),
     .io_temporalStrides_i_valid     (io_csr_valid),
     .io_temporalStrides_i_bits_0    (io_csr_bits_temporalStrides_i_0_0),
-    .io_temporalStrides_i_bits_1    (io_csr_bits_temporalStrides_i_0_1),
-    .io_temporalStrides_i_bits_2    (io_csr_bits_temporalStrides_i_0_2),
     .io_ptr_i_valid                 (io_csr_valid),
     .io_ptr_i_bits                  (io_csr_bits_ptr_i_0),
     .io_ptr_o_ready                 (_data_reader_0_io_ptr_agu_i_ready),	// src/main/scala/streamer/Streamer.scala:165:11
@@ -3124,12 +1325,8 @@ module Streamer(	// <stdin>:5735:10
     .reset                          (reset),
     .io_temporalLoopBounds_i_valid  (io_csr_valid),
     .io_temporalLoopBounds_i_bits_0 (io_csr_bits_temporalLoopBounds_i_0),
-    .io_temporalLoopBounds_i_bits_1 (io_csr_bits_temporalLoopBounds_i_1),
-    .io_temporalLoopBounds_i_bits_2 (io_csr_bits_temporalLoopBounds_i_2),
     .io_temporalStrides_i_valid     (io_csr_valid),
     .io_temporalStrides_i_bits_0    (io_csr_bits_temporalStrides_i_1_0),
-    .io_temporalStrides_i_bits_1    (io_csr_bits_temporalStrides_i_1_1),
-    .io_temporalStrides_i_bits_2    (io_csr_bits_temporalStrides_i_1_2),
     .io_ptr_i_valid                 (io_csr_valid),
     .io_ptr_i_bits                  (io_csr_bits_ptr_i_1),
     .io_ptr_o_ready                 (_data_reader_1_io_ptr_agu_i_ready),	// src/main/scala/streamer/Streamer.scala:165:11
@@ -3142,20 +1339,30 @@ module Streamer(	// <stdin>:5735:10
     .reset                          (reset),
     .io_temporalLoopBounds_i_valid  (io_csr_valid),
     .io_temporalLoopBounds_i_bits_0 (8'h1),	// src/main/scala/streamer/Streamer.scala:261:63
-    .io_temporalLoopBounds_i_bits_1 (io_csr_bits_temporalLoopBounds_i_1),
-    .io_temporalLoopBounds_i_bits_2 (io_csr_bits_temporalLoopBounds_i_2),
     .io_temporalStrides_i_valid     (io_csr_valid),
     .io_temporalStrides_i_bits_0    (io_csr_bits_temporalStrides_i_2_0),
-    .io_temporalStrides_i_bits_1    (io_csr_bits_temporalStrides_i_2_1),
-    .io_temporalStrides_i_bits_2    (io_csr_bits_temporalStrides_i_2_2),
     .io_ptr_i_valid                 (io_csr_valid),
     .io_ptr_i_bits                  (io_csr_bits_ptr_i_2),
-    .io_ptr_o_ready                 (_data_writer_0_io_ptr_agu_i_ready),	// src/main/scala/streamer/Streamer.scala:181:11
+    .io_ptr_o_ready                 (_data_reader_2_io_ptr_agu_i_ready),	// src/main/scala/streamer/Streamer.scala:165:11
     .io_ptr_o_valid                 (_address_gen_unit_2_io_ptr_o_valid),
     .io_ptr_o_bits                  (_address_gen_unit_2_io_ptr_o_bits),
     .io_data_move_done              (_address_gen_unit_2_io_data_move_done)
   );
-  Queue4_UInt512 io_data_streamer2accelerator_data_0_q (	// src/main/scala/chisel3/util/Decoupled.scala:364:21
+  TemporalAdressGenUnit address_gen_unit_3 (	// src/main/scala/streamer/Streamer.scala:197:11
+    .clock                          (clock),
+    .reset                          (reset),
+    .io_temporalLoopBounds_i_valid  (io_csr_valid),
+    .io_temporalLoopBounds_i_bits_0 (8'h1),	// src/main/scala/streamer/Streamer.scala:261:63
+    .io_temporalStrides_i_valid     (io_csr_valid),
+    .io_temporalStrides_i_bits_0    (io_csr_bits_temporalStrides_i_3_0),
+    .io_ptr_i_valid                 (io_csr_valid),
+    .io_ptr_i_bits                  (io_csr_bits_ptr_i_3),
+    .io_ptr_o_ready                 (_data_writer_0_io_ptr_agu_i_ready),	// src/main/scala/streamer/Streamer.scala:181:11
+    .io_ptr_o_valid                 (_address_gen_unit_3_io_ptr_o_valid),
+    .io_ptr_o_bits                  (_address_gen_unit_3_io_ptr_o_bits),
+    .io_data_move_done              (_address_gen_unit_3_io_data_move_done)
+  );
+  Queue2_UInt256 io_data_streamer2accelerator_data_0_q (	// src/main/scala/chisel3/util/Decoupled.scala:364:21
     .clock        (clock),
     .reset        (reset),
     .io_enq_valid (_data_reader_0_io_data_fifo_o_valid),	// src/main/scala/streamer/Streamer.scala:165:11
@@ -3165,7 +1372,7 @@ module Streamer(	// <stdin>:5735:10
     .io_deq_valid (io_data_streamer2accelerator_data_0_valid),
     .io_deq_bits  (io_data_streamer2accelerator_data_0_bits)
   );
-  Queue4_UInt512 io_data_streamer2accelerator_data_1_q (	// src/main/scala/chisel3/util/Decoupled.scala:364:21
+  Queue2_UInt256 io_data_streamer2accelerator_data_1_q (	// src/main/scala/chisel3/util/Decoupled.scala:364:21
     .clock        (clock),
     .reset        (reset),
     .io_enq_valid (_data_reader_1_io_data_fifo_o_valid),	// src/main/scala/streamer/Streamer.scala:165:11
@@ -3175,7 +1382,17 @@ module Streamer(	// <stdin>:5735:10
     .io_deq_valid (io_data_streamer2accelerator_data_1_valid),
     .io_deq_bits  (io_data_streamer2accelerator_data_1_bits)
   );
-  Queue4_UInt2048 data_writer_0_io_data_fifo_i_q (	// src/main/scala/chisel3/util/Decoupled.scala:364:21
+  Queue2_UInt64 io_data_streamer2accelerator_data_2_q (	// src/main/scala/chisel3/util/Decoupled.scala:364:21
+    .clock        (clock),
+    .reset        (reset),
+    .io_enq_valid (_data_reader_2_io_data_fifo_o_valid),	// src/main/scala/streamer/Streamer.scala:165:11
+    .io_enq_bits  (_data_reader_2_io_data_fifo_o_bits),	// src/main/scala/streamer/Streamer.scala:165:11
+    .io_deq_ready (io_data_streamer2accelerator_data_2_ready),
+    .io_enq_ready (_io_data_streamer2accelerator_data_2_q_io_enq_ready),
+    .io_deq_valid (io_data_streamer2accelerator_data_2_valid),
+    .io_deq_bits  (io_data_streamer2accelerator_data_2_bits)
+  );
+  Queue2_UInt256 data_writer_0_io_data_fifo_i_q (	// src/main/scala/chisel3/util/Decoupled.scala:364:21
     .clock        (clock),
     .reset        (reset),
     .io_enq_valid (io_data_accelerator2streamer_data_0_valid),
@@ -3185,365 +1402,123 @@ module Streamer(	// <stdin>:5735:10
     .io_deq_valid (_data_writer_0_io_data_fifo_i_q_io_deq_valid),
     .io_deq_bits  (_data_writer_0_io_data_fifo_i_q_io_deq_bits)
   );
-  assign io_csr_ready = ~cstate;	// <stdin>:5735:10, src/main/scala/streamer/Streamer.scala:214:23, :221:18
+  assign io_csr_ready = ~cstate;	// <stdin>:1963:10, src/main/scala/streamer/Streamer.scala:214:23, :221:18
 endmodule
 
-module StreamerTop(	// <stdin>:6158:10
-  input           clock,	// <stdin>:6159:11
-                  reset,	// <stdin>:6160:11
-                  io_csr_req_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input  [31:0]   io_csr_req_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-                  io_csr_req_bits_addr,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input           io_csr_req_bits_write,	// src/main/scala/streamer/StreamerTop.scala:65:14
-                  io_csr_rsp_ready,	// src/main/scala/streamer/StreamerTop.scala:65:14
-                  io_data_streamer2accelerator_data_1_ready,	// src/main/scala/streamer/StreamerTop.scala:65:14
-                  io_data_streamer2accelerator_data_0_ready,	// src/main/scala/streamer/StreamerTop.scala:65:14
-                  io_data_accelerator2streamer_data_0_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input  [2047:0] io_data_accelerator2streamer_data_0_bits,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input           io_data_tcdm_req_0_ready,	// src/main/scala/streamer/StreamerTop.scala:65:14
-                  io_data_tcdm_req_1_ready,	// src/main/scala/streamer/StreamerTop.scala:65:14
-                  io_data_tcdm_req_2_ready,	// src/main/scala/streamer/StreamerTop.scala:65:14
-                  io_data_tcdm_req_3_ready,	// src/main/scala/streamer/StreamerTop.scala:65:14
-                  io_data_tcdm_req_4_ready,	// src/main/scala/streamer/StreamerTop.scala:65:14
-                  io_data_tcdm_req_5_ready,	// src/main/scala/streamer/StreamerTop.scala:65:14
-                  io_data_tcdm_req_6_ready,	// src/main/scala/streamer/StreamerTop.scala:65:14
-                  io_data_tcdm_req_7_ready,	// src/main/scala/streamer/StreamerTop.scala:65:14
-                  io_data_tcdm_req_8_ready,	// src/main/scala/streamer/StreamerTop.scala:65:14
-                  io_data_tcdm_req_9_ready,	// src/main/scala/streamer/StreamerTop.scala:65:14
-                  io_data_tcdm_req_10_ready,	// src/main/scala/streamer/StreamerTop.scala:65:14
-                  io_data_tcdm_req_11_ready,	// src/main/scala/streamer/StreamerTop.scala:65:14
-                  io_data_tcdm_req_12_ready,	// src/main/scala/streamer/StreamerTop.scala:65:14
-                  io_data_tcdm_req_13_ready,	// src/main/scala/streamer/StreamerTop.scala:65:14
-                  io_data_tcdm_req_14_ready,	// src/main/scala/streamer/StreamerTop.scala:65:14
-                  io_data_tcdm_req_15_ready,	// src/main/scala/streamer/StreamerTop.scala:65:14
-                  io_data_tcdm_req_16_ready,	// src/main/scala/streamer/StreamerTop.scala:65:14
-                  io_data_tcdm_req_17_ready,	// src/main/scala/streamer/StreamerTop.scala:65:14
-                  io_data_tcdm_req_18_ready,	// src/main/scala/streamer/StreamerTop.scala:65:14
-                  io_data_tcdm_req_19_ready,	// src/main/scala/streamer/StreamerTop.scala:65:14
-                  io_data_tcdm_req_20_ready,	// src/main/scala/streamer/StreamerTop.scala:65:14
-                  io_data_tcdm_req_21_ready,	// src/main/scala/streamer/StreamerTop.scala:65:14
-                  io_data_tcdm_req_22_ready,	// src/main/scala/streamer/StreamerTop.scala:65:14
-                  io_data_tcdm_req_23_ready,	// src/main/scala/streamer/StreamerTop.scala:65:14
-                  io_data_tcdm_req_24_ready,	// src/main/scala/streamer/StreamerTop.scala:65:14
-                  io_data_tcdm_req_25_ready,	// src/main/scala/streamer/StreamerTop.scala:65:14
-                  io_data_tcdm_req_26_ready,	// src/main/scala/streamer/StreamerTop.scala:65:14
-                  io_data_tcdm_req_27_ready,	// src/main/scala/streamer/StreamerTop.scala:65:14
-                  io_data_tcdm_req_28_ready,	// src/main/scala/streamer/StreamerTop.scala:65:14
-                  io_data_tcdm_req_29_ready,	// src/main/scala/streamer/StreamerTop.scala:65:14
-                  io_data_tcdm_req_30_ready,	// src/main/scala/streamer/StreamerTop.scala:65:14
-                  io_data_tcdm_req_31_ready,	// src/main/scala/streamer/StreamerTop.scala:65:14
-                  io_data_tcdm_req_32_ready,	// src/main/scala/streamer/StreamerTop.scala:65:14
-                  io_data_tcdm_req_33_ready,	// src/main/scala/streamer/StreamerTop.scala:65:14
-                  io_data_tcdm_req_34_ready,	// src/main/scala/streamer/StreamerTop.scala:65:14
-                  io_data_tcdm_req_35_ready,	// src/main/scala/streamer/StreamerTop.scala:65:14
-                  io_data_tcdm_req_36_ready,	// src/main/scala/streamer/StreamerTop.scala:65:14
-                  io_data_tcdm_req_37_ready,	// src/main/scala/streamer/StreamerTop.scala:65:14
-                  io_data_tcdm_req_38_ready,	// src/main/scala/streamer/StreamerTop.scala:65:14
-                  io_data_tcdm_req_39_ready,	// src/main/scala/streamer/StreamerTop.scala:65:14
-                  io_data_tcdm_req_40_ready,	// src/main/scala/streamer/StreamerTop.scala:65:14
-                  io_data_tcdm_req_41_ready,	// src/main/scala/streamer/StreamerTop.scala:65:14
-                  io_data_tcdm_req_42_ready,	// src/main/scala/streamer/StreamerTop.scala:65:14
-                  io_data_tcdm_req_43_ready,	// src/main/scala/streamer/StreamerTop.scala:65:14
-                  io_data_tcdm_req_44_ready,	// src/main/scala/streamer/StreamerTop.scala:65:14
-                  io_data_tcdm_req_45_ready,	// src/main/scala/streamer/StreamerTop.scala:65:14
-                  io_data_tcdm_req_46_ready,	// src/main/scala/streamer/StreamerTop.scala:65:14
-                  io_data_tcdm_req_47_ready,	// src/main/scala/streamer/StreamerTop.scala:65:14
-                  io_data_tcdm_rsp_0_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input  [63:0]   io_data_tcdm_rsp_0_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input           io_data_tcdm_rsp_1_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input  [63:0]   io_data_tcdm_rsp_1_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input           io_data_tcdm_rsp_2_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input  [63:0]   io_data_tcdm_rsp_2_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input           io_data_tcdm_rsp_3_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input  [63:0]   io_data_tcdm_rsp_3_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input           io_data_tcdm_rsp_4_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input  [63:0]   io_data_tcdm_rsp_4_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input           io_data_tcdm_rsp_5_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input  [63:0]   io_data_tcdm_rsp_5_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input           io_data_tcdm_rsp_6_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input  [63:0]   io_data_tcdm_rsp_6_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input           io_data_tcdm_rsp_7_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input  [63:0]   io_data_tcdm_rsp_7_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input           io_data_tcdm_rsp_8_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input  [63:0]   io_data_tcdm_rsp_8_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input           io_data_tcdm_rsp_9_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input  [63:0]   io_data_tcdm_rsp_9_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input           io_data_tcdm_rsp_10_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input  [63:0]   io_data_tcdm_rsp_10_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input           io_data_tcdm_rsp_11_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input  [63:0]   io_data_tcdm_rsp_11_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input           io_data_tcdm_rsp_12_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input  [63:0]   io_data_tcdm_rsp_12_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input           io_data_tcdm_rsp_13_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input  [63:0]   io_data_tcdm_rsp_13_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input           io_data_tcdm_rsp_14_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input  [63:0]   io_data_tcdm_rsp_14_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input           io_data_tcdm_rsp_15_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input  [63:0]   io_data_tcdm_rsp_15_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input           io_data_tcdm_rsp_16_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input  [63:0]   io_data_tcdm_rsp_16_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input           io_data_tcdm_rsp_17_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input  [63:0]   io_data_tcdm_rsp_17_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input           io_data_tcdm_rsp_18_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input  [63:0]   io_data_tcdm_rsp_18_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input           io_data_tcdm_rsp_19_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input  [63:0]   io_data_tcdm_rsp_19_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input           io_data_tcdm_rsp_20_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input  [63:0]   io_data_tcdm_rsp_20_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input           io_data_tcdm_rsp_21_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input  [63:0]   io_data_tcdm_rsp_21_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input           io_data_tcdm_rsp_22_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input  [63:0]   io_data_tcdm_rsp_22_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input           io_data_tcdm_rsp_23_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input  [63:0]   io_data_tcdm_rsp_23_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input           io_data_tcdm_rsp_24_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input  [63:0]   io_data_tcdm_rsp_24_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input           io_data_tcdm_rsp_25_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input  [63:0]   io_data_tcdm_rsp_25_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input           io_data_tcdm_rsp_26_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input  [63:0]   io_data_tcdm_rsp_26_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input           io_data_tcdm_rsp_27_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input  [63:0]   io_data_tcdm_rsp_27_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input           io_data_tcdm_rsp_28_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input  [63:0]   io_data_tcdm_rsp_28_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input           io_data_tcdm_rsp_29_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input  [63:0]   io_data_tcdm_rsp_29_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input           io_data_tcdm_rsp_30_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input  [63:0]   io_data_tcdm_rsp_30_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input           io_data_tcdm_rsp_31_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input  [63:0]   io_data_tcdm_rsp_31_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input           io_data_tcdm_rsp_32_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input  [63:0]   io_data_tcdm_rsp_32_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input           io_data_tcdm_rsp_33_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input  [63:0]   io_data_tcdm_rsp_33_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input           io_data_tcdm_rsp_34_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input  [63:0]   io_data_tcdm_rsp_34_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input           io_data_tcdm_rsp_35_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input  [63:0]   io_data_tcdm_rsp_35_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input           io_data_tcdm_rsp_36_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input  [63:0]   io_data_tcdm_rsp_36_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input           io_data_tcdm_rsp_37_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input  [63:0]   io_data_tcdm_rsp_37_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input           io_data_tcdm_rsp_38_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input  [63:0]   io_data_tcdm_rsp_38_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input           io_data_tcdm_rsp_39_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input  [63:0]   io_data_tcdm_rsp_39_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input           io_data_tcdm_rsp_40_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input  [63:0]   io_data_tcdm_rsp_40_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input           io_data_tcdm_rsp_41_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input  [63:0]   io_data_tcdm_rsp_41_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input           io_data_tcdm_rsp_42_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input  [63:0]   io_data_tcdm_rsp_42_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input           io_data_tcdm_rsp_43_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input  [63:0]   io_data_tcdm_rsp_43_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input           io_data_tcdm_rsp_44_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input  [63:0]   io_data_tcdm_rsp_44_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input           io_data_tcdm_rsp_45_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input  [63:0]   io_data_tcdm_rsp_45_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input           io_data_tcdm_rsp_46_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input  [63:0]   io_data_tcdm_rsp_46_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input           io_data_tcdm_rsp_47_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  input  [63:0]   io_data_tcdm_rsp_47_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_csr_req_ready,	// src/main/scala/streamer/StreamerTop.scala:65:14
-                  io_csr_rsp_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [31:0]   io_csr_rsp_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_streamer2accelerator_data_1_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [511:0]  io_data_streamer2accelerator_data_1_bits,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_streamer2accelerator_data_0_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [511:0]  io_data_streamer2accelerator_data_0_bits,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_accelerator2streamer_data_0_ready,	// src/main/scala/streamer/StreamerTop.scala:65:14
-                  io_data_tcdm_req_0_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [31:0]   io_data_tcdm_req_0_bits_addr,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_0_bits_write,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [63:0]   io_data_tcdm_req_0_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_1_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [31:0]   io_data_tcdm_req_1_bits_addr,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_1_bits_write,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [63:0]   io_data_tcdm_req_1_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_2_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [31:0]   io_data_tcdm_req_2_bits_addr,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_2_bits_write,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [63:0]   io_data_tcdm_req_2_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_3_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [31:0]   io_data_tcdm_req_3_bits_addr,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_3_bits_write,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [63:0]   io_data_tcdm_req_3_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_4_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [31:0]   io_data_tcdm_req_4_bits_addr,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_4_bits_write,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [63:0]   io_data_tcdm_req_4_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_5_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [31:0]   io_data_tcdm_req_5_bits_addr,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_5_bits_write,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [63:0]   io_data_tcdm_req_5_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_6_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [31:0]   io_data_tcdm_req_6_bits_addr,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_6_bits_write,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [63:0]   io_data_tcdm_req_6_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_7_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [31:0]   io_data_tcdm_req_7_bits_addr,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_7_bits_write,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [63:0]   io_data_tcdm_req_7_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_8_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [31:0]   io_data_tcdm_req_8_bits_addr,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_8_bits_write,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [63:0]   io_data_tcdm_req_8_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_9_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [31:0]   io_data_tcdm_req_9_bits_addr,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_9_bits_write,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [63:0]   io_data_tcdm_req_9_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_10_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [31:0]   io_data_tcdm_req_10_bits_addr,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_10_bits_write,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [63:0]   io_data_tcdm_req_10_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_11_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [31:0]   io_data_tcdm_req_11_bits_addr,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_11_bits_write,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [63:0]   io_data_tcdm_req_11_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_12_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [31:0]   io_data_tcdm_req_12_bits_addr,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_12_bits_write,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [63:0]   io_data_tcdm_req_12_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_13_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [31:0]   io_data_tcdm_req_13_bits_addr,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_13_bits_write,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [63:0]   io_data_tcdm_req_13_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_14_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [31:0]   io_data_tcdm_req_14_bits_addr,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_14_bits_write,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [63:0]   io_data_tcdm_req_14_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_15_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [31:0]   io_data_tcdm_req_15_bits_addr,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_15_bits_write,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [63:0]   io_data_tcdm_req_15_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_16_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [31:0]   io_data_tcdm_req_16_bits_addr,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_16_bits_write,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [63:0]   io_data_tcdm_req_16_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_17_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [31:0]   io_data_tcdm_req_17_bits_addr,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_17_bits_write,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [63:0]   io_data_tcdm_req_17_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_18_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [31:0]   io_data_tcdm_req_18_bits_addr,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_18_bits_write,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [63:0]   io_data_tcdm_req_18_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_19_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [31:0]   io_data_tcdm_req_19_bits_addr,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_19_bits_write,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [63:0]   io_data_tcdm_req_19_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_20_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [31:0]   io_data_tcdm_req_20_bits_addr,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_20_bits_write,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [63:0]   io_data_tcdm_req_20_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_21_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [31:0]   io_data_tcdm_req_21_bits_addr,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_21_bits_write,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [63:0]   io_data_tcdm_req_21_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_22_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [31:0]   io_data_tcdm_req_22_bits_addr,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_22_bits_write,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [63:0]   io_data_tcdm_req_22_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_23_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [31:0]   io_data_tcdm_req_23_bits_addr,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_23_bits_write,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [63:0]   io_data_tcdm_req_23_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_24_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [31:0]   io_data_tcdm_req_24_bits_addr,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_24_bits_write,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [63:0]   io_data_tcdm_req_24_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_25_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [31:0]   io_data_tcdm_req_25_bits_addr,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_25_bits_write,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [63:0]   io_data_tcdm_req_25_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_26_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [31:0]   io_data_tcdm_req_26_bits_addr,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_26_bits_write,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [63:0]   io_data_tcdm_req_26_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_27_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [31:0]   io_data_tcdm_req_27_bits_addr,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_27_bits_write,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [63:0]   io_data_tcdm_req_27_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_28_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [31:0]   io_data_tcdm_req_28_bits_addr,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_28_bits_write,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [63:0]   io_data_tcdm_req_28_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_29_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [31:0]   io_data_tcdm_req_29_bits_addr,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_29_bits_write,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [63:0]   io_data_tcdm_req_29_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_30_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [31:0]   io_data_tcdm_req_30_bits_addr,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_30_bits_write,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [63:0]   io_data_tcdm_req_30_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_31_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [31:0]   io_data_tcdm_req_31_bits_addr,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_31_bits_write,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [63:0]   io_data_tcdm_req_31_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_32_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [31:0]   io_data_tcdm_req_32_bits_addr,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_32_bits_write,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [63:0]   io_data_tcdm_req_32_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_33_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [31:0]   io_data_tcdm_req_33_bits_addr,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_33_bits_write,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [63:0]   io_data_tcdm_req_33_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_34_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [31:0]   io_data_tcdm_req_34_bits_addr,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_34_bits_write,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [63:0]   io_data_tcdm_req_34_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_35_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [31:0]   io_data_tcdm_req_35_bits_addr,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_35_bits_write,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [63:0]   io_data_tcdm_req_35_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_36_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [31:0]   io_data_tcdm_req_36_bits_addr,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_36_bits_write,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [63:0]   io_data_tcdm_req_36_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_37_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [31:0]   io_data_tcdm_req_37_bits_addr,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_37_bits_write,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [63:0]   io_data_tcdm_req_37_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_38_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [31:0]   io_data_tcdm_req_38_bits_addr,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_38_bits_write,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [63:0]   io_data_tcdm_req_38_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_39_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [31:0]   io_data_tcdm_req_39_bits_addr,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_39_bits_write,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [63:0]   io_data_tcdm_req_39_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_40_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [31:0]   io_data_tcdm_req_40_bits_addr,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_40_bits_write,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [63:0]   io_data_tcdm_req_40_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_41_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [31:0]   io_data_tcdm_req_41_bits_addr,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_41_bits_write,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [63:0]   io_data_tcdm_req_41_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_42_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [31:0]   io_data_tcdm_req_42_bits_addr,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_42_bits_write,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [63:0]   io_data_tcdm_req_42_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_43_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [31:0]   io_data_tcdm_req_43_bits_addr,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_43_bits_write,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [63:0]   io_data_tcdm_req_43_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_44_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [31:0]   io_data_tcdm_req_44_bits_addr,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_44_bits_write,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [63:0]   io_data_tcdm_req_44_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_45_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [31:0]   io_data_tcdm_req_45_bits_addr,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_45_bits_write,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [63:0]   io_data_tcdm_req_45_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_46_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [31:0]   io_data_tcdm_req_46_bits_addr,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_46_bits_write,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [63:0]   io_data_tcdm_req_46_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_47_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [31:0]   io_data_tcdm_req_47_bits_addr,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output          io_data_tcdm_req_47_bits_write,	// src/main/scala/streamer/StreamerTop.scala:65:14
-  output [63:0]   io_data_tcdm_req_47_bits_data	// src/main/scala/streamer/StreamerTop.scala:65:14
+module StreamerTop(	// <stdin>:2214:10
+  input          clock,	// <stdin>:2215:11
+                 reset,	// <stdin>:2216:11
+                 io_csr_req_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
+  input  [31:0]  io_csr_req_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
+                 io_csr_req_bits_addr,	// src/main/scala/streamer/StreamerTop.scala:65:14
+  input          io_csr_req_bits_write,	// src/main/scala/streamer/StreamerTop.scala:65:14
+                 io_csr_rsp_ready,	// src/main/scala/streamer/StreamerTop.scala:65:14
+                 io_data_streamer2accelerator_data_2_ready,	// src/main/scala/streamer/StreamerTop.scala:65:14
+                 io_data_streamer2accelerator_data_1_ready,	// src/main/scala/streamer/StreamerTop.scala:65:14
+                 io_data_streamer2accelerator_data_0_ready,	// src/main/scala/streamer/StreamerTop.scala:65:14
+                 io_data_accelerator2streamer_data_0_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
+  input  [255:0] io_data_accelerator2streamer_data_0_bits,	// src/main/scala/streamer/StreamerTop.scala:65:14
+  input          io_data_tcdm_req_0_ready,	// src/main/scala/streamer/StreamerTop.scala:65:14
+                 io_data_tcdm_req_1_ready,	// src/main/scala/streamer/StreamerTop.scala:65:14
+                 io_data_tcdm_req_2_ready,	// src/main/scala/streamer/StreamerTop.scala:65:14
+                 io_data_tcdm_req_3_ready,	// src/main/scala/streamer/StreamerTop.scala:65:14
+                 io_data_tcdm_req_4_ready,	// src/main/scala/streamer/StreamerTop.scala:65:14
+                 io_data_tcdm_req_5_ready,	// src/main/scala/streamer/StreamerTop.scala:65:14
+                 io_data_tcdm_req_6_ready,	// src/main/scala/streamer/StreamerTop.scala:65:14
+                 io_data_tcdm_req_7_ready,	// src/main/scala/streamer/StreamerTop.scala:65:14
+                 io_data_tcdm_req_8_ready,	// src/main/scala/streamer/StreamerTop.scala:65:14
+                 io_data_tcdm_req_9_ready,	// src/main/scala/streamer/StreamerTop.scala:65:14
+                 io_data_tcdm_req_10_ready,	// src/main/scala/streamer/StreamerTop.scala:65:14
+                 io_data_tcdm_req_11_ready,	// src/main/scala/streamer/StreamerTop.scala:65:14
+                 io_data_tcdm_req_12_ready,	// src/main/scala/streamer/StreamerTop.scala:65:14
+                 io_data_tcdm_rsp_0_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
+  input  [63:0]  io_data_tcdm_rsp_0_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
+  input          io_data_tcdm_rsp_1_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
+  input  [63:0]  io_data_tcdm_rsp_1_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
+  input          io_data_tcdm_rsp_2_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
+  input  [63:0]  io_data_tcdm_rsp_2_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
+  input          io_data_tcdm_rsp_3_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
+  input  [63:0]  io_data_tcdm_rsp_3_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
+  input          io_data_tcdm_rsp_4_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
+  input  [63:0]  io_data_tcdm_rsp_4_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
+  input          io_data_tcdm_rsp_5_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
+  input  [63:0]  io_data_tcdm_rsp_5_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
+  input          io_data_tcdm_rsp_6_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
+  input  [63:0]  io_data_tcdm_rsp_6_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
+  input          io_data_tcdm_rsp_7_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
+  input  [63:0]  io_data_tcdm_rsp_7_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
+  input          io_data_tcdm_rsp_8_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
+  input  [63:0]  io_data_tcdm_rsp_8_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
+  input          io_data_tcdm_rsp_9_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
+  input  [63:0]  io_data_tcdm_rsp_9_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
+  input          io_data_tcdm_rsp_10_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
+  input  [63:0]  io_data_tcdm_rsp_10_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
+  input          io_data_tcdm_rsp_11_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
+  input  [63:0]  io_data_tcdm_rsp_11_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
+  input          io_data_tcdm_rsp_12_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
+  input  [63:0]  io_data_tcdm_rsp_12_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
+  output         io_csr_req_ready,	// src/main/scala/streamer/StreamerTop.scala:65:14
+                 io_csr_rsp_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
+  output [31:0]  io_csr_rsp_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
+  output         io_data_streamer2accelerator_data_2_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
+  output [63:0]  io_data_streamer2accelerator_data_2_bits,	// src/main/scala/streamer/StreamerTop.scala:65:14
+  output         io_data_streamer2accelerator_data_1_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
+  output [255:0] io_data_streamer2accelerator_data_1_bits,	// src/main/scala/streamer/StreamerTop.scala:65:14
+  output         io_data_streamer2accelerator_data_0_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
+  output [255:0] io_data_streamer2accelerator_data_0_bits,	// src/main/scala/streamer/StreamerTop.scala:65:14
+  output         io_data_accelerator2streamer_data_0_ready,	// src/main/scala/streamer/StreamerTop.scala:65:14
+                 io_data_tcdm_req_0_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
+  output [31:0]  io_data_tcdm_req_0_bits_addr,	// src/main/scala/streamer/StreamerTop.scala:65:14
+  output         io_data_tcdm_req_0_bits_write,	// src/main/scala/streamer/StreamerTop.scala:65:14
+  output [63:0]  io_data_tcdm_req_0_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
+  output         io_data_tcdm_req_1_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
+  output [31:0]  io_data_tcdm_req_1_bits_addr,	// src/main/scala/streamer/StreamerTop.scala:65:14
+  output         io_data_tcdm_req_1_bits_write,	// src/main/scala/streamer/StreamerTop.scala:65:14
+  output [63:0]  io_data_tcdm_req_1_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
+  output         io_data_tcdm_req_2_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
+  output [31:0]  io_data_tcdm_req_2_bits_addr,	// src/main/scala/streamer/StreamerTop.scala:65:14
+  output         io_data_tcdm_req_2_bits_write,	// src/main/scala/streamer/StreamerTop.scala:65:14
+  output [63:0]  io_data_tcdm_req_2_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
+  output         io_data_tcdm_req_3_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
+  output [31:0]  io_data_tcdm_req_3_bits_addr,	// src/main/scala/streamer/StreamerTop.scala:65:14
+  output         io_data_tcdm_req_3_bits_write,	// src/main/scala/streamer/StreamerTop.scala:65:14
+  output [63:0]  io_data_tcdm_req_3_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
+  output         io_data_tcdm_req_4_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
+  output [31:0]  io_data_tcdm_req_4_bits_addr,	// src/main/scala/streamer/StreamerTop.scala:65:14
+  output         io_data_tcdm_req_4_bits_write,	// src/main/scala/streamer/StreamerTop.scala:65:14
+  output [63:0]  io_data_tcdm_req_4_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
+  output         io_data_tcdm_req_5_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
+  output [31:0]  io_data_tcdm_req_5_bits_addr,	// src/main/scala/streamer/StreamerTop.scala:65:14
+  output         io_data_tcdm_req_5_bits_write,	// src/main/scala/streamer/StreamerTop.scala:65:14
+  output [63:0]  io_data_tcdm_req_5_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
+  output         io_data_tcdm_req_6_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
+  output [31:0]  io_data_tcdm_req_6_bits_addr,	// src/main/scala/streamer/StreamerTop.scala:65:14
+  output         io_data_tcdm_req_6_bits_write,	// src/main/scala/streamer/StreamerTop.scala:65:14
+  output [63:0]  io_data_tcdm_req_6_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
+  output         io_data_tcdm_req_7_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
+  output [31:0]  io_data_tcdm_req_7_bits_addr,	// src/main/scala/streamer/StreamerTop.scala:65:14
+  output         io_data_tcdm_req_7_bits_write,	// src/main/scala/streamer/StreamerTop.scala:65:14
+  output [63:0]  io_data_tcdm_req_7_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
+  output         io_data_tcdm_req_8_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
+  output [31:0]  io_data_tcdm_req_8_bits_addr,	// src/main/scala/streamer/StreamerTop.scala:65:14
+  output         io_data_tcdm_req_8_bits_write,	// src/main/scala/streamer/StreamerTop.scala:65:14
+  output [63:0]  io_data_tcdm_req_8_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
+  output         io_data_tcdm_req_9_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
+  output [31:0]  io_data_tcdm_req_9_bits_addr,	// src/main/scala/streamer/StreamerTop.scala:65:14
+  output         io_data_tcdm_req_9_bits_write,	// src/main/scala/streamer/StreamerTop.scala:65:14
+  output [63:0]  io_data_tcdm_req_9_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
+  output         io_data_tcdm_req_10_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
+  output [31:0]  io_data_tcdm_req_10_bits_addr,	// src/main/scala/streamer/StreamerTop.scala:65:14
+  output         io_data_tcdm_req_10_bits_write,	// src/main/scala/streamer/StreamerTop.scala:65:14
+  output [63:0]  io_data_tcdm_req_10_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
+  output         io_data_tcdm_req_11_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
+  output [31:0]  io_data_tcdm_req_11_bits_addr,	// src/main/scala/streamer/StreamerTop.scala:65:14
+  output         io_data_tcdm_req_11_bits_write,	// src/main/scala/streamer/StreamerTop.scala:65:14
+  output [63:0]  io_data_tcdm_req_11_bits_data,	// src/main/scala/streamer/StreamerTop.scala:65:14
+  output         io_data_tcdm_req_12_valid,	// src/main/scala/streamer/StreamerTop.scala:65:14
+  output [31:0]  io_data_tcdm_req_12_bits_addr,	// src/main/scala/streamer/StreamerTop.scala:65:14
+  output         io_data_tcdm_req_12_bits_write,	// src/main/scala/streamer/StreamerTop.scala:65:14
+  output [63:0]  io_data_tcdm_req_12_bits_data	// src/main/scala/streamer/StreamerTop.scala:65:14
 );
 
   wire              _io_csr_req_ready_output;	// src/main/scala/streamer/StreamerTop.scala:140:93
@@ -3562,37 +1537,13 @@ module StreamerTop(	// <stdin>:6158:10
   reg  [31:0]       csr_11;	// src/main/scala/streamer/StreamerTop.scala:81:20
   reg  [31:0]       csr_12;	// src/main/scala/streamer/StreamerTop.scala:81:20
   reg  [31:0]       csr_13;	// src/main/scala/streamer/StreamerTop.scala:81:20
-  reg  [31:0]       csr_14;	// src/main/scala/streamer/StreamerTop.scala:81:20
-  reg  [31:0]       csr_15;	// src/main/scala/streamer/StreamerTop.scala:81:20
-  reg  [31:0]       csr_16;	// src/main/scala/streamer/StreamerTop.scala:81:20
-  reg  [31:0]       csr_17;	// src/main/scala/streamer/StreamerTop.scala:81:20
-  reg  [31:0]       csr_18;	// src/main/scala/streamer/StreamerTop.scala:81:20
-  reg  [31:0]       csr_19;	// src/main/scala/streamer/StreamerTop.scala:81:20
-  reg  [31:0]       csr_20;	// src/main/scala/streamer/StreamerTop.scala:81:20
-  reg  [31:0]       csr_21;	// src/main/scala/streamer/StreamerTop.scala:81:20
   wire              _config_valid_T = _io_csr_req_ready_output & io_csr_req_valid;	// src/main/scala/chisel3/util/Decoupled.scala:52:35, src/main/scala/streamer/StreamerTop.scala:140:93
   wire              read_csr = _config_valid_T & ~io_csr_req_bits_write;	// src/main/scala/chisel3/util/Decoupled.scala:52:35, src/main/scala/streamer/StreamerTop.scala:83:{34,37}
   reg               keep_sending_csr_rsp;	// src/main/scala/streamer/StreamerTop.scala:86:37
   reg  [31:0]       csr_rsp_data_reg;	// src/main/scala/streamer/StreamerTop.scala:87:33
-  wire [31:0][31:0] _GEN =
+  wire [15:0][31:0] _GEN =
     {{csr_0},
      {csr_0},
-     {csr_0},
-     {csr_0},
-     {csr_0},
-     {csr_0},
-     {csr_0},
-     {csr_0},
-     {csr_0},
-     {csr_0},
-     {csr_21},
-     {csr_20},
-     {csr_19},
-     {csr_18},
-     {csr_17},
-     {csr_16},
-     {csr_15},
-     {csr_14},
      {csr_13},
      {csr_12},
      {csr_11},
@@ -3607,12 +1558,12 @@ module StreamerTop(	// <stdin>:6158:10
      {csr_2},
      {csr_1},
      {csr_0}};	// src/main/scala/streamer/StreamerTop.scala:81:20, :125:26
-  wire              _io_csr_rsp_valid_output = read_csr | keep_sending_csr_rsp;	// src/main/scala/streamer/StreamerTop.scala:83:34, :86:37, :124:18, :126:22, :127:35
+  wire              _io_csr_rsp_valid_output = read_csr | keep_sending_csr_rsp;	// src/main/scala/streamer/StreamerTop.scala:83:34, :86:37, :124:18, :126:22, :127:36
   assign _io_csr_req_ready_output =
-    ~(~_streamer_io_csr_ready & io_csr_req_bits_addr == 32'h15)
+    ~(~_streamer_io_csr_ready & io_csr_req_bits_addr == 32'hD)
     & ~(keep_sending_csr_rsp & ~io_csr_req_bits_write);	// src/main/scala/streamer/StreamerTop.scala:83:37, :86:37, :91:24, :140:{23,25,48,72,93,96,119}
-  always @(posedge clock or posedge reset) begin	// <stdin>:6159:11
-    if (reset) begin	// <stdin>:6159:11
+  always @(posedge clock or posedge reset) begin	// <stdin>:2215:11
+    if (reset) begin	// <stdin>:2215:11
       csr_0 <= 32'h0;	// src/main/scala/streamer/StreamerTop.scala:81:{20,28}
       csr_1 <= 32'h0;	// src/main/scala/streamer/StreamerTop.scala:81:{20,28}
       csr_2 <= 32'h0;	// src/main/scala/streamer/StreamerTop.scala:81:{20,28}
@@ -3627,107 +1578,75 @@ module StreamerTop(	// <stdin>:6158:10
       csr_11 <= 32'h0;	// src/main/scala/streamer/StreamerTop.scala:81:{20,28}
       csr_12 <= 32'h0;	// src/main/scala/streamer/StreamerTop.scala:81:{20,28}
       csr_13 <= 32'h0;	// src/main/scala/streamer/StreamerTop.scala:81:{20,28}
-      csr_14 <= 32'h0;	// src/main/scala/streamer/StreamerTop.scala:81:{20,28}
-      csr_15 <= 32'h0;	// src/main/scala/streamer/StreamerTop.scala:81:{20,28}
-      csr_16 <= 32'h0;	// src/main/scala/streamer/StreamerTop.scala:81:{20,28}
-      csr_17 <= 32'h0;	// src/main/scala/streamer/StreamerTop.scala:81:{20,28}
-      csr_18 <= 32'h0;	// src/main/scala/streamer/StreamerTop.scala:81:{20,28}
-      csr_19 <= 32'h0;	// src/main/scala/streamer/StreamerTop.scala:81:{20,28}
-      csr_20 <= 32'h0;	// src/main/scala/streamer/StreamerTop.scala:81:{20,28}
-      csr_21 <= 32'h0;	// src/main/scala/streamer/StreamerTop.scala:81:{20,28}
       csr_rsp_data_reg <= 32'h0;	// src/main/scala/streamer/StreamerTop.scala:81:28, :87:33
     end
-    else begin	// <stdin>:6159:11
+    else begin	// <stdin>:2215:11
       automatic logic write_csr = _config_valid_T & io_csr_req_bits_write;	// src/main/scala/chisel3/util/Decoupled.scala:52:35, src/main/scala/streamer/StreamerTop.scala:84:35
-      if (write_csr & io_csr_req_bits_addr[4:0] == 5'h0)	// <stdin>:6158:10, :6206:17, src/main/scala/streamer/StreamerTop.scala:81:20, :84:35, :119:19, :120:31
+      if (write_csr & io_csr_req_bits_addr[3:0] == 4'h0)	// <stdin>:2214:10, :2254:17, src/main/scala/streamer/StreamerTop.scala:81:20, :84:35, :119:19, :120:31
         csr_0 <= io_csr_req_bits_data;	// src/main/scala/streamer/StreamerTop.scala:81:20
-      if (write_csr & io_csr_req_bits_addr[4:0] == 5'h1)	// <stdin>:6158:10, :6206:17, src/main/scala/streamer/StreamerTop.scala:81:20, :84:35, :119:19, :120:31
+      if (write_csr & io_csr_req_bits_addr[3:0] == 4'h1)	// <stdin>:2214:10, :2254:17, src/main/scala/streamer/StreamerTop.scala:81:20, :84:35, :119:19, :120:31
         csr_1 <= io_csr_req_bits_data;	// src/main/scala/streamer/StreamerTop.scala:81:20
-      if (write_csr & io_csr_req_bits_addr[4:0] == 5'h2)	// <stdin>:6158:10, :6206:17, src/main/scala/streamer/StreamerTop.scala:81:20, :84:35, :119:19, :120:31
+      if (write_csr & io_csr_req_bits_addr[3:0] == 4'h2)	// <stdin>:2214:10, :2254:17, src/main/scala/streamer/StreamerTop.scala:81:20, :84:35, :119:19, :120:31
         csr_2 <= io_csr_req_bits_data;	// src/main/scala/streamer/StreamerTop.scala:81:20
-      if (write_csr & io_csr_req_bits_addr[4:0] == 5'h3)	// <stdin>:6158:10, :6206:17, src/main/scala/streamer/StreamerTop.scala:81:20, :84:35, :119:19, :120:31
+      if (write_csr & io_csr_req_bits_addr[3:0] == 4'h3)	// <stdin>:2214:10, :2254:17, src/main/scala/streamer/StreamerTop.scala:81:20, :84:35, :119:19, :120:31
         csr_3 <= io_csr_req_bits_data;	// src/main/scala/streamer/StreamerTop.scala:81:20
-      if (write_csr & io_csr_req_bits_addr[4:0] == 5'h4)	// <stdin>:6158:10, :6206:17, src/main/scala/streamer/StreamerTop.scala:81:20, :84:35, :119:19, :120:31
+      if (write_csr & io_csr_req_bits_addr[3:0] == 4'h4)	// <stdin>:2214:10, :2254:17, src/main/scala/streamer/StreamerTop.scala:81:20, :84:35, :119:19, :120:31
         csr_4 <= io_csr_req_bits_data;	// src/main/scala/streamer/StreamerTop.scala:81:20
-      if (write_csr & io_csr_req_bits_addr[4:0] == 5'h5)	// <stdin>:6158:10, :6206:17, src/main/scala/streamer/StreamerTop.scala:81:20, :84:35, :119:19, :120:31
+      if (write_csr & io_csr_req_bits_addr[3:0] == 4'h5)	// <stdin>:2214:10, :2254:17, src/main/scala/streamer/StreamerTop.scala:81:20, :84:35, :119:19, :120:31
         csr_5 <= io_csr_req_bits_data;	// src/main/scala/streamer/StreamerTop.scala:81:20
-      if (write_csr & io_csr_req_bits_addr[4:0] == 5'h6)	// <stdin>:6158:10, :6206:17, src/main/scala/streamer/StreamerTop.scala:81:20, :84:35, :119:19, :120:31
+      if (write_csr & io_csr_req_bits_addr[3:0] == 4'h6)	// <stdin>:2214:10, :2254:17, src/main/scala/streamer/StreamerTop.scala:81:20, :84:35, :119:19, :120:31
         csr_6 <= io_csr_req_bits_data;	// src/main/scala/streamer/StreamerTop.scala:81:20
-      if (write_csr & io_csr_req_bits_addr[4:0] == 5'h7)	// <stdin>:6158:10, :6206:17, src/main/scala/streamer/StreamerTop.scala:81:20, :84:35, :119:19, :120:31
+      if (write_csr & io_csr_req_bits_addr[3:0] == 4'h7)	// <stdin>:2214:10, :2254:17, src/main/scala/streamer/StreamerTop.scala:81:20, :84:35, :119:19, :120:31
         csr_7 <= io_csr_req_bits_data;	// src/main/scala/streamer/StreamerTop.scala:81:20
-      if (write_csr & io_csr_req_bits_addr[4:0] == 5'h8)	// <stdin>:6158:10, :6206:17, src/main/scala/streamer/StreamerTop.scala:81:20, :84:35, :119:19, :120:31
+      if (write_csr & io_csr_req_bits_addr[3:0] == 4'h8)	// <stdin>:2214:10, :2254:17, src/main/scala/streamer/StreamerTop.scala:81:20, :84:35, :119:19, :120:31
         csr_8 <= io_csr_req_bits_data;	// src/main/scala/streamer/StreamerTop.scala:81:20
-      if (write_csr & io_csr_req_bits_addr[4:0] == 5'h9)	// <stdin>:6158:10, :6206:17, src/main/scala/streamer/StreamerTop.scala:81:20, :84:35, :119:19, :120:31
+      if (write_csr & io_csr_req_bits_addr[3:0] == 4'h9)	// <stdin>:2214:10, :2254:17, src/main/scala/streamer/StreamerTop.scala:81:20, :84:35, :119:19, :120:31
         csr_9 <= io_csr_req_bits_data;	// src/main/scala/streamer/StreamerTop.scala:81:20
-      if (write_csr & io_csr_req_bits_addr[4:0] == 5'hA)	// <stdin>:6158:10, :6206:17, src/main/scala/streamer/StreamerTop.scala:81:20, :84:35, :119:19, :120:31
+      if (write_csr & io_csr_req_bits_addr[3:0] == 4'hA)	// <stdin>:2214:10, :2254:17, src/main/scala/streamer/StreamerTop.scala:81:20, :84:35, :119:19, :120:31
         csr_10 <= io_csr_req_bits_data;	// src/main/scala/streamer/StreamerTop.scala:81:20
-      if (write_csr & io_csr_req_bits_addr[4:0] == 5'hB)	// <stdin>:6158:10, :6206:17, src/main/scala/streamer/StreamerTop.scala:81:20, :84:35, :119:19, :120:31
+      if (write_csr & io_csr_req_bits_addr[3:0] == 4'hB)	// <stdin>:2214:10, :2254:17, src/main/scala/streamer/StreamerTop.scala:81:20, :84:35, :119:19, :120:31
         csr_11 <= io_csr_req_bits_data;	// src/main/scala/streamer/StreamerTop.scala:81:20
-      if (write_csr & io_csr_req_bits_addr[4:0] == 5'hC)	// <stdin>:6158:10, :6206:17, src/main/scala/streamer/StreamerTop.scala:81:20, :84:35, :119:19, :120:31
+      if (write_csr & io_csr_req_bits_addr[3:0] == 4'hC)	// <stdin>:2214:10, :2254:17, src/main/scala/streamer/StreamerTop.scala:81:20, :84:35, :119:19, :120:31
         csr_12 <= io_csr_req_bits_data;	// src/main/scala/streamer/StreamerTop.scala:81:20
-      if (write_csr & io_csr_req_bits_addr[4:0] == 5'hD)	// <stdin>:6158:10, :6206:17, src/main/scala/streamer/StreamerTop.scala:81:20, :84:35, :119:19, :120:31
+      if (write_csr & io_csr_req_bits_addr[3:0] == 4'hD)	// <stdin>:2214:10, :2254:17, src/main/scala/streamer/StreamerTop.scala:81:20, :84:35, :119:19, :120:31
         csr_13 <= io_csr_req_bits_data;	// src/main/scala/streamer/StreamerTop.scala:81:20
-      if (write_csr & io_csr_req_bits_addr[4:0] == 5'hE)	// <stdin>:6158:10, :6206:17, src/main/scala/streamer/StreamerTop.scala:81:20, :84:35, :119:19, :120:31
-        csr_14 <= io_csr_req_bits_data;	// src/main/scala/streamer/StreamerTop.scala:81:20
-      if (write_csr & io_csr_req_bits_addr[4:0] == 5'hF)	// <stdin>:6158:10, :6206:17, src/main/scala/streamer/StreamerTop.scala:81:20, :84:35, :119:19, :120:31
-        csr_15 <= io_csr_req_bits_data;	// src/main/scala/streamer/StreamerTop.scala:81:20
-      if (write_csr & io_csr_req_bits_addr[4:0] == 5'h10)	// <stdin>:6158:10, :6206:17, src/main/scala/streamer/StreamerTop.scala:81:20, :84:35, :119:19, :120:31
-        csr_16 <= io_csr_req_bits_data;	// src/main/scala/streamer/StreamerTop.scala:81:20
-      if (write_csr & io_csr_req_bits_addr[4:0] == 5'h11)	// <stdin>:6158:10, :6206:17, src/main/scala/streamer/StreamerTop.scala:81:20, :84:35, :119:19, :120:31
-        csr_17 <= io_csr_req_bits_data;	// src/main/scala/streamer/StreamerTop.scala:81:20
-      if (write_csr & io_csr_req_bits_addr[4:0] == 5'h12)	// <stdin>:6158:10, :6206:17, src/main/scala/streamer/StreamerTop.scala:81:20, :84:35, :119:19, :120:31
-        csr_18 <= io_csr_req_bits_data;	// src/main/scala/streamer/StreamerTop.scala:81:20
-      if (write_csr & io_csr_req_bits_addr[4:0] == 5'h13)	// <stdin>:6158:10, :6206:17, src/main/scala/streamer/StreamerTop.scala:81:20, :84:35, :119:19, :120:31
-        csr_19 <= io_csr_req_bits_data;	// src/main/scala/streamer/StreamerTop.scala:81:20
-      if (write_csr & io_csr_req_bits_addr[4:0] == 5'h14)	// <stdin>:6158:10, :6206:17, src/main/scala/streamer/StreamerTop.scala:81:20, :84:35, :119:19, :120:31
-        csr_20 <= io_csr_req_bits_data;	// src/main/scala/streamer/StreamerTop.scala:81:20
-      if (write_csr & io_csr_req_bits_addr[4:0] == 5'h15)	// <stdin>:6158:10, :6206:17, src/main/scala/streamer/StreamerTop.scala:81:20, :84:35, :119:19, :120:31
-        csr_21 <= io_csr_req_bits_data;	// src/main/scala/streamer/StreamerTop.scala:81:20
       if (read_csr)	// src/main/scala/streamer/StreamerTop.scala:83:34
-        csr_rsp_data_reg <= _GEN[io_csr_req_bits_addr[4:0]];	// <stdin>:6219:32, src/main/scala/streamer/StreamerTop.scala:87:33, :125:26, :136:26
+        csr_rsp_data_reg <= _GEN[io_csr_req_bits_addr[3:0]];	// <stdin>:2267:32, src/main/scala/streamer/StreamerTop.scala:87:33, :125:26, :136:26
     end
   end // always @(posedge, posedge)
-  always @(posedge clock)	// <stdin>:6159:11
-    keep_sending_csr_rsp <= _io_csr_rsp_valid_output & ~io_csr_rsp_ready;	// src/main/scala/streamer/StreamerTop.scala:86:{37,55,58}, :124:18, :126:22, :127:35
-  `ifndef SYNTHESIS	// <stdin>:6158:10
-    `ifdef FIRRTL_BEFORE_INITIAL	// <stdin>:6158:10
-      `FIRRTL_BEFORE_INITIAL	// <stdin>:6158:10
+  always @(posedge clock)	// <stdin>:2215:11
+    keep_sending_csr_rsp <= _io_csr_rsp_valid_output & ~io_csr_rsp_ready;	// src/main/scala/streamer/StreamerTop.scala:86:{37,55,58}, :124:18, :126:22, :127:36
+  `ifndef SYNTHESIS	// <stdin>:2214:10
+    `ifdef FIRRTL_BEFORE_INITIAL	// <stdin>:2214:10
+      `FIRRTL_BEFORE_INITIAL	// <stdin>:2214:10
     `endif // FIRRTL_BEFORE_INITIAL
-    initial begin	// <stdin>:6158:10
-      automatic logic [31:0] _RANDOM[0:23];	// <stdin>:6158:10
-      `ifdef INIT_RANDOM_PROLOG_	// <stdin>:6158:10
-        `INIT_RANDOM_PROLOG_	// <stdin>:6158:10
+    initial begin	// <stdin>:2214:10
+      automatic logic [31:0] _RANDOM[0:15];	// <stdin>:2214:10
+      `ifdef INIT_RANDOM_PROLOG_	// <stdin>:2214:10
+        `INIT_RANDOM_PROLOG_	// <stdin>:2214:10
       `endif // INIT_RANDOM_PROLOG_
-      `ifdef RANDOMIZE_REG_INIT	// <stdin>:6158:10
-        for (logic [4:0] i = 5'h0; i < 5'h18; i += 5'h1) begin
-          _RANDOM[i] = `RANDOM;	// <stdin>:6158:10
-        end	// <stdin>:6158:10
-        csr_0 = _RANDOM[5'h0];	// <stdin>:6158:10, src/main/scala/streamer/StreamerTop.scala:81:20
-        csr_1 = _RANDOM[5'h1];	// <stdin>:6158:10, src/main/scala/streamer/StreamerTop.scala:81:20
-        csr_2 = _RANDOM[5'h2];	// <stdin>:6158:10, src/main/scala/streamer/StreamerTop.scala:81:20
-        csr_3 = _RANDOM[5'h3];	// <stdin>:6158:10, src/main/scala/streamer/StreamerTop.scala:81:20
-        csr_4 = _RANDOM[5'h4];	// <stdin>:6158:10, src/main/scala/streamer/StreamerTop.scala:81:20
-        csr_5 = _RANDOM[5'h5];	// <stdin>:6158:10, src/main/scala/streamer/StreamerTop.scala:81:20
-        csr_6 = _RANDOM[5'h6];	// <stdin>:6158:10, src/main/scala/streamer/StreamerTop.scala:81:20
-        csr_7 = _RANDOM[5'h7];	// <stdin>:6158:10, src/main/scala/streamer/StreamerTop.scala:81:20
-        csr_8 = _RANDOM[5'h8];	// <stdin>:6158:10, src/main/scala/streamer/StreamerTop.scala:81:20
-        csr_9 = _RANDOM[5'h9];	// <stdin>:6158:10, src/main/scala/streamer/StreamerTop.scala:81:20
-        csr_10 = _RANDOM[5'hA];	// <stdin>:6158:10, src/main/scala/streamer/StreamerTop.scala:81:20
-        csr_11 = _RANDOM[5'hB];	// <stdin>:6158:10, src/main/scala/streamer/StreamerTop.scala:81:20
-        csr_12 = _RANDOM[5'hC];	// <stdin>:6158:10, src/main/scala/streamer/StreamerTop.scala:81:20
-        csr_13 = _RANDOM[5'hD];	// <stdin>:6158:10, src/main/scala/streamer/StreamerTop.scala:81:20
-        csr_14 = _RANDOM[5'hE];	// <stdin>:6158:10, src/main/scala/streamer/StreamerTop.scala:81:20
-        csr_15 = _RANDOM[5'hF];	// <stdin>:6158:10, src/main/scala/streamer/StreamerTop.scala:81:20
-        csr_16 = _RANDOM[5'h10];	// <stdin>:6158:10, src/main/scala/streamer/StreamerTop.scala:81:20
-        csr_17 = _RANDOM[5'h11];	// <stdin>:6158:10, src/main/scala/streamer/StreamerTop.scala:81:20
-        csr_18 = _RANDOM[5'h12];	// <stdin>:6158:10, src/main/scala/streamer/StreamerTop.scala:81:20
-        csr_19 = _RANDOM[5'h13];	// <stdin>:6158:10, src/main/scala/streamer/StreamerTop.scala:81:20
-        csr_20 = _RANDOM[5'h14];	// <stdin>:6158:10, src/main/scala/streamer/StreamerTop.scala:81:20
-        csr_21 = _RANDOM[5'h15];	// <stdin>:6158:10, src/main/scala/streamer/StreamerTop.scala:81:20
-        keep_sending_csr_rsp = _RANDOM[5'h16][0];	// <stdin>:6158:10, src/main/scala/streamer/StreamerTop.scala:86:37
-        csr_rsp_data_reg = {_RANDOM[5'h16][31:1], _RANDOM[5'h17][0]};	// <stdin>:6158:10, src/main/scala/streamer/StreamerTop.scala:86:37, :87:33
+      `ifdef RANDOMIZE_REG_INIT	// <stdin>:2214:10
+        for (logic [4:0] i = 5'h0; i < 5'h10; i += 5'h1) begin
+          _RANDOM[i[3:0]] = `RANDOM;	// <stdin>:2214:10
+        end	// <stdin>:2214:10
+        csr_0 = _RANDOM[4'h0];	// <stdin>:2214:10, src/main/scala/streamer/StreamerTop.scala:81:20
+        csr_1 = _RANDOM[4'h1];	// <stdin>:2214:10, src/main/scala/streamer/StreamerTop.scala:81:20
+        csr_2 = _RANDOM[4'h2];	// <stdin>:2214:10, src/main/scala/streamer/StreamerTop.scala:81:20
+        csr_3 = _RANDOM[4'h3];	// <stdin>:2214:10, src/main/scala/streamer/StreamerTop.scala:81:20
+        csr_4 = _RANDOM[4'h4];	// <stdin>:2214:10, src/main/scala/streamer/StreamerTop.scala:81:20
+        csr_5 = _RANDOM[4'h5];	// <stdin>:2214:10, src/main/scala/streamer/StreamerTop.scala:81:20
+        csr_6 = _RANDOM[4'h6];	// <stdin>:2214:10, src/main/scala/streamer/StreamerTop.scala:81:20
+        csr_7 = _RANDOM[4'h7];	// <stdin>:2214:10, src/main/scala/streamer/StreamerTop.scala:81:20
+        csr_8 = _RANDOM[4'h8];	// <stdin>:2214:10, src/main/scala/streamer/StreamerTop.scala:81:20
+        csr_9 = _RANDOM[4'h9];	// <stdin>:2214:10, src/main/scala/streamer/StreamerTop.scala:81:20
+        csr_10 = _RANDOM[4'hA];	// <stdin>:2214:10, src/main/scala/streamer/StreamerTop.scala:81:20
+        csr_11 = _RANDOM[4'hB];	// <stdin>:2214:10, src/main/scala/streamer/StreamerTop.scala:81:20
+        csr_12 = _RANDOM[4'hC];	// <stdin>:2214:10, src/main/scala/streamer/StreamerTop.scala:81:20
+        csr_13 = _RANDOM[4'hD];	// <stdin>:2214:10, src/main/scala/streamer/StreamerTop.scala:81:20
+        keep_sending_csr_rsp = _RANDOM[4'hE][0];	// <stdin>:2214:10, src/main/scala/streamer/StreamerTop.scala:86:37
+        csr_rsp_data_reg = {_RANDOM[4'hE][31:1], _RANDOM[4'hF][0]};	// <stdin>:2214:10, src/main/scala/streamer/StreamerTop.scala:86:37, :87:33
       `endif // RANDOMIZE_REG_INIT
-      if (reset) begin	// <stdin>:6158:10
+      if (reset) begin	// <stdin>:2214:10
         csr_0 = 32'h0;	// src/main/scala/streamer/StreamerTop.scala:81:{20,28}
         csr_1 = 32'h0;	// src/main/scala/streamer/StreamerTop.scala:81:{20,28}
         csr_2 = 32'h0;	// src/main/scala/streamer/StreamerTop.scala:81:{20,28}
@@ -3742,47 +1661,33 @@ module StreamerTop(	// <stdin>:6158:10
         csr_11 = 32'h0;	// src/main/scala/streamer/StreamerTop.scala:81:{20,28}
         csr_12 = 32'h0;	// src/main/scala/streamer/StreamerTop.scala:81:{20,28}
         csr_13 = 32'h0;	// src/main/scala/streamer/StreamerTop.scala:81:{20,28}
-        csr_14 = 32'h0;	// src/main/scala/streamer/StreamerTop.scala:81:{20,28}
-        csr_15 = 32'h0;	// src/main/scala/streamer/StreamerTop.scala:81:{20,28}
-        csr_16 = 32'h0;	// src/main/scala/streamer/StreamerTop.scala:81:{20,28}
-        csr_17 = 32'h0;	// src/main/scala/streamer/StreamerTop.scala:81:{20,28}
-        csr_18 = 32'h0;	// src/main/scala/streamer/StreamerTop.scala:81:{20,28}
-        csr_19 = 32'h0;	// src/main/scala/streamer/StreamerTop.scala:81:{20,28}
-        csr_20 = 32'h0;	// src/main/scala/streamer/StreamerTop.scala:81:{20,28}
-        csr_21 = 32'h0;	// src/main/scala/streamer/StreamerTop.scala:81:{20,28}
         csr_rsp_data_reg = 32'h0;	// src/main/scala/streamer/StreamerTop.scala:81:28, :87:33
       end
     end // initial
-    `ifdef FIRRTL_AFTER_INITIAL	// <stdin>:6158:10
-      `FIRRTL_AFTER_INITIAL	// <stdin>:6158:10
+    `ifdef FIRRTL_AFTER_INITIAL	// <stdin>:2214:10
+      `FIRRTL_AFTER_INITIAL	// <stdin>:2214:10
     `endif // FIRRTL_AFTER_INITIAL
   `endif // not def SYNTHESIS
   Streamer streamer (	// src/main/scala/streamer/StreamerTop.scala:91:24
     .clock                                     (clock),
     .reset                                     (reset),
     .io_csr_valid
-      (_config_valid_T & io_csr_req_bits_addr == 32'h15),	// src/main/scala/chisel3/util/Decoupled.scala:52:35, src/main/scala/streamer/StreamerTop.scala:140:72, :143:{35,60}
+      (_config_valid_T & io_csr_req_bits_addr == 32'hD),	// src/main/scala/chisel3/util/Decoupled.scala:52:35, src/main/scala/streamer/StreamerTop.scala:140:72, :143:{35,60}
     .io_csr_bits_temporalLoopBounds_i_0        (csr_0[7:0]),	// src/main/scala/streamer/StreamerTop.scala:81:20, :149:50
-    .io_csr_bits_temporalLoopBounds_i_1        (csr_1[7:0]),	// src/main/scala/streamer/StreamerTop.scala:81:20, :149:50
-    .io_csr_bits_temporalLoopBounds_i_2        (csr_2[7:0]),	// src/main/scala/streamer/StreamerTop.scala:81:20, :149:50
-    .io_csr_bits_temporalStrides_i_0_0         (csr_3),	// src/main/scala/streamer/StreamerTop.scala:81:20
-    .io_csr_bits_temporalStrides_i_0_1         (csr_4),	// src/main/scala/streamer/StreamerTop.scala:81:20
-    .io_csr_bits_temporalStrides_i_0_2         (csr_5),	// src/main/scala/streamer/StreamerTop.scala:81:20
-    .io_csr_bits_temporalStrides_i_1_0         (csr_6),	// src/main/scala/streamer/StreamerTop.scala:81:20
-    .io_csr_bits_temporalStrides_i_1_1         (csr_7),	// src/main/scala/streamer/StreamerTop.scala:81:20
-    .io_csr_bits_temporalStrides_i_1_2         (csr_8),	// src/main/scala/streamer/StreamerTop.scala:81:20
-    .io_csr_bits_temporalStrides_i_2_0         (csr_9),	// src/main/scala/streamer/StreamerTop.scala:81:20
-    .io_csr_bits_temporalStrides_i_2_1         (csr_10),	// src/main/scala/streamer/StreamerTop.scala:81:20
-    .io_csr_bits_temporalStrides_i_2_2         (csr_11),	// src/main/scala/streamer/StreamerTop.scala:81:20
-    .io_csr_bits_unrollingStrides_i_2_0        (csr_16),	// src/main/scala/streamer/StreamerTop.scala:81:20
-    .io_csr_bits_unrollingStrides_i_2_1        (csr_17),	// src/main/scala/streamer/StreamerTop.scala:81:20
-    .io_csr_bits_unrollingStrides_i_1_0        (csr_14),	// src/main/scala/streamer/StreamerTop.scala:81:20
-    .io_csr_bits_unrollingStrides_i_1_1        (csr_15),	// src/main/scala/streamer/StreamerTop.scala:81:20
-    .io_csr_bits_unrollingStrides_i_0_0        (csr_12),	// src/main/scala/streamer/StreamerTop.scala:81:20
-    .io_csr_bits_unrollingStrides_i_0_1        (csr_13),	// src/main/scala/streamer/StreamerTop.scala:81:20
-    .io_csr_bits_ptr_i_0                       (csr_18),	// src/main/scala/streamer/StreamerTop.scala:81:20
-    .io_csr_bits_ptr_i_1                       (csr_19),	// src/main/scala/streamer/StreamerTop.scala:81:20
-    .io_csr_bits_ptr_i_2                       (csr_20),	// src/main/scala/streamer/StreamerTop.scala:81:20
+    .io_csr_bits_temporalStrides_i_0_0         (csr_1),	// src/main/scala/streamer/StreamerTop.scala:81:20
+    .io_csr_bits_temporalStrides_i_1_0         (csr_2),	// src/main/scala/streamer/StreamerTop.scala:81:20
+    .io_csr_bits_temporalStrides_i_2_0         (csr_3),	// src/main/scala/streamer/StreamerTop.scala:81:20
+    .io_csr_bits_temporalStrides_i_3_0         (csr_4),	// src/main/scala/streamer/StreamerTop.scala:81:20
+    .io_csr_bits_unrollingStrides_i_3_0        (csr_8),	// src/main/scala/streamer/StreamerTop.scala:81:20
+    .io_csr_bits_unrollingStrides_i_2_0        (csr_7),	// src/main/scala/streamer/StreamerTop.scala:81:20
+    .io_csr_bits_unrollingStrides_i_1_0        (csr_6),	// src/main/scala/streamer/StreamerTop.scala:81:20
+    .io_csr_bits_unrollingStrides_i_0_0        (csr_5),	// src/main/scala/streamer/StreamerTop.scala:81:20
+    .io_csr_bits_ptr_i_0                       (csr_9),	// src/main/scala/streamer/StreamerTop.scala:81:20
+    .io_csr_bits_ptr_i_1                       (csr_10),	// src/main/scala/streamer/StreamerTop.scala:81:20
+    .io_csr_bits_ptr_i_2                       (csr_11),	// src/main/scala/streamer/StreamerTop.scala:81:20
+    .io_csr_bits_ptr_i_3                       (csr_12),	// src/main/scala/streamer/StreamerTop.scala:81:20
+    .io_data_streamer2accelerator_data_2_ready
+      (io_data_streamer2accelerator_data_2_ready),
     .io_data_streamer2accelerator_data_1_ready
       (io_data_streamer2accelerator_data_1_ready),
     .io_data_streamer2accelerator_data_0_ready
@@ -3803,41 +1708,6 @@ module StreamerTop(	// <stdin>:6158:10
     .io_data_tcdm_req_10_ready                 (io_data_tcdm_req_10_ready),
     .io_data_tcdm_req_11_ready                 (io_data_tcdm_req_11_ready),
     .io_data_tcdm_req_12_ready                 (io_data_tcdm_req_12_ready),
-    .io_data_tcdm_req_13_ready                 (io_data_tcdm_req_13_ready),
-    .io_data_tcdm_req_14_ready                 (io_data_tcdm_req_14_ready),
-    .io_data_tcdm_req_15_ready                 (io_data_tcdm_req_15_ready),
-    .io_data_tcdm_req_16_ready                 (io_data_tcdm_req_16_ready),
-    .io_data_tcdm_req_17_ready                 (io_data_tcdm_req_17_ready),
-    .io_data_tcdm_req_18_ready                 (io_data_tcdm_req_18_ready),
-    .io_data_tcdm_req_19_ready                 (io_data_tcdm_req_19_ready),
-    .io_data_tcdm_req_20_ready                 (io_data_tcdm_req_20_ready),
-    .io_data_tcdm_req_21_ready                 (io_data_tcdm_req_21_ready),
-    .io_data_tcdm_req_22_ready                 (io_data_tcdm_req_22_ready),
-    .io_data_tcdm_req_23_ready                 (io_data_tcdm_req_23_ready),
-    .io_data_tcdm_req_24_ready                 (io_data_tcdm_req_24_ready),
-    .io_data_tcdm_req_25_ready                 (io_data_tcdm_req_25_ready),
-    .io_data_tcdm_req_26_ready                 (io_data_tcdm_req_26_ready),
-    .io_data_tcdm_req_27_ready                 (io_data_tcdm_req_27_ready),
-    .io_data_tcdm_req_28_ready                 (io_data_tcdm_req_28_ready),
-    .io_data_tcdm_req_29_ready                 (io_data_tcdm_req_29_ready),
-    .io_data_tcdm_req_30_ready                 (io_data_tcdm_req_30_ready),
-    .io_data_tcdm_req_31_ready                 (io_data_tcdm_req_31_ready),
-    .io_data_tcdm_req_32_ready                 (io_data_tcdm_req_32_ready),
-    .io_data_tcdm_req_33_ready                 (io_data_tcdm_req_33_ready),
-    .io_data_tcdm_req_34_ready                 (io_data_tcdm_req_34_ready),
-    .io_data_tcdm_req_35_ready                 (io_data_tcdm_req_35_ready),
-    .io_data_tcdm_req_36_ready                 (io_data_tcdm_req_36_ready),
-    .io_data_tcdm_req_37_ready                 (io_data_tcdm_req_37_ready),
-    .io_data_tcdm_req_38_ready                 (io_data_tcdm_req_38_ready),
-    .io_data_tcdm_req_39_ready                 (io_data_tcdm_req_39_ready),
-    .io_data_tcdm_req_40_ready                 (io_data_tcdm_req_40_ready),
-    .io_data_tcdm_req_41_ready                 (io_data_tcdm_req_41_ready),
-    .io_data_tcdm_req_42_ready                 (io_data_tcdm_req_42_ready),
-    .io_data_tcdm_req_43_ready                 (io_data_tcdm_req_43_ready),
-    .io_data_tcdm_req_44_ready                 (io_data_tcdm_req_44_ready),
-    .io_data_tcdm_req_45_ready                 (io_data_tcdm_req_45_ready),
-    .io_data_tcdm_req_46_ready                 (io_data_tcdm_req_46_ready),
-    .io_data_tcdm_req_47_ready                 (io_data_tcdm_req_47_ready),
     .io_data_tcdm_rsp_0_valid                  (io_data_tcdm_rsp_0_valid),
     .io_data_tcdm_rsp_0_bits_data              (io_data_tcdm_rsp_0_bits_data),
     .io_data_tcdm_rsp_1_valid                  (io_data_tcdm_rsp_1_valid),
@@ -3856,21 +1726,10 @@ module StreamerTop(	// <stdin>:6158:10
     .io_data_tcdm_rsp_7_bits_data              (io_data_tcdm_rsp_7_bits_data),
     .io_data_tcdm_rsp_8_valid                  (io_data_tcdm_rsp_8_valid),
     .io_data_tcdm_rsp_8_bits_data              (io_data_tcdm_rsp_8_bits_data),
-    .io_data_tcdm_rsp_9_valid                  (io_data_tcdm_rsp_9_valid),
-    .io_data_tcdm_rsp_9_bits_data              (io_data_tcdm_rsp_9_bits_data),
-    .io_data_tcdm_rsp_10_valid                 (io_data_tcdm_rsp_10_valid),
-    .io_data_tcdm_rsp_10_bits_data             (io_data_tcdm_rsp_10_bits_data),
-    .io_data_tcdm_rsp_11_valid                 (io_data_tcdm_rsp_11_valid),
-    .io_data_tcdm_rsp_11_bits_data             (io_data_tcdm_rsp_11_bits_data),
-    .io_data_tcdm_rsp_12_valid                 (io_data_tcdm_rsp_12_valid),
-    .io_data_tcdm_rsp_12_bits_data             (io_data_tcdm_rsp_12_bits_data),
-    .io_data_tcdm_rsp_13_valid                 (io_data_tcdm_rsp_13_valid),
-    .io_data_tcdm_rsp_13_bits_data             (io_data_tcdm_rsp_13_bits_data),
-    .io_data_tcdm_rsp_14_valid                 (io_data_tcdm_rsp_14_valid),
-    .io_data_tcdm_rsp_14_bits_data             (io_data_tcdm_rsp_14_bits_data),
-    .io_data_tcdm_rsp_15_valid                 (io_data_tcdm_rsp_15_valid),
-    .io_data_tcdm_rsp_15_bits_data             (io_data_tcdm_rsp_15_bits_data),
     .io_csr_ready                              (_streamer_io_csr_ready),
+    .io_data_streamer2accelerator_data_2_valid
+      (io_data_streamer2accelerator_data_2_valid),
+    .io_data_streamer2accelerator_data_2_bits  (io_data_streamer2accelerator_data_2_bits),
     .io_data_streamer2accelerator_data_1_valid
       (io_data_streamer2accelerator_data_1_valid),
     .io_data_streamer2accelerator_data_1_bits  (io_data_streamer2accelerator_data_1_bits),
@@ -3899,184 +1758,44 @@ module StreamerTop(	// <stdin>:6158:10
     .io_data_tcdm_req_8_bits_addr              (io_data_tcdm_req_8_bits_addr),
     .io_data_tcdm_req_9_valid                  (io_data_tcdm_req_9_valid),
     .io_data_tcdm_req_9_bits_addr              (io_data_tcdm_req_9_bits_addr),
+    .io_data_tcdm_req_9_bits_data              (io_data_tcdm_req_9_bits_data),
     .io_data_tcdm_req_10_valid                 (io_data_tcdm_req_10_valid),
     .io_data_tcdm_req_10_bits_addr             (io_data_tcdm_req_10_bits_addr),
+    .io_data_tcdm_req_10_bits_data             (io_data_tcdm_req_10_bits_data),
     .io_data_tcdm_req_11_valid                 (io_data_tcdm_req_11_valid),
     .io_data_tcdm_req_11_bits_addr             (io_data_tcdm_req_11_bits_addr),
+    .io_data_tcdm_req_11_bits_data             (io_data_tcdm_req_11_bits_data),
     .io_data_tcdm_req_12_valid                 (io_data_tcdm_req_12_valid),
     .io_data_tcdm_req_12_bits_addr             (io_data_tcdm_req_12_bits_addr),
-    .io_data_tcdm_req_13_valid                 (io_data_tcdm_req_13_valid),
-    .io_data_tcdm_req_13_bits_addr             (io_data_tcdm_req_13_bits_addr),
-    .io_data_tcdm_req_14_valid                 (io_data_tcdm_req_14_valid),
-    .io_data_tcdm_req_14_bits_addr             (io_data_tcdm_req_14_bits_addr),
-    .io_data_tcdm_req_15_valid                 (io_data_tcdm_req_15_valid),
-    .io_data_tcdm_req_15_bits_addr             (io_data_tcdm_req_15_bits_addr),
-    .io_data_tcdm_req_16_valid                 (io_data_tcdm_req_16_valid),
-    .io_data_tcdm_req_16_bits_addr             (io_data_tcdm_req_16_bits_addr),
-    .io_data_tcdm_req_16_bits_data             (io_data_tcdm_req_16_bits_data),
-    .io_data_tcdm_req_17_valid                 (io_data_tcdm_req_17_valid),
-    .io_data_tcdm_req_17_bits_addr             (io_data_tcdm_req_17_bits_addr),
-    .io_data_tcdm_req_17_bits_data             (io_data_tcdm_req_17_bits_data),
-    .io_data_tcdm_req_18_valid                 (io_data_tcdm_req_18_valid),
-    .io_data_tcdm_req_18_bits_addr             (io_data_tcdm_req_18_bits_addr),
-    .io_data_tcdm_req_18_bits_data             (io_data_tcdm_req_18_bits_data),
-    .io_data_tcdm_req_19_valid                 (io_data_tcdm_req_19_valid),
-    .io_data_tcdm_req_19_bits_addr             (io_data_tcdm_req_19_bits_addr),
-    .io_data_tcdm_req_19_bits_data             (io_data_tcdm_req_19_bits_data),
-    .io_data_tcdm_req_20_valid                 (io_data_tcdm_req_20_valid),
-    .io_data_tcdm_req_20_bits_addr             (io_data_tcdm_req_20_bits_addr),
-    .io_data_tcdm_req_20_bits_data             (io_data_tcdm_req_20_bits_data),
-    .io_data_tcdm_req_21_valid                 (io_data_tcdm_req_21_valid),
-    .io_data_tcdm_req_21_bits_addr             (io_data_tcdm_req_21_bits_addr),
-    .io_data_tcdm_req_21_bits_data             (io_data_tcdm_req_21_bits_data),
-    .io_data_tcdm_req_22_valid                 (io_data_tcdm_req_22_valid),
-    .io_data_tcdm_req_22_bits_addr             (io_data_tcdm_req_22_bits_addr),
-    .io_data_tcdm_req_22_bits_data             (io_data_tcdm_req_22_bits_data),
-    .io_data_tcdm_req_23_valid                 (io_data_tcdm_req_23_valid),
-    .io_data_tcdm_req_23_bits_addr             (io_data_tcdm_req_23_bits_addr),
-    .io_data_tcdm_req_23_bits_data             (io_data_tcdm_req_23_bits_data),
-    .io_data_tcdm_req_24_valid                 (io_data_tcdm_req_24_valid),
-    .io_data_tcdm_req_24_bits_addr             (io_data_tcdm_req_24_bits_addr),
-    .io_data_tcdm_req_24_bits_data             (io_data_tcdm_req_24_bits_data),
-    .io_data_tcdm_req_25_valid                 (io_data_tcdm_req_25_valid),
-    .io_data_tcdm_req_25_bits_addr             (io_data_tcdm_req_25_bits_addr),
-    .io_data_tcdm_req_25_bits_data             (io_data_tcdm_req_25_bits_data),
-    .io_data_tcdm_req_26_valid                 (io_data_tcdm_req_26_valid),
-    .io_data_tcdm_req_26_bits_addr             (io_data_tcdm_req_26_bits_addr),
-    .io_data_tcdm_req_26_bits_data             (io_data_tcdm_req_26_bits_data),
-    .io_data_tcdm_req_27_valid                 (io_data_tcdm_req_27_valid),
-    .io_data_tcdm_req_27_bits_addr             (io_data_tcdm_req_27_bits_addr),
-    .io_data_tcdm_req_27_bits_data             (io_data_tcdm_req_27_bits_data),
-    .io_data_tcdm_req_28_valid                 (io_data_tcdm_req_28_valid),
-    .io_data_tcdm_req_28_bits_addr             (io_data_tcdm_req_28_bits_addr),
-    .io_data_tcdm_req_28_bits_data             (io_data_tcdm_req_28_bits_data),
-    .io_data_tcdm_req_29_valid                 (io_data_tcdm_req_29_valid),
-    .io_data_tcdm_req_29_bits_addr             (io_data_tcdm_req_29_bits_addr),
-    .io_data_tcdm_req_29_bits_data             (io_data_tcdm_req_29_bits_data),
-    .io_data_tcdm_req_30_valid                 (io_data_tcdm_req_30_valid),
-    .io_data_tcdm_req_30_bits_addr             (io_data_tcdm_req_30_bits_addr),
-    .io_data_tcdm_req_30_bits_data             (io_data_tcdm_req_30_bits_data),
-    .io_data_tcdm_req_31_valid                 (io_data_tcdm_req_31_valid),
-    .io_data_tcdm_req_31_bits_addr             (io_data_tcdm_req_31_bits_addr),
-    .io_data_tcdm_req_31_bits_data             (io_data_tcdm_req_31_bits_data),
-    .io_data_tcdm_req_32_valid                 (io_data_tcdm_req_32_valid),
-    .io_data_tcdm_req_32_bits_addr             (io_data_tcdm_req_32_bits_addr),
-    .io_data_tcdm_req_32_bits_data             (io_data_tcdm_req_32_bits_data),
-    .io_data_tcdm_req_33_valid                 (io_data_tcdm_req_33_valid),
-    .io_data_tcdm_req_33_bits_addr             (io_data_tcdm_req_33_bits_addr),
-    .io_data_tcdm_req_33_bits_data             (io_data_tcdm_req_33_bits_data),
-    .io_data_tcdm_req_34_valid                 (io_data_tcdm_req_34_valid),
-    .io_data_tcdm_req_34_bits_addr             (io_data_tcdm_req_34_bits_addr),
-    .io_data_tcdm_req_34_bits_data             (io_data_tcdm_req_34_bits_data),
-    .io_data_tcdm_req_35_valid                 (io_data_tcdm_req_35_valid),
-    .io_data_tcdm_req_35_bits_addr             (io_data_tcdm_req_35_bits_addr),
-    .io_data_tcdm_req_35_bits_data             (io_data_tcdm_req_35_bits_data),
-    .io_data_tcdm_req_36_valid                 (io_data_tcdm_req_36_valid),
-    .io_data_tcdm_req_36_bits_addr             (io_data_tcdm_req_36_bits_addr),
-    .io_data_tcdm_req_36_bits_data             (io_data_tcdm_req_36_bits_data),
-    .io_data_tcdm_req_37_valid                 (io_data_tcdm_req_37_valid),
-    .io_data_tcdm_req_37_bits_addr             (io_data_tcdm_req_37_bits_addr),
-    .io_data_tcdm_req_37_bits_data             (io_data_tcdm_req_37_bits_data),
-    .io_data_tcdm_req_38_valid                 (io_data_tcdm_req_38_valid),
-    .io_data_tcdm_req_38_bits_addr             (io_data_tcdm_req_38_bits_addr),
-    .io_data_tcdm_req_38_bits_data             (io_data_tcdm_req_38_bits_data),
-    .io_data_tcdm_req_39_valid                 (io_data_tcdm_req_39_valid),
-    .io_data_tcdm_req_39_bits_addr             (io_data_tcdm_req_39_bits_addr),
-    .io_data_tcdm_req_39_bits_data             (io_data_tcdm_req_39_bits_data),
-    .io_data_tcdm_req_40_valid                 (io_data_tcdm_req_40_valid),
-    .io_data_tcdm_req_40_bits_addr             (io_data_tcdm_req_40_bits_addr),
-    .io_data_tcdm_req_40_bits_data             (io_data_tcdm_req_40_bits_data),
-    .io_data_tcdm_req_41_valid                 (io_data_tcdm_req_41_valid),
-    .io_data_tcdm_req_41_bits_addr             (io_data_tcdm_req_41_bits_addr),
-    .io_data_tcdm_req_41_bits_data             (io_data_tcdm_req_41_bits_data),
-    .io_data_tcdm_req_42_valid                 (io_data_tcdm_req_42_valid),
-    .io_data_tcdm_req_42_bits_addr             (io_data_tcdm_req_42_bits_addr),
-    .io_data_tcdm_req_42_bits_data             (io_data_tcdm_req_42_bits_data),
-    .io_data_tcdm_req_43_valid                 (io_data_tcdm_req_43_valid),
-    .io_data_tcdm_req_43_bits_addr             (io_data_tcdm_req_43_bits_addr),
-    .io_data_tcdm_req_43_bits_data             (io_data_tcdm_req_43_bits_data),
-    .io_data_tcdm_req_44_valid                 (io_data_tcdm_req_44_valid),
-    .io_data_tcdm_req_44_bits_addr             (io_data_tcdm_req_44_bits_addr),
-    .io_data_tcdm_req_44_bits_data             (io_data_tcdm_req_44_bits_data),
-    .io_data_tcdm_req_45_valid                 (io_data_tcdm_req_45_valid),
-    .io_data_tcdm_req_45_bits_addr             (io_data_tcdm_req_45_bits_addr),
-    .io_data_tcdm_req_45_bits_data             (io_data_tcdm_req_45_bits_data),
-    .io_data_tcdm_req_46_valid                 (io_data_tcdm_req_46_valid),
-    .io_data_tcdm_req_46_bits_addr             (io_data_tcdm_req_46_bits_addr),
-    .io_data_tcdm_req_46_bits_data             (io_data_tcdm_req_46_bits_data),
-    .io_data_tcdm_req_47_valid                 (io_data_tcdm_req_47_valid),
-    .io_data_tcdm_req_47_bits_addr             (io_data_tcdm_req_47_bits_addr),
-    .io_data_tcdm_req_47_bits_data             (io_data_tcdm_req_47_bits_data)
+    .io_data_tcdm_req_12_bits_data             (io_data_tcdm_req_12_bits_data)
   );
-  assign io_csr_req_ready = _io_csr_req_ready_output;	// <stdin>:6158:10, src/main/scala/streamer/StreamerTop.scala:140:93
-  assign io_csr_rsp_valid = _io_csr_rsp_valid_output;	// <stdin>:6158:10, src/main/scala/streamer/StreamerTop.scala:124:18, :126:22, :127:35
+  assign io_csr_req_ready = _io_csr_req_ready_output;	// <stdin>:2214:10, src/main/scala/streamer/StreamerTop.scala:140:93
+  assign io_csr_rsp_valid = _io_csr_rsp_valid_output;	// <stdin>:2214:10, src/main/scala/streamer/StreamerTop.scala:124:18, :126:22, :127:36
   assign io_csr_rsp_bits_data =
     read_csr
-      ? _GEN[io_csr_req_bits_addr[4:0]]
-      : keep_sending_csr_rsp ? csr_rsp_data_reg : 32'h0;	// <stdin>:6158:10, :6209:38, src/main/scala/streamer/StreamerTop.scala:81:28, :83:34, :86:37, :87:33, :124:18, :125:26, :127:35, :128:26, :132:26
-  assign io_data_tcdm_req_0_bits_write = 1'h0;	// <stdin>:6158:10, src/main/scala/streamer/StreamerTop.scala:91:24
-  assign io_data_tcdm_req_0_bits_data = 64'h0;	// <stdin>:6158:10, src/main/scala/streamer/StreamerTop.scala:91:24
-  assign io_data_tcdm_req_1_bits_write = 1'h0;	// <stdin>:6158:10, src/main/scala/streamer/StreamerTop.scala:91:24
-  assign io_data_tcdm_req_1_bits_data = 64'h0;	// <stdin>:6158:10, src/main/scala/streamer/StreamerTop.scala:91:24
-  assign io_data_tcdm_req_2_bits_write = 1'h0;	// <stdin>:6158:10, src/main/scala/streamer/StreamerTop.scala:91:24
-  assign io_data_tcdm_req_2_bits_data = 64'h0;	// <stdin>:6158:10, src/main/scala/streamer/StreamerTop.scala:91:24
-  assign io_data_tcdm_req_3_bits_write = 1'h0;	// <stdin>:6158:10, src/main/scala/streamer/StreamerTop.scala:91:24
-  assign io_data_tcdm_req_3_bits_data = 64'h0;	// <stdin>:6158:10, src/main/scala/streamer/StreamerTop.scala:91:24
-  assign io_data_tcdm_req_4_bits_write = 1'h0;	// <stdin>:6158:10, src/main/scala/streamer/StreamerTop.scala:91:24
-  assign io_data_tcdm_req_4_bits_data = 64'h0;	// <stdin>:6158:10, src/main/scala/streamer/StreamerTop.scala:91:24
-  assign io_data_tcdm_req_5_bits_write = 1'h0;	// <stdin>:6158:10, src/main/scala/streamer/StreamerTop.scala:91:24
-  assign io_data_tcdm_req_5_bits_data = 64'h0;	// <stdin>:6158:10, src/main/scala/streamer/StreamerTop.scala:91:24
-  assign io_data_tcdm_req_6_bits_write = 1'h0;	// <stdin>:6158:10, src/main/scala/streamer/StreamerTop.scala:91:24
-  assign io_data_tcdm_req_6_bits_data = 64'h0;	// <stdin>:6158:10, src/main/scala/streamer/StreamerTop.scala:91:24
-  assign io_data_tcdm_req_7_bits_write = 1'h0;	// <stdin>:6158:10, src/main/scala/streamer/StreamerTop.scala:91:24
-  assign io_data_tcdm_req_7_bits_data = 64'h0;	// <stdin>:6158:10, src/main/scala/streamer/StreamerTop.scala:91:24
-  assign io_data_tcdm_req_8_bits_write = 1'h0;	// <stdin>:6158:10, src/main/scala/streamer/StreamerTop.scala:91:24
-  assign io_data_tcdm_req_8_bits_data = 64'h0;	// <stdin>:6158:10, src/main/scala/streamer/StreamerTop.scala:91:24
-  assign io_data_tcdm_req_9_bits_write = 1'h0;	// <stdin>:6158:10, src/main/scala/streamer/StreamerTop.scala:91:24
-  assign io_data_tcdm_req_9_bits_data = 64'h0;	// <stdin>:6158:10, src/main/scala/streamer/StreamerTop.scala:91:24
-  assign io_data_tcdm_req_10_bits_write = 1'h0;	// <stdin>:6158:10, src/main/scala/streamer/StreamerTop.scala:91:24
-  assign io_data_tcdm_req_10_bits_data = 64'h0;	// <stdin>:6158:10, src/main/scala/streamer/StreamerTop.scala:91:24
-  assign io_data_tcdm_req_11_bits_write = 1'h0;	// <stdin>:6158:10, src/main/scala/streamer/StreamerTop.scala:91:24
-  assign io_data_tcdm_req_11_bits_data = 64'h0;	// <stdin>:6158:10, src/main/scala/streamer/StreamerTop.scala:91:24
-  assign io_data_tcdm_req_12_bits_write = 1'h0;	// <stdin>:6158:10, src/main/scala/streamer/StreamerTop.scala:91:24
-  assign io_data_tcdm_req_12_bits_data = 64'h0;	// <stdin>:6158:10, src/main/scala/streamer/StreamerTop.scala:91:24
-  assign io_data_tcdm_req_13_bits_write = 1'h0;	// <stdin>:6158:10, src/main/scala/streamer/StreamerTop.scala:91:24
-  assign io_data_tcdm_req_13_bits_data = 64'h0;	// <stdin>:6158:10, src/main/scala/streamer/StreamerTop.scala:91:24
-  assign io_data_tcdm_req_14_bits_write = 1'h0;	// <stdin>:6158:10, src/main/scala/streamer/StreamerTop.scala:91:24
-  assign io_data_tcdm_req_14_bits_data = 64'h0;	// <stdin>:6158:10, src/main/scala/streamer/StreamerTop.scala:91:24
-  assign io_data_tcdm_req_15_bits_write = 1'h0;	// <stdin>:6158:10, src/main/scala/streamer/StreamerTop.scala:91:24
-  assign io_data_tcdm_req_15_bits_data = 64'h0;	// <stdin>:6158:10, src/main/scala/streamer/StreamerTop.scala:91:24
-  assign io_data_tcdm_req_16_bits_write = 1'h1;	// <stdin>:6158:10, src/main/scala/streamer/StreamerTop.scala:91:24
-  assign io_data_tcdm_req_17_bits_write = 1'h1;	// <stdin>:6158:10, src/main/scala/streamer/StreamerTop.scala:91:24
-  assign io_data_tcdm_req_18_bits_write = 1'h1;	// <stdin>:6158:10, src/main/scala/streamer/StreamerTop.scala:91:24
-  assign io_data_tcdm_req_19_bits_write = 1'h1;	// <stdin>:6158:10, src/main/scala/streamer/StreamerTop.scala:91:24
-  assign io_data_tcdm_req_20_bits_write = 1'h1;	// <stdin>:6158:10, src/main/scala/streamer/StreamerTop.scala:91:24
-  assign io_data_tcdm_req_21_bits_write = 1'h1;	// <stdin>:6158:10, src/main/scala/streamer/StreamerTop.scala:91:24
-  assign io_data_tcdm_req_22_bits_write = 1'h1;	// <stdin>:6158:10, src/main/scala/streamer/StreamerTop.scala:91:24
-  assign io_data_tcdm_req_23_bits_write = 1'h1;	// <stdin>:6158:10, src/main/scala/streamer/StreamerTop.scala:91:24
-  assign io_data_tcdm_req_24_bits_write = 1'h1;	// <stdin>:6158:10, src/main/scala/streamer/StreamerTop.scala:91:24
-  assign io_data_tcdm_req_25_bits_write = 1'h1;	// <stdin>:6158:10, src/main/scala/streamer/StreamerTop.scala:91:24
-  assign io_data_tcdm_req_26_bits_write = 1'h1;	// <stdin>:6158:10, src/main/scala/streamer/StreamerTop.scala:91:24
-  assign io_data_tcdm_req_27_bits_write = 1'h1;	// <stdin>:6158:10, src/main/scala/streamer/StreamerTop.scala:91:24
-  assign io_data_tcdm_req_28_bits_write = 1'h1;	// <stdin>:6158:10, src/main/scala/streamer/StreamerTop.scala:91:24
-  assign io_data_tcdm_req_29_bits_write = 1'h1;	// <stdin>:6158:10, src/main/scala/streamer/StreamerTop.scala:91:24
-  assign io_data_tcdm_req_30_bits_write = 1'h1;	// <stdin>:6158:10, src/main/scala/streamer/StreamerTop.scala:91:24
-  assign io_data_tcdm_req_31_bits_write = 1'h1;	// <stdin>:6158:10, src/main/scala/streamer/StreamerTop.scala:91:24
-  assign io_data_tcdm_req_32_bits_write = 1'h1;	// <stdin>:6158:10, src/main/scala/streamer/StreamerTop.scala:91:24
-  assign io_data_tcdm_req_33_bits_write = 1'h1;	// <stdin>:6158:10, src/main/scala/streamer/StreamerTop.scala:91:24
-  assign io_data_tcdm_req_34_bits_write = 1'h1;	// <stdin>:6158:10, src/main/scala/streamer/StreamerTop.scala:91:24
-  assign io_data_tcdm_req_35_bits_write = 1'h1;	// <stdin>:6158:10, src/main/scala/streamer/StreamerTop.scala:91:24
-  assign io_data_tcdm_req_36_bits_write = 1'h1;	// <stdin>:6158:10, src/main/scala/streamer/StreamerTop.scala:91:24
-  assign io_data_tcdm_req_37_bits_write = 1'h1;	// <stdin>:6158:10, src/main/scala/streamer/StreamerTop.scala:91:24
-  assign io_data_tcdm_req_38_bits_write = 1'h1;	// <stdin>:6158:10, src/main/scala/streamer/StreamerTop.scala:91:24
-  assign io_data_tcdm_req_39_bits_write = 1'h1;	// <stdin>:6158:10, src/main/scala/streamer/StreamerTop.scala:91:24
-  assign io_data_tcdm_req_40_bits_write = 1'h1;	// <stdin>:6158:10, src/main/scala/streamer/StreamerTop.scala:91:24
-  assign io_data_tcdm_req_41_bits_write = 1'h1;	// <stdin>:6158:10, src/main/scala/streamer/StreamerTop.scala:91:24
-  assign io_data_tcdm_req_42_bits_write = 1'h1;	// <stdin>:6158:10, src/main/scala/streamer/StreamerTop.scala:91:24
-  assign io_data_tcdm_req_43_bits_write = 1'h1;	// <stdin>:6158:10, src/main/scala/streamer/StreamerTop.scala:91:24
-  assign io_data_tcdm_req_44_bits_write = 1'h1;	// <stdin>:6158:10, src/main/scala/streamer/StreamerTop.scala:91:24
-  assign io_data_tcdm_req_45_bits_write = 1'h1;	// <stdin>:6158:10, src/main/scala/streamer/StreamerTop.scala:91:24
-  assign io_data_tcdm_req_46_bits_write = 1'h1;	// <stdin>:6158:10, src/main/scala/streamer/StreamerTop.scala:91:24
-  assign io_data_tcdm_req_47_bits_write = 1'h1;	// <stdin>:6158:10, src/main/scala/streamer/StreamerTop.scala:91:24
+      ? _GEN[io_csr_req_bits_addr[3:0]]
+      : keep_sending_csr_rsp ? csr_rsp_data_reg : 32'h0;	// <stdin>:2214:10, :2257:38, src/main/scala/streamer/StreamerTop.scala:81:28, :83:34, :86:37, :87:33, :124:18, :125:26, :127:36, :128:26, :132:26
+  assign io_data_tcdm_req_0_bits_write = 1'h0;	// <stdin>:2214:10, src/main/scala/streamer/StreamerTop.scala:91:24
+  assign io_data_tcdm_req_0_bits_data = 64'h0;	// <stdin>:2214:10, src/main/scala/streamer/StreamerTop.scala:91:24
+  assign io_data_tcdm_req_1_bits_write = 1'h0;	// <stdin>:2214:10, src/main/scala/streamer/StreamerTop.scala:91:24
+  assign io_data_tcdm_req_1_bits_data = 64'h0;	// <stdin>:2214:10, src/main/scala/streamer/StreamerTop.scala:91:24
+  assign io_data_tcdm_req_2_bits_write = 1'h0;	// <stdin>:2214:10, src/main/scala/streamer/StreamerTop.scala:91:24
+  assign io_data_tcdm_req_2_bits_data = 64'h0;	// <stdin>:2214:10, src/main/scala/streamer/StreamerTop.scala:91:24
+  assign io_data_tcdm_req_3_bits_write = 1'h0;	// <stdin>:2214:10, src/main/scala/streamer/StreamerTop.scala:91:24
+  assign io_data_tcdm_req_3_bits_data = 64'h0;	// <stdin>:2214:10, src/main/scala/streamer/StreamerTop.scala:91:24
+  assign io_data_tcdm_req_4_bits_write = 1'h0;	// <stdin>:2214:10, src/main/scala/streamer/StreamerTop.scala:91:24
+  assign io_data_tcdm_req_4_bits_data = 64'h0;	// <stdin>:2214:10, src/main/scala/streamer/StreamerTop.scala:91:24
+  assign io_data_tcdm_req_5_bits_write = 1'h0;	// <stdin>:2214:10, src/main/scala/streamer/StreamerTop.scala:91:24
+  assign io_data_tcdm_req_5_bits_data = 64'h0;	// <stdin>:2214:10, src/main/scala/streamer/StreamerTop.scala:91:24
+  assign io_data_tcdm_req_6_bits_write = 1'h0;	// <stdin>:2214:10, src/main/scala/streamer/StreamerTop.scala:91:24
+  assign io_data_tcdm_req_6_bits_data = 64'h0;	// <stdin>:2214:10, src/main/scala/streamer/StreamerTop.scala:91:24
+  assign io_data_tcdm_req_7_bits_write = 1'h0;	// <stdin>:2214:10, src/main/scala/streamer/StreamerTop.scala:91:24
+  assign io_data_tcdm_req_7_bits_data = 64'h0;	// <stdin>:2214:10, src/main/scala/streamer/StreamerTop.scala:91:24
+  assign io_data_tcdm_req_8_bits_write = 1'h0;	// <stdin>:2214:10, src/main/scala/streamer/StreamerTop.scala:91:24
+  assign io_data_tcdm_req_8_bits_data = 64'h0;	// <stdin>:2214:10, src/main/scala/streamer/StreamerTop.scala:91:24
+  assign io_data_tcdm_req_9_bits_write = 1'h1;	// <stdin>:2214:10, src/main/scala/streamer/StreamerTop.scala:91:24
+  assign io_data_tcdm_req_10_bits_write = 1'h1;	// <stdin>:2214:10, src/main/scala/streamer/StreamerTop.scala:91:24
+  assign io_data_tcdm_req_11_bits_write = 1'h1;	// <stdin>:2214:10, src/main/scala/streamer/StreamerTop.scala:91:24
+  assign io_data_tcdm_req_12_bits_write = 1'h1;	// <stdin>:2214:10, src/main/scala/streamer/StreamerTop.scala:91:24
 endmodule
 

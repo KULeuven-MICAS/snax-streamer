@@ -6,84 +6,82 @@ import chisel3.util._
 // input and output declaration for spatial unrolling address generation unit
 // it's a submodule of a data mover
 class SpatialAddrGenUnitIO(
-    unrollingDim: Int = SpatialAddrGenUnitTestParameters.unrollingDim,
-    unrollingFactor: Seq[Int] =
-      SpatialAddrGenUnitTestParameters.unrollingFactor,
+    loopDim: Int = SpatialAddrGenUnitTestParameters.loopDim,
+    loopBounds: Seq[Int] = SpatialAddrGenUnitTestParameters.loopBounds,
     addrWidth: Int = SpatialAddrGenUnitTestParameters.addrWidth
 ) extends Bundle {
 
   // configurations for unrolling address generation
   val valid_i = Input(Bool())
-  val start_ptr_i = Input(UInt(addrWidth.W))
-  val unrollingStrides_i = Input(Vec(unrollingDim, UInt(addrWidth.W)))
+  val ptr_i = Input(UInt(addrWidth.W))
+  val strides_i = Input(Vec(loopDim, UInt(addrWidth.W)))
 
-  // generated output address
-  val unrolling_addr_o = Output(
-    Vec(unrollingFactor.reduce(_ * _), UInt(addrWidth.W))
+  // generated output addresses
+  val ptr_o = Output(
+    Vec(loopBounds.reduce(_ * _), UInt(addrWidth.W))
   )
 }
 
 // unrolling adress generation unit module
 class SpatialAddrGenUnit(
-    unrollingDim: Int = SpatialAddrGenUnitTestParameters.unrollingDim,
-    unrollingFactor: Seq[Int] =
-      SpatialAddrGenUnitTestParameters.unrollingFactor,
+    loopDim: Int = SpatialAddrGenUnitTestParameters.loopDim,
+    loopBounds: Seq[Int] =
+      SpatialAddrGenUnitTestParameters.loopBounds,
     addrWidth: Int = SpatialAddrGenUnitTestParameters.addrWidth
-) extends Module
-    with RequireAsyncReset {
+) extends Module with RequireAsyncReset {
 
   val io = IO(
-    new SpatialAddrGenUnitIO(unrollingDim, unrollingFactor, addrWidth)
+    new SpatialAddrGenUnitIO(loopDim, loopBounds, addrWidth)
   )
 
   // a scala function to generate the nested indices of the unrolled loop counter for generating unrolling addresses
   // for instance:
-  // genUnrollingLoopIndices(2,Seq(8,8),0) returns (0,0)
-  // genUnrollingLoopIndices(2,Seq(8,8),1) returns (1,0)
-  // genUnrollingLoopIndices(2,Seq(8,8),10) returns (2,1)
-  def genUnrollingLoopIndices(
-      unrollingDim: Int,
-      unrollingFactor: Seq[Int],
+  // genSpatialLoopIndeces(2,Seq(8,8),0) returns (0,0)
+  // genSpatialLoopIndeces(2,Seq(8,8),1) returns (1,0)
+  // genSpatialLoopIndeces(2,Seq(8,8),10) returns (2,1)
+  def genSpatialLoopIndeces(
+      loopDim: Int,
+      loopBounds: Seq[Int],
       i: Int
   ): Seq[Int] = {
-    val indices = (0 until unrollingDim).map(j =>
-      (i / (1 +: unrollingFactor)
-        .dropRight(unrollingDim - j)
-        .product) % unrollingFactor(j)
+    val indices = (0 until loopDim).map(j =>
+      (i / (1 +: loopBounds)
+        .dropRight(loopDim - j)
+        .product) % loopBounds(j)
     )
     indices
   }
 
-  // a function for generating all the unrolled addresses
-  def genUnrollingAddr(
+  // a function for generating all the spatial addresses
+  def genSpatialAddr(
       valid: Bool,
-      unrollingDim: Int,
-      unrollingFactor: Seq[Int],
-      unrollingStrides: Vec[UInt],
+      loopDim: Int,
+      loopBounds: Seq[Int],
+      strides: Vec[UInt],
       start_ptr: UInt
   ): Vec[UInt] = {
 
     // a generation time requirement
     require(
-      unrollingFactor.length == unrollingDim && unrollingStrides.length == unrollingDim,
-      "unrollingFactor and unrollingStrides must have the same length which is unrollingDim"
+      loopBounds.length == loopDim && strides.length == loopDim,
+      "loopBounds and strides must have the same length which is loopDim"
     )
 
     val unrolling_addr = WireInit(
-      VecInit(Seq.fill(unrollingFactor.reduce(_ * _))(0.U(addrWidth.W)))
+      VecInit(Seq.fill(loopBounds.reduce(_ * _))(0.U(addrWidth.W)))
     )
 
     when(valid) {
       // address generation for each unrolling data element
       // will ignore some later to be aligned with bank width
-      for (i <- 0 until unrollingFactor.product) {
+      for (i <- 0 until loopBounds.product) {
 
         // indices for each nested unrolling loop
-        val indices = genUnrollingLoopIndices(unrollingDim, unrollingFactor, i)
+        val indices = genSpatialLoopIndeces(loopDim, loopBounds, i)
 
         // address generation with affine mapping definition
-        unrolling_addr(i) := ((0 until unrollingDim)
-          .map(j => indices(j).U * unrollingStrides(j)))
+        unrolling_addr(i) := ((0 until loopDim)
+          .map(j => indices(j).U * strides(j)))
           .reduce(_ + _) +& start_ptr
       }
     }
@@ -91,14 +89,14 @@ class SpatialAddrGenUnit(
     unrolling_addr
   }
 
-  chisel3.dontTouch(io.unrolling_addr_o)
+  chisel3.dontTouch(io.ptr_o)
 
-  io.unrolling_addr_o := genUnrollingAddr(
+  io.ptr_o := genSpatialAddr(
     io.valid_i,
-    unrollingDim,
-    unrollingFactor,
-    io.unrollingStrides_i,
-    io.start_ptr_i
+    loopDim,
+    loopBounds,
+    io.strides_i,
+    io.ptr_i
   )
 
 }

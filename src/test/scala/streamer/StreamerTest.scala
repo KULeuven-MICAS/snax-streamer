@@ -21,12 +21,12 @@ class StreamerTest
         // give valid transaction config
         dut.io.csr.valid.poke(1.B)
         for (i <- 0 until StreamerTestConstant.temporalLoopDim) {
-          dut.io.csr.bits.temporalLoopBounds_i(i).poke(2)
+          dut.io.csr.bits.loopBounds_i(i).poke(2)
         }
         // give the proper unrolling strides so that is a aligned in one TCDM bank
-        dut.io.csr.bits.unrollingStrides_i(0)(0).poke(1)
-        dut.io.csr.bits.unrollingStrides_i(1)(0).poke(1)
-        dut.io.csr.bits.unrollingStrides_i(2)(0).poke(1)
+        dut.io.csr.bits.spatialStrides_csr_i(0)(0).poke(1)
+        dut.io.csr.bits.spatialStrides_csr_i(1)(0).poke(1)
+        dut.io.csr.bits.spatialStrides_csr_i(2)(0).poke(1)
         dut.clock.step(1)
         dut.io.csr.valid.poke(0.B)
 

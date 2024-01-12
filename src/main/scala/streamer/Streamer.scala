@@ -35,13 +35,13 @@ class StreamerCsrIO(
 ) extends Bundle {
 
   // configurations interface for a new data operation
-  val temporalLoopBounds_i =
+  val loopBounds_i =
     Vec(temporalLoopDim, UInt(temporalLoopBoundWidth.W))
 
-  val temporalStrides_i =
+  val temporalStrides_csr_i =
     Vec(dataMoverNum, Vec(temporalLoopDim, UInt(addrWidth.W)))
 
-  val unrollingStrides_i =
+  val spatialStrides_csr_i =
     MixedVec((0 until unrollingDim.length).map { i =>
       Vec(unrollingDim(i), UInt(addrWidth.W))
     })
@@ -241,7 +241,7 @@ class Streamer(
   for (i <- 0 until dataMoverNum) {
     when(config_valid) {
       datamover_states(i) := 1.B
-    }.elsewhen(address_gen_unit(i).io.data_move_done) {
+    }.elsewhen(address_gen_unit(i).io.done) {
       datamover_states(i) := 0.B
     }
   }
@@ -258,28 +258,28 @@ class Streamer(
     if (stationarity(i) == 1) {
       for (j <- 0 until temporalLoopDim) {
         if (j == 0) {
-          address_gen_unit(i).io.temporalLoopBounds_i.bits(j) := 1.U
+          address_gen_unit(i).io.loopBounds_i.bits(j) := 1.U
         } else {
-          address_gen_unit(i).io.temporalLoopBounds_i
-            .bits(j) := io.csr.bits.temporalLoopBounds_i(j)
+          address_gen_unit(i).io.loopBounds_i
+            .bits(j) := io.csr.bits.loopBounds_i(j)
         }
       }
     } else {
       address_gen_unit(
         i
-      ).io.temporalLoopBounds_i.bits := io.csr.bits.temporalLoopBounds_i
+      ).io.loopBounds_i.bits := io.csr.bits.loopBounds_i
     }
     address_gen_unit(
       i
-    ).io.temporalLoopBounds_i.valid := io.csr.valid
+    ).io.loopBounds_i.valid := io.csr.valid
     address_gen_unit(
       i
-    ).io.temporalStrides_i.bits := io.csr.bits.temporalStrides_i(
+    ).io.strides_i.bits := io.csr.bits.temporalStrides_csr_i(
       i
     )
     address_gen_unit(
       i
-    ).io.temporalStrides_i.valid := io.csr.valid
+    ).io.strides_i.valid := io.csr.valid
     address_gen_unit(i).io.ptr_i.bits := io.csr.bits.ptr_i(i)
     address_gen_unit(i).io.ptr_i.valid := io.csr.valid
   }
@@ -287,18 +287,18 @@ class Streamer(
   // data reader and data writer <> streamer IO
   for (i <- 0 until dataMoverNum) {
     if (i < dataReaderNum) {
-      data_reader(i).io.unrollingStrides_csr_i.bits := io.csr.bits
-        .unrollingStrides_i(i)
+      data_reader(i).io.spatialStrides_csr_i.bits := io.csr.bits
+        .spatialStrides_csr_i(i)
       data_reader(
         i
-      ).io.unrollingStrides_csr_i.valid := io.csr.valid
+      ).io.spatialStrides_csr_i.valid := io.csr.valid
     } else {
       data_writer(
         i - dataReaderNum
-      ).io.unrollingStrides_csr_i.bits := io.csr.bits.unrollingStrides_i(i)
+      ).io.spatialStrides_csr_i.bits := io.csr.bits.spatialStrides_csr_i(i)
       data_writer(
         i - dataReaderNum
-      ).io.unrollingStrides_csr_i.valid := io.csr.valid
+      ).io.spatialStrides_csr_i.valid := io.csr.valid
     }
   }
 
@@ -306,14 +306,14 @@ class Streamer(
   for (i <- 0 until dataMoverNum) {
     if (i < dataReaderNum) {
       address_gen_unit(i).io.ptr_o <> data_reader(i).io.ptr_agu_i
-      address_gen_unit(i).io.data_move_done <> data_reader(i).io.data_move_done
+      address_gen_unit(i).io.done <> data_reader(i).io.done
     } else {
       address_gen_unit(i).io.ptr_o <> data_writer(
         i - dataReaderNum
       ).io.ptr_agu_i
-      address_gen_unit(i).io.data_move_done <> data_writer(
+      address_gen_unit(i).io.done <> data_writer(
         i - dataReaderNum
-      ).io.data_move_done
+      ).io.done
     }
   }
 

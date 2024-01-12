@@ -19,35 +19,35 @@ class TemporalAddrGenUnitTest
     ) { dut =>
       dut.clock.step(5)
       // random config generation
-      val temporalLoopBounds =
-        Seq.fill(TemporalAddrGenUnitTestParameters.temporalLoopDim)(
+      val loopBounds =
+        Seq.fill(TemporalAddrGenUnitTestParameters.loopDim)(
           (
             4.U
           )
         )
-      val temporalStrides =
-        Seq.fill(TemporalAddrGenUnitTestParameters.temporalLoopDim)(
+      val strides =
+        Seq.fill(TemporalAddrGenUnitTestParameters.loopDim)(
           (
             scala.util.Random.nextInt(10).U
           )
         )
 
       // sending these configruation to the dut
-      for (i <- 0 until TemporalAddrGenUnitTestParameters.temporalLoopDim) {
-        val lb = temporalLoopBounds(i)
-        val ts = temporalStrides(i)
-        dut.io.temporalLoopBounds_i.bits(i).poke(lb)
-        dut.io.temporalStrides_i.bits(i).poke(ts)
+      for (i <- 0 until TemporalAddrGenUnitTestParameters.loopDim) {
+        val lb = loopBounds(i)
+        val ts = strides(i)
+        dut.io.loopBounds_i.bits(i).poke(lb)
+        dut.io.strides_i.bits(i).poke(ts)
       }
       dut.io.ptr_i.bits.poke(16.U)
 
-      dut.io.temporalLoopBounds_i.valid.poke(1.B)
-      dut.io.temporalStrides_i.valid.poke(1.B)
+      dut.io.loopBounds_i.valid.poke(1.B)
+      dut.io.strides_i.valid.poke(1.B)
       dut.io.ptr_i.valid.poke(1.B)
 
       dut.clock.step(1)
-      dut.io.temporalLoopBounds_i.valid.poke(0.B)
-      dut.io.temporalStrides_i.valid.poke(0.B)
+      dut.io.loopBounds_i.valid.poke(0.B)
+      dut.io.strides_i.valid.poke(0.B)
       dut.io.ptr_i.valid.poke(0.B)
 
       // keep consuming generated addresses by asserting dut.io.ptr_o.ready

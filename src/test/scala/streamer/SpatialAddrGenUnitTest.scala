@@ -19,19 +19,19 @@ class SpatialAddrGenUnitTest
     ) { dut =>
       dut.clock.step(5)
       // random config generation
-      val unrollingStrides =
-        Seq.fill(SpatialAddrGenUnitTestParameters.unrollingDim)(
+      val strides =
+        Seq.fill(SpatialAddrGenUnitTestParameters.loopDim)(
           (
             scala.util.Random.nextInt(10).U
           )
         )
 
       // sending these configruation to the dut
-      for (i <- 0 until SpatialAddrGenUnitTestParameters.unrollingDim) {
-        val us = unrollingStrides(i)
-        dut.io.unrollingStrides_i(i).poke(us)
+      for (i <- 0 until SpatialAddrGenUnitTestParameters.loopDim) {
+        val us = strides(i)
+        dut.io.strides_i(i).poke(us)
       }
-      dut.io.start_ptr_i.poke(16.U)
+      dut.io.ptr_i.poke(16.U)
       dut.io.valid_i.poke(1.B)
 
       dut.clock.step(5)

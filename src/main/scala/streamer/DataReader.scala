@@ -163,14 +163,14 @@ class DataReader(
   }
 
   // generating original unrolling address for TCDM request
-  val unrolling_addr_gen_unit = Module(
-    new UnrollingAddrGenUint(unrollingDim, unrollingFactor, addrWidth)
+  val spatial_addr_gen_unit = Module(
+    new SpatialAddrGenUnit(unrollingDim, unrollingFactor, addrWidth)
   )
 
-  unrolling_addr_gen_unit.io.valid_i := cstate =/= sIDLE
-  unrolling_addr_gen_unit.io.start_ptr_i := start_ptr
-  unrolling_addr_gen_unit.io.unrollingStrides_i := unrollingStrides
-  unrolling_addr := unrolling_addr_gen_unit.io.unrolling_addr_o
+  spatial_addr_gen_unit.io.valid_i := cstate =/= sIDLE
+  spatial_addr_gen_unit.io.start_ptr_i := start_ptr
+  spatial_addr_gen_unit.io.unrollingStrides_i := unrollingStrides
+  unrolling_addr := spatial_addr_gen_unit.io.unrolling_addr_o
 
   // simulation time address constraint check
   when(cstate === sBUSY) {

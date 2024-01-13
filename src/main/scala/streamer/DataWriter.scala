@@ -18,18 +18,18 @@ class DataWriterIO(
   val data_fifo_i = Flipped(Decoupled(UInt(params.fifoWidth.W)))
 
   assert(
-    params.fifoWidth == params.tcdmPorts * params.tcdmDataWidth,
+    params.fifoWidth == params.tcdmPortsNum * params.tcdmDataWidth,
     "params.fifoWidth should match with TCDM datawidth for now!"
   )
 
   // tcdm write req signals
-  val tcdm_req_addr = Output(Vec(params.tcdmPorts, UInt(params.addrWidth.W)))
-  val write_tcmd_valid_o = Output(Vec(params.tcdmPorts, Bool()))
+  val tcdm_req_addr = Output(Vec(params.tcdmPortsNum, UInt(params.addrWidth.W)))
+  val write_tcmd_valid_o = Output(Vec(params.tcdmPortsNum, Bool()))
   val tcdm_req_data = Output(
-    Vec(params.tcdmPorts, UInt(params.tcdmDataWidth.W))
+    Vec(params.tcdmPortsNum, UInt(params.tcdmDataWidth.W))
   )
 
-  val tcdm_ready_i = Input(Vec(params.tcdmPorts, Bool()))
+  val tcdm_ready_i = Input(Vec(params.tcdmPortsNum, Bool()))
 
   // from temporal address generation unit to indicate if the transaction is done
   val done = Input(Bool())
@@ -73,9 +73,9 @@ class DataWriter(
   // no sub-data accessing within one TCDM bank
   def packed_addr_num = (params.tcdmDataWidth / 8) / (params.elementWidth / 8)
 
-  val tcdm_rsp_i_q_ready = WireInit(VecInit(Seq.fill(params.tcdmPorts)(0.B)))
+  val tcdm_rsp_i_q_ready = WireInit(VecInit(Seq.fill(params.tcdmPortsNum)(0.B)))
   val tcdm_rsp_i_q_ready_reg = RegInit(
-    VecInit(Seq.fill(params.tcdmPorts)(0.B))
+    VecInit(Seq.fill(params.tcdmPortsNum)(0.B))
   )
   val wait_for_q_ready_write = WireInit(0.B)
 
@@ -145,7 +145,7 @@ class DataWriter(
 
   // address constraint check
   when(cstate === sBUSY) {
-    for (i <- 0 until params.tcdmPorts) {
+    for (i <- 0 until params.tcdmPortsNum) {
       for (j <- 0 until packed_addr_num - 1) {
         assert(
           unrolling_addr(i * packed_addr_num + j + 1) === unrolling_addr(
@@ -160,13 +160,13 @@ class DataWriter(
   can_send_tcdm_write_req := io.data_fifo_i.valid && cstate === sBUSY
 
   // assuming addresses are packed in one tcmd request
-  for (i <- 0 until params.tcdmPorts) {
+  for (i <- 0 until params.tcdmPortsNum) {
     io.tcdm_req_addr(i) := unrolling_addr(i * packed_addr_num)
   }
 
   // deal with contention
   // ensure all the write request are sent successfully
-  for (i <- 0 until params.tcdmPorts) {
+  for (i <- 0 until params.tcdmPortsNum) {
     when(can_send_tcdm_write_req) {
       when(io.ptr_agu_i.fire) {
         io.write_tcmd_valid_o(i) := 1.B
@@ -183,7 +183,7 @@ class DataWriter(
     }
   }
 
-  for (i <- 0 until params.tcdmPorts) {
+  for (i <- 0 until params.tcdmPortsNum) {
     when(can_send_tcdm_write_req && !tcdm_write_mem_all_ready) {
       wait_for_q_ready_write := 1.B
     }.otherwise {
@@ -192,7 +192,7 @@ class DataWriter(
   }
 
   // ensure getting all the grants
-  for (i <- 0 until params.tcdmPorts) {
+  for (i <- 0 until params.tcdmPortsNum) {
     when(wait_for_q_ready_write && !tcdm_write_mem_all_ready) {
       when(io.tcdm_ready_i(i)) {
         tcdm_rsp_i_q_ready_reg(i) := io.tcdm_ready_i(i)
@@ -202,7 +202,7 @@ class DataWriter(
     }
   }
 
-  for (i <- 0 until params.tcdmPorts) {
+  for (i <- 0 until params.tcdmPortsNum) {
     tcdm_rsp_i_q_ready(i) := io.tcdm_ready_i(i) || tcdm_rsp_i_q_ready_reg(i)
   }
 

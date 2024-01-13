@@ -72,8 +72,8 @@ trait HasStreamerParams {
 
   val fifoWidthReader: Seq[Int] = fifoReaderParams.map(_.width)
   val fifoWidthWriter: Seq[Int] = fifoWriterParams.map(_.width)
-  val dataReaderTcdmPorts: Seq[Int] = dataReaderParams.map(_.tcdmPorts)
-  val dataWriterTcdmPorts: Seq[Int] = dataWriterParams.map(_.tcdmPorts)
+  val dataReaderTcdmPorts: Seq[Int] = dataReaderParams.map(_.tcdmPortsNum)
+  val dataWriterTcdmPorts: Seq[Int] = dataWriterParams.map(_.tcdmPortsNum)
   val tcdmPortsNum: Int = dataReaderTcdmPorts.sum + dataWriterTcdmPorts.sum
 
 }

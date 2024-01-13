@@ -19,7 +19,7 @@ object SpatialAddrGenUnitTestParameters {
 }
 
 object DataMoverTestParameters {
-  def tcdmPorts = 8
+  def tcdmPortsNum = 8
   def tcdmDataWidth = 64
   def unrollingFactor = Seq(8, 8)
   def addrWidth = 32
@@ -60,21 +60,21 @@ object StreamerTestConstant extends CommonParams {
 
   def dataReaderParams: Seq[DataMoverParams] = Seq(
     DataMoverParams(
-      tcdmPorts = 1 * MacScalingFactor,
+      tcdmPortsNum = 1 * MacScalingFactor,
       unrollingFactor = Seq(2 * MacScalingFactor),
       unrollingDim = 1,
       elementWidth = 32,
       fifoWidth = fifoReaderParams(0).width
     ),
     DataMoverParams(
-      tcdmPorts = 1 * MacScalingFactor,
+      tcdmPortsNum = 1 * MacScalingFactor,
       unrollingFactor = Seq(2 * MacScalingFactor),
       unrollingDim = 1,
       elementWidth = 32,
       fifoWidth = fifoReaderParams(1).width
     ),
     DataMoverParams(
-      tcdmPorts = 1,
+      tcdmPortsNum = 1,
       unrollingFactor = Seq(2),
       unrollingDim = 1,
       elementWidth = 32,
@@ -84,7 +84,7 @@ object StreamerTestConstant extends CommonParams {
 
   def dataWriterParams: Seq[DataMoverParams] = Seq(
     DataMoverParams(
-      tcdmPorts = 1,
+      tcdmPortsNum = 1,
       unrollingFactor = Seq(2),
       unrollingDim = 1,
       elementWidth = 32,

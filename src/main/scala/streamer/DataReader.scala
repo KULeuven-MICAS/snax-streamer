@@ -4,7 +4,7 @@ import chisel3._
 import chisel3.util._
 
 case class DataMoverParams(
-    tcdmPorts: Int = DataMoverTestParameters.tcdmPorts,
+    tcdmPortsNum: Int = DataMoverTestParameters.tcdmPortsNum,
     unrollingFactor: Seq[Int] = DataMoverTestParameters.unrollingFactor,
     unrollingDim: Int = DataMoverTestParameters.unrollingDim,
     elementWidth: Int = DataMoverTestParameters.elementWidth,
@@ -23,21 +23,21 @@ class DataReaderIO(
   )
 
   // tcdm read req
-  val tcdm_req_addr = Output(Vec(params.tcdmPorts, UInt(params.addrWidth.W)))
-  val read_tcmd_valid_o = Output(Vec(params.tcdmPorts, Bool()))
+  val tcdm_req_addr = Output(Vec(params.tcdmPortsNum, UInt(params.addrWidth.W)))
+  val read_tcmd_valid_o = Output(Vec(params.tcdmPortsNum, Bool()))
 
-  val tcdm_ready_i = Input(Vec(params.tcdmPorts, Bool()))
+  val tcdm_ready_i = Input(Vec(params.tcdmPortsNum, Bool()))
 
   // tcdm rsp
   val data_tcdm_i = Flipped(
-    (Vec(params.tcdmPorts, Valid(UInt(params.tcdmDataWidth.W))))
+    (Vec(params.tcdmPortsNum, Valid(UInt(params.tcdmDataWidth.W))))
   )
 
   // data pushed into the queue
   val data_fifo_o = Decoupled(UInt(params.fifoWidth.W))
 
   assert(
-    params.fifoWidth == params.tcdmPorts * params.tcdmDataWidth,
+    params.fifoWidth == params.tcdmPortsNum * params.tcdmDataWidth,
     "fifoWidth should match with TCDM datawidth for now!"
   )
 
@@ -95,23 +95,23 @@ class DataReader(
   val tcdm_read_mem_all_ready = WireInit(0.B)
 
   // signals for dealing with contention
-  val tcdm_rsp_i_p_valid = WireInit(VecInit(Seq.fill(params.tcdmPorts)(0.B)))
+  val tcdm_rsp_i_p_valid = WireInit(VecInit(Seq.fill(params.tcdmPortsNum)(0.B)))
   val tcdm_rsp_i_p_valid_reg = RegInit(
-    VecInit(Seq.fill(params.tcdmPorts)(0.B))
+    VecInit(Seq.fill(params.tcdmPortsNum)(0.B))
   )
-  val tcdm_rsp_i_q_ready = WireInit(VecInit(Seq.fill(params.tcdmPorts)(0.B)))
+  val tcdm_rsp_i_q_ready = WireInit(VecInit(Seq.fill(params.tcdmPortsNum)(0.B)))
   val tcdm_rsp_i_q_ready_reg = RegInit(
-    VecInit(Seq.fill(params.tcdmPorts)(0.B))
+    VecInit(Seq.fill(params.tcdmPortsNum)(0.B))
   )
   val wait_for_q_ready_read = WireInit(0.B)
   val wait_for_p_valid_read = WireInit(0.B)
 
   // storing response data (part of whole transaction) when waiting for other part
   val data_reg = RegInit(
-    VecInit(Seq.fill(params.tcdmPorts)(0.U(params.tcdmDataWidth.W)))
+    VecInit(Seq.fill(params.tcdmPortsNum)(0.U(params.tcdmDataWidth.W)))
   )
   val data_fifo_input = WireInit(
-    VecInit(Seq.fill(params.tcdmPorts)(0.U(params.tcdmDataWidth.W)))
+    VecInit(Seq.fill(params.tcdmPortsNum)(0.U(params.tcdmDataWidth.W)))
   )
 
   // State declaration
@@ -176,7 +176,7 @@ class DataReader(
 
   // simulation time address constraint check
   when(cstate === sBUSY) {
-    for (i <- 0 until params.tcdmPorts) {
+    for (i <- 0 until params.tcdmPortsNum) {
       for (j <- 0 until packed_addr_num - 1) {
         assert(
           unrolling_addr(i * packed_addr_num + j + 1) === unrolling_addr(
@@ -192,13 +192,13 @@ class DataReader(
 
   // assuming addresses are packed in one tcmd request
   // the data granularity constrain
-  for (i <- 0 until params.tcdmPorts) {
+  for (i <- 0 until params.tcdmPortsNum) {
     io.tcdm_req_addr(i) := unrolling_addr(i * packed_addr_num)
   }
 
   // deal with contention
   // ensure all the read request are sent successfully
-  for (i <- 0 until params.tcdmPorts) {
+  for (i <- 0 until params.tcdmPortsNum) {
     when(can_send_tcdm_read_req) {
       when(io.ptr_agu_i.fire) {
         io.read_tcmd_valid_o(i) := 1.B
@@ -210,7 +210,7 @@ class DataReader(
     }
   }
 
-  for (i <- 0 until params.tcdmPorts) {
+  for (i <- 0 until params.tcdmPortsNum) {
     when(can_send_tcdm_read_req && !tcdm_read_mem_all_ready) {
       wait_for_q_ready_read := 1.B
     }.otherwise {
@@ -218,7 +218,7 @@ class DataReader(
     }
   }
 
-  for (i <- 0 until params.tcdmPorts) {
+  for (i <- 0 until params.tcdmPortsNum) {
     when(wait_for_q_ready_read && !tcdm_read_mem_all_ready) {
       when(io.tcdm_ready_i(i)) {
         tcdm_rsp_i_q_ready_reg(i) := io.tcdm_ready_i(i)
@@ -228,7 +228,7 @@ class DataReader(
     }
   }
 
-  for (i <- 0 until params.tcdmPorts) {
+  for (i <- 0 until params.tcdmPortsNum) {
     tcdm_rsp_i_q_ready(i) := io.tcdm_ready_i(i) || tcdm_rsp_i_q_ready_reg(i)
   }
 
@@ -236,7 +236,7 @@ class DataReader(
   ready_for_new_tcdm_reqs := !wait_for_q_ready_read && can_send_tcdm_read_req
 
   // check and wait for all the response valid
-  for (i <- 0 until params.tcdmPorts) {
+  for (i <- 0 until params.tcdmPortsNum) {
     when(can_send_tcdm_read_req && !fifo_input_valid) {
       wait_for_p_valid_read := 1.B
     }.otherwise {
@@ -244,7 +244,7 @@ class DataReader(
     }
   }
 
-  for (i <- 0 until params.tcdmPorts) {
+  for (i <- 0 until params.tcdmPortsNum) {
     when(wait_for_p_valid_read && !fifo_input_valid) {
       when(io.data_tcdm_i(i).valid) {
         tcdm_rsp_i_p_valid_reg(i) := io.data_tcdm_i(i).valid
@@ -256,7 +256,7 @@ class DataReader(
   }
 
   // fifo data
-  for (i <- 0 until params.tcdmPorts) {
+  for (i <- 0 until params.tcdmPortsNum) {
     when(fifo_input_valid) {
       when(io.data_tcdm_i(i).valid) {
         data_fifo_input(i) := io.data_tcdm_i(i).bits
@@ -269,7 +269,7 @@ class DataReader(
   io.data_fifo_o.bits := fifo_input_bits
 
   // fifo valid
-  for (i <- 0 until params.tcdmPorts) {
+  for (i <- 0 until params.tcdmPortsNum) {
     tcdm_rsp_i_p_valid(i) := io.data_tcdm_i(i).valid || tcdm_rsp_i_p_valid_reg(
       i
     )

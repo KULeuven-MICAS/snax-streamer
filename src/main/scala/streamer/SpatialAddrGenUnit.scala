@@ -21,6 +21,12 @@ import chisel3.util._
   * design time. The loop strides are programmable at run time.
   */
 
+case class SpatialAddrGenUnitParams(
+    loopDim: Int = SpatialAddrGenUnitTestParameters.loopDim,
+    loopBounds: Seq[Int] = SpatialAddrGenUnitTestParameters.loopBounds,
+    addrWidth: Int = SpatialAddrGenUnitTestParameters.addrWidth
+)
+
 /** This class represents the input and output ports of the SpatialAddrGenUnit
   * module.
   *
@@ -32,23 +38,21 @@ import chisel3.util._
   *   The bit width of the address.
   */
 class SpatialAddrGenUnitIO(
-    loopDim: Int = SpatialAddrGenUnitTestParameters.loopDim,
-    loopBounds: Seq[Int] = SpatialAddrGenUnitTestParameters.loopBounds,
-    addrWidth: Int = SpatialAddrGenUnitTestParameters.addrWidth
+    params: SpatialAddrGenUnitParams
 ) extends Bundle {
 
   // configurations for unrolling address generation
   val valid_i = Input(Bool())
-  val ptr_i = Input(UInt(addrWidth.W))
-  val strides_i = Input(Vec(loopDim, UInt(addrWidth.W)))
+  val ptr_i = Input(UInt(params.addrWidth.W))
+  val strides_i = Input(Vec(params.loopDim, UInt(params.addrWidth.W)))
 
   // generated output addresses
   val ptr_o = Output(
-    Vec(loopBounds.reduce(_ * _), UInt(addrWidth.W))
+    Vec(params.loopBounds.reduce(_ * _), UInt(params.addrWidth.W))
   )
 }
 
-trait withSpatialLoopIndeces {
+trait WithSpatialLoopIndeces {
 
   // a scala function to generate the nested indices of the unrolled loop counter for generating unrolling addresses
   // for instance:
@@ -80,16 +84,14 @@ trait withSpatialLoopIndeces {
   *   The bit width of the address.
   */
 class SpatialAddrGenUnit(
-    loopDim: Int = SpatialAddrGenUnitTestParameters.loopDim,
-    loopBounds: Seq[Int] = SpatialAddrGenUnitTestParameters.loopBounds,
-    addrWidth: Int = SpatialAddrGenUnitTestParameters.addrWidth
+    params: SpatialAddrGenUnitParams
 ) extends Module
     with RequireAsyncReset
-    with withSpatialLoopIndeces {
+    with WithSpatialLoopIndeces {
 
   // the input/output ports
   val io = IO(
-    new SpatialAddrGenUnitIO(loopDim, loopBounds, addrWidth)
+    new SpatialAddrGenUnitIO(params)
   )
 
   /** Generates spatial addresses based on the given parameters.
@@ -123,7 +125,9 @@ class SpatialAddrGenUnit(
 
     // the output vector of spatial addresses
     val spatial_addr = WireInit(
-      VecInit(Seq.fill(loopBounds.reduce(_ * _))(0.U(addrWidth.W)))
+      VecInit(
+        Seq.fill(params.loopBounds.reduce(_ * _))(0.U(params.addrWidth.W))
+      )
     )
 
     when(valid) {
@@ -148,8 +152,8 @@ class SpatialAddrGenUnit(
 
   io.ptr_o := genSpatialAddr(
     io.valid_i,
-    loopDim,
-    loopBounds,
+    params.loopDim,
+    params.loopBounds,
     io.strides_i,
     io.ptr_i
   )
@@ -159,7 +163,7 @@ class SpatialAddrGenUnit(
 // Scala main function for generating system verilog file for the SpatialAddrGenUnit module
 object SpatialAddrGenUnit extends App {
   emitVerilog(
-    new (SpatialAddrGenUnit),
+    new SpatialAddrGenUnit(SpatialAddrGenUnitParams()),
     Array("--target-dir", "generated/streamer")
   )
 }

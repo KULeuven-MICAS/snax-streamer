@@ -13,9 +13,9 @@ class TemporalAddrGenUnitTest
     extends AnyFlatSpec
     with ChiselScalatestTester
     with Matchers
-    with withSpatialLoopIndeces {
+    with WithSpatialLoopIndeces {
   "DUT" should "pass" in {
-    test(new TemporalAddrGenUnit).withAnnotations(
+    test(new TemporalAddrGenUnit(TemporalAddrGenUnitParams())).withAnnotations(
       Seq(WriteVcdAnnotation)
     ) { dut =>
       def test_once() = {

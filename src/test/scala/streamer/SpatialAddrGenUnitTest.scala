@@ -14,7 +14,7 @@ class SpatialAddrGenUnitTest
     with ChiselScalatestTester
     with Matchers {
   "DUT" should "pass" in {
-    test(new SpatialAddrGenUnit).withAnnotations(
+    test(new SpatialAddrGenUnit(SpatialAddrGenUnitParams())).withAnnotations(
       Seq(WriteVcdAnnotation)
     ) { dut =>
       dut.clock.step(5)

@@ -8,10 +8,8 @@ case class DataMoverParams(
     unrollingFactor: Seq[Int] = DataMoverTestParameters.unrollingFactor,
     unrollingDim: Int = DataMoverTestParameters.unrollingDim,
     elementWidth: Int = DataMoverTestParameters.elementWidth,
-    fifoWidth: Int = DataMoverTestParameters.fifoWidth,
-    tcdmDataWidth: Int = DataMoverTestParameters.tcdmDataWidth,
-    addrWidth: Int = DataMoverTestParameters.addrWidth
-)
+    fifoWidth: Int = DataMoverTestParameters.fifoWidth
+) extends CommonParams
 
 // input and output for data reader (data mover in read mode)
 class DataReaderIO(

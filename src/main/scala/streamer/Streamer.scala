@@ -5,6 +5,46 @@ import chisel3.util._
 
 case class FIFOParams(width: Int, depth: Int)
 
+/** Parameter definitions
+  * @param fifoWidthReader
+  *   FIFO width for the data readers
+  * @param fifoDepthReader
+  *   FIFO depth for the data readers
+  * @param fifoWidthWriter
+  *   FIFO width for the data writers
+  * @param fifoDepthWriter
+  *   FIFO depth for the data writers
+  * @param dataReaderNum
+  *   number of data readers
+  * @param dataWriterNum
+  *   number of data writers
+  * @param dataReaderTcdmPorts
+  *   the number of connections to TCDM ports for each data reader
+  * @param dataWriterTcdmPorts
+  *   the number of connections to TCDM ports for each data writer
+  * @param readElementWidth
+  *   single data element width for each data reader, useful for generating
+  *   unrolling addresses
+  * @param writeElementWidth
+  *   single data element width for each data writer, useful for generating
+  *   unrolling addresses
+  * @param tcdmDataWidth
+  *   data width for each TCDm port
+  * @param unrollingFactorReader
+  *   spatial unrolling factors (your parfor) for each data reader
+  * @param unrollingFactorWriter
+  *   spatial unrolling factors (your parfor) for each data writer
+  * @param temporalLoopDim
+  *   the dimension of the temporal loop
+  * @param temporalLoopBoundWidth
+  *   the register width for storing the temporal loop bound
+  * @param addrWidth
+  *   the address width
+  * @param stationarity
+  *   accelerator stationarity feature for each data mover (data reader and data
+  *   writer)
+  */
+
 trait HasStreamerParams {
 
   val temporalAddrGenUnitParams: TemporalAddrGenUnitParams
@@ -402,7 +442,15 @@ object StreamerTester extends App {
 object GemmStreamer extends App {
   emitVerilog(
     new Streamer(
-      StreamerParams()
+      StreamerParams(
+        temporalAddrGenUnitParams =
+          GeMMStreamerParameters.temporalAddrGenUnitParams,
+        fifoReaderParams = GeMMStreamerParameters.fifoReaderParams,
+        fifoWriterParams = GeMMStreamerParameters.fifoWriterParams,
+        stationarity = GeMMStreamerParameters.stationarity,
+        dataReaderParams = GeMMStreamerParameters.dataReaderParams,
+        dataWriterParams = GeMMStreamerParameters.dataWriterParams
+      )
     ),
     Array("--target-dir", "generated/streamer/gemm")
   )
@@ -411,7 +459,15 @@ object GemmStreamer extends App {
 object PostProcessingStreamer extends App {
   emitVerilog(
     new Streamer(
-      StreamerParams()
+      StreamerParams(
+        temporalAddrGenUnitParams =
+          PostProcessingStreamerParameters.temporalAddrGenUnitParams,
+        fifoReaderParams = PostProcessingStreamerParameters.fifoReaderParams,
+        fifoWriterParams = PostProcessingStreamerParameters.fifoWriterParams,
+        stationarity = PostProcessingStreamerParameters.stationarity,
+        dataReaderParams = PostProcessingStreamerParameters.dataReaderParams,
+        dataWriterParams = PostProcessingStreamerParameters.dataWriterParams
+      )
     ),
     Array("--target-dir", "generated/streamer/pp")
   )

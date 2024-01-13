@@ -30,12 +30,16 @@ object DataMoverTestParameters {
 
 }
 
-object StreamerTestConstant {
-
-  def MacScalingFactor = 4
+trait CommonParams {
 
   def addrWidth = 32
   def tcdmDataWidth = 64
+
+}
+
+object StreamerTestConstant extends CommonParams {
+
+  def MacScalingFactor = 4
 
   def temporalAddrGenUnitParams: TemporalAddrGenUnitParams =
     TemporalAddrGenUnitParams(
@@ -60,27 +64,21 @@ object StreamerTestConstant {
       unrollingFactor = Seq(2 * MacScalingFactor),
       unrollingDim = 1,
       elementWidth = 32,
-      fifoWidth = fifoReaderParams(0).width,
-      tcdmDataWidth,
-      addrWidth
+      fifoWidth = fifoReaderParams(0).width
     ),
     DataMoverParams(
       tcdmPorts = 1 * MacScalingFactor,
       unrollingFactor = Seq(2 * MacScalingFactor),
       unrollingDim = 1,
       elementWidth = 32,
-      fifoWidth = fifoReaderParams(1).width,
-      tcdmDataWidth,
-      addrWidth
+      fifoWidth = fifoReaderParams(1).width
     ),
     DataMoverParams(
       tcdmPorts = 1,
       unrollingFactor = Seq(2),
       unrollingDim = 1,
       elementWidth = 32,
-      fifoWidth = fifoReaderParams(2).width,
-      tcdmDataWidth,
-      addrWidth
+      fifoWidth = fifoReaderParams(2).width
     )
   )
 
@@ -90,9 +88,7 @@ object StreamerTestConstant {
       unrollingFactor = Seq(2),
       unrollingDim = 1,
       elementWidth = 32,
-      fifoWidth = fifoReaderParams(2).width,
-      tcdmDataWidth,
-      addrWidth
+      fifoWidth = fifoWriterParams(0).width
     )
   )
 

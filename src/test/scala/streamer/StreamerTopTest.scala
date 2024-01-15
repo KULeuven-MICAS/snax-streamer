@@ -12,7 +12,7 @@ class StreamerTopTest
     with ChiselScalatestTester
     with Matchers {
   "DUT" should "pass" in {
-    test(new StreamerTop(StreamerParams()))
+    test(new StreamerTop(new StreamerTopParams()))
       .withAnnotations(
         Seq(WriteVcdAnnotation)
       ) { dut =>

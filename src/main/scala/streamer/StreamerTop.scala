@@ -3,27 +3,64 @@ package streamer
 import chisel3._
 import chisel3.util._
 
-class StreamerTopCsrIO(addrWidth: Int) extends Bundle {
+/** This trait add the parameters for the CsrManager module based on the streamer parameters
+  *
+  * @param CsrNum
+  *   the number of csr registers
+  * @param addrWidth
+  *   the width of the address
+  */
+trait HasCsrInferredParams extends HasStreamerInferredParams {
+  val CsrNum: Int =
+    temporalDim + dataMoverNum * temporalDim + spatialDim.sum + dataMoverNum + 1
+  val csrAddrWidth: Int = log2Up(CsrNum)
+}
 
-  val req = Flipped(Decoupled(new CsrReq(addrWidth)))
+/**
+  * This class constructs the new parameters for streamer top module which contains the streamer and the csrManager
+  */
+class StreamerTopParams() extends StreamerParams with HasCsrInferredParams
+
+/**
+  * This class represents the csr input and output ports of the streamer top module
+  *
+  * @param csrAddrWidth
+  * csr registers address width
+  */
+class StreamerTopCsrIO(csrAddrWidth:Int) extends Bundle {
+
+  val req = Flipped(Decoupled(new CsrReq(csrAddrWidth)))
   val rsp = Decoupled(new CsrRsp)
 
 }
 
+/**
+  * This class represents the input and output ports of the streamer top module
+  *
+  * @param params
+  * the parameters class instantiation for the streamer top module
+  */
 class StreamerTopIO(
-    params: StreamerParams
+    params: StreamerTopParams = new StreamerTopParams()
 ) extends Bundle {
 
-  val csr = new StreamerTopCsrIO(params.addrWidth)
+  // ports for csr configuration
+  val csr = new StreamerTopCsrIO(params.csrAddrWidth)
 
+  // ports for data in and out
   val data = new StreamerDataIO(
     params
   )
 }
 
-// add csr as well as read and write signals for streamer
+/**
+  * This class represents the streamer top module which adds the csr registers as well as csr read and write logic based on the streamer
+  *
+  * @param params
+  * the parameters class instantiation for the streamer top module
+  */
 class StreamerTop(
-    params: StreamerParams = StreamerParams()
+    params: StreamerTopParams = new StreamerTopParams()
 ) extends Module
     with RequireAsyncReset {
   val io = IO(
@@ -32,46 +69,48 @@ class StreamerTop(
     )
   )
 
-  // configuration csrs plus one config valid csr
-  def csr_num =
-    params.temporalLoopDim + params.dataMoverNum * params.temporalLoopDim + params.unrollingDim.sum + params.dataMoverNum + 1
+  // csrManager instantiation
+  val csr_manager = Module(new CsrManager(params))
 
-  val csr_manager = Module(new CsrManager(csr_num, params.addrWidth))
-
+  // streamer instantiation
   val streamer = Module(
     new Streamer(
       params
     )
   )
 
+  // io.csr and csrManager input connection
+  csr_manager.io.csr_config_in <> io.csr
+
+  // below does streamer and csrManager output connection
+  // control signals
   streamer.io.csr.valid := csr_manager.io.csr_config_out.valid
   csr_manager.io.csr_config_out.ready := streamer.io.csr.ready
 
-  csr_manager.io.csr_config_in <> io.csr
-
+  // splitting csrManager data ports to the streamer components
   // temporal loop bounds
-  for (i <- 0 until params.temporalLoopDim) {
+  for (i <- 0 until params.temporalDim) {
     streamer.io.csr.bits
       .loopBounds_i(i) := csr_manager.io.csr_config_out.bits(i)
   }
 
   // temporal loop strides
   for (i <- 0 until params.dataMoverNum) {
-    for (j <- 0 until params.temporalLoopDim) {
+    for (j <- 0 until params.temporalDim) {
       streamer.io.csr.bits
         .temporalStrides_csr_i(i)(j) := csr_manager.io.csr_config_out.bits(
-        params.temporalLoopDim + i * params.temporalLoopDim + j
+        params.temporalDim + i * params.temporalDim + j
       )
     }
   }
 
   // spatial loop strides
-  for (i <- 0 until params.unrollingDim.length) {
-    for (j <- 0 until params.unrollingDim(i)) {
+  for (i <- 0 until params.spatialDim.length) {
+    for (j <- 0 until params.spatialDim(i)) {
       streamer.io.csr.bits
         .spatialStrides_csr_i(i)(j) := csr_manager.io.csr_config_out.bits(
-        params.temporalLoopDim + params.dataMoverNum * params.temporalLoopDim + i * params
-          .unrollingDim(
+        params.temporalDim + params.dataMoverNum * params.temporalDim + i * params
+          .spatialDim(
             i
           ) + j
       )
@@ -81,10 +120,11 @@ class StreamerTop(
   // base ptrs
   for (i <- 0 until params.dataMoverNum) {
     streamer.io.csr.bits.ptr_i(i) := csr_manager.io.csr_config_out.bits(
-      params.temporalLoopDim + params.dataMoverNum * params.temporalLoopDim + params.unrollingDim.sum + i
+      params.temporalDim + params.dataMoverNum * params.temporalDim + params.spatialDim.sum + i
     )
   }
 
+  // io.data and streamer data ports connection
   io.data <> streamer.io.data
 
 }
@@ -92,7 +132,7 @@ class StreamerTop(
 // Scala main function for generating test streamerTop system verilog file
 object StreamerTopTester extends App {
   emitVerilog(
-    new StreamerTop(StreamerParams()),
+    new StreamerTop(new StreamerTopParams()),
     Array("--target-dir", "generated/streamertop/tester")
   )
 }

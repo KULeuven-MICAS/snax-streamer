@@ -189,15 +189,15 @@ case class StreamerParams(
 /** This trait add the parameters for the CsrManager module based on the
   * streamer parameters
   *
-  * @param CsrNum
+  * @param csrNum
   *   the number of csr registers
   * @param addrWidth
   *   the width of the address
   */
 trait HasCsrInferredParams extends HasStreamerInferredParams {
-  val CsrNum: Int =
+  val csrNum: Int =
     temporalDim + dataMoverNum * temporalDim + spatialDim.sum + dataMoverNum + 1
-  val csrAddrWidth: Int = log2Up(CsrNum)
+  val csrAddrWidth: Int = log2Up(csrNum)
 }
 
 /** This class constructs the new parameters for streamer top module which

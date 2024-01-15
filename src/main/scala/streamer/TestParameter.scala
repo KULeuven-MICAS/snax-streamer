@@ -21,12 +21,12 @@ object SpatialAddrGenUnitTestParameters {
 object DataMoverTestParameters {
   def tcdmPortsNum = 8
   def tcdmDataWidth = 64
-  def unrollingFactor = Seq(8, 8)
+  def spatialBounds = Seq(8, 8)
   def addrWidth = 32
   def fifoWidth = 512
   def elementWidth = 8
 
-  def unrollingDim = unrollingFactor.length
+  def spatialDim = spatialBounds.length
 
 }
 
@@ -61,22 +61,22 @@ object StreamerTestConstant extends CommonParams {
   def dataReaderParams: Seq[DataMoverParams] = Seq(
     DataMoverParams(
       tcdmPortsNum = 1 * MacScalingFactor,
-      unrollingFactor = Seq(2 * MacScalingFactor),
-      unrollingDim = 1,
+      spatialBounds = Seq(2 * MacScalingFactor),
+      spatialDim = 1,
       elementWidth = 32,
       fifoWidth = fifoReaderParams(0).width
     ),
     DataMoverParams(
       tcdmPortsNum = 1 * MacScalingFactor,
-      unrollingFactor = Seq(2 * MacScalingFactor),
-      unrollingDim = 1,
+      spatialBounds = Seq(2 * MacScalingFactor),
+      spatialDim = 1,
       elementWidth = 32,
       fifoWidth = fifoReaderParams(1).width
     ),
     DataMoverParams(
       tcdmPortsNum = 1,
-      unrollingFactor = Seq(2),
-      unrollingDim = 1,
+      spatialBounds = Seq(2),
+      spatialDim = 1,
       elementWidth = 32,
       fifoWidth = fifoReaderParams(2).width
     )
@@ -85,8 +85,8 @@ object StreamerTestConstant extends CommonParams {
   def dataWriterParams: Seq[DataMoverParams] = Seq(
     DataMoverParams(
       tcdmPortsNum = 1,
-      unrollingFactor = Seq(2),
-      unrollingDim = 1,
+      spatialBounds = Seq(2),
+      spatialDim = 1,
       elementWidth = 32,
       fifoWidth = fifoWriterParams(0).width
     )

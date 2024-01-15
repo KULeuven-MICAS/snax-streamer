@@ -23,15 +23,15 @@ object GeMMStreamerParameters extends CommonParams {
   def dataReaderParams: Seq[DataMoverParams] = Seq(
     DataMoverParams(
       tcdmPortsNum = 8,
-      unrollingFactor = Seq(8, 8),
-      unrollingDim = 2,
+      spatialBounds = Seq(8, 8),
+      spatialDim = 2,
       elementWidth = 8,
       fifoWidth = fifoReaderParams(0).width
     ),
     DataMoverParams(
       tcdmPortsNum = 8,
-      unrollingFactor = Seq(8, 8),
-      unrollingDim = 2,
+      spatialBounds = Seq(8, 8),
+      spatialDim = 2,
       elementWidth = 8,
       fifoWidth = fifoReaderParams(1).width
     )
@@ -40,8 +40,8 @@ object GeMMStreamerParameters extends CommonParams {
   def dataWriterParams: Seq[DataMoverParams] = Seq(
     DataMoverParams(
       tcdmPortsNum = 32,
-      unrollingFactor = Seq(8, 8),
-      unrollingDim = 2,
+      spatialBounds = Seq(8, 8),
+      spatialDim = 2,
       elementWidth = 32,
       fifoWidth = fifoWriterParams(0).width
     )
@@ -70,8 +70,8 @@ object PostProcessingStreamerParameters extends CommonParams {
   def dataReaderParams: Seq[DataMoverParams] = Seq(
     DataMoverParams(
       tcdmPortsNum = 32,
-      unrollingFactor = Seq(64),
-      unrollingDim = 1,
+      spatialBounds = Seq(64),
+      spatialDim = 1,
       elementWidth = 32,
       fifoWidth = fifoReaderParams(0).width
     )
@@ -80,8 +80,8 @@ object PostProcessingStreamerParameters extends CommonParams {
   def dataWriterParams: Seq[DataMoverParams] = Seq(
     DataMoverParams(
       tcdmPortsNum = 8,
-      unrollingFactor = Seq(64),
-      unrollingDim = 1,
+      spatialBounds = Seq(64),
+      spatialDim = 1,
       elementWidth = 8,
       fifoWidth = fifoWriterParams(0).width
     )

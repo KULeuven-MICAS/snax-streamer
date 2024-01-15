@@ -8,9 +8,9 @@ import chisel3.util._
   *
   * @param tcdmPortsNum
   *   the number of TCDM ports connected to each data mover
-  * @param unrollingFactor
+  * @param spatialBounds
   *   spatial unrolling factors (your parfor) for each data mover
-  * @param unrollingDim
+  * @param spatialDim
   *   the dimension of spatial unrolling factors (your parfor) for each data
   *   mover
   * @param elementWidth
@@ -21,8 +21,8 @@ import chisel3.util._
   */
 case class DataMoverParams(
     tcdmPortsNum: Int = DataMoverTestParameters.tcdmPortsNum,
-    unrollingFactor: Seq[Int] = DataMoverTestParameters.unrollingFactor,
-    unrollingDim: Int = DataMoverTestParameters.unrollingDim,
+    spatialBounds: Seq[Int] = DataMoverTestParameters.spatialBounds,
+    spatialDim: Int = DataMoverTestParameters.spatialDim,
     elementWidth: Int = DataMoverTestParameters.elementWidth,
     fifoWidth: Int = DataMoverTestParameters.fifoWidth
 ) extends CommonParams
@@ -35,7 +35,7 @@ class DataReaderIO(
   // signals for read request address generation
   val ptr_agu_i = Flipped(Decoupled(UInt(params.addrWidth.W)))
   val spatialStrides_csr_i = Flipped(
-    Decoupled(Vec(params.unrollingDim, UInt(params.addrWidth.W)))
+    Decoupled(Vec(params.spatialDim, UInt(params.addrWidth.W)))
   )
 
   // tcdm read req
@@ -83,13 +83,13 @@ class DataReader(
   // storing the config when it is valid
   val config_valid = WireInit(0.B)
   val unrollingStrides = RegInit(
-    VecInit(Seq.fill(params.unrollingDim)(0.U(params.addrWidth.W)))
+    VecInit(Seq.fill(params.spatialDim)(0.U(params.addrWidth.W)))
   )
 
   // original unrolling address for TCDM request
   val unrolling_addr = WireInit(
     VecInit(
-      Seq.fill(params.unrollingFactor.reduce(_ * _))(0.U(params.addrWidth.W))
+      Seq.fill(params.spatialBounds.reduce(_ * _))(0.U(params.addrWidth.W))
     )
   )
 
@@ -178,8 +178,8 @@ class DataReader(
   val spatial_addr_gen_unit = Module(
     new SpatialAddrGenUnit(
       SpatialAddrGenUnitParams(
-        params.unrollingDim,
-        params.unrollingFactor,
+        params.spatialDim,
+        params.spatialBounds,
         params.addrWidth
       )
     )

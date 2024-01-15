@@ -11,7 +11,7 @@ class DataWriterIO(
   // signals for write request address generation
   val ptr_agu_i = Flipped(Decoupled(UInt(params.addrWidth.W)))
   val spatialStrides_csr_i = Flipped(
-    Decoupled(Vec(params.unrollingDim, UInt(params.addrWidth.W)))
+    Decoupled(Vec(params.spatialDim, UInt(params.addrWidth.W)))
   )
 
   // valid data from the queue
@@ -57,13 +57,13 @@ class DataWriter(
   // storing the config when it is valid
   val config_valid = WireInit(0.B)
   val unrollingStrides = RegInit(
-    VecInit(Seq.fill(params.unrollingDim)(0.U(params.addrWidth.W)))
+    VecInit(Seq.fill(params.spatialDim)(0.U(params.addrWidth.W)))
   )
 
   // original unrolling address for TCDM request
   val unrolling_addr = WireInit(
     VecInit(
-      Seq.fill(params.unrollingFactor.reduce(_ * _))(0.U(params.addrWidth.W))
+      Seq.fill(params.spatialBounds.reduce(_ * _))(0.U(params.addrWidth.W))
     )
   )
 
@@ -131,8 +131,8 @@ class DataWriter(
   val spatial_addr_gen_unit = Module(
     new SpatialAddrGenUnit(
       SpatialAddrGenUnitParams(
-        params.unrollingDim,
-        params.unrollingFactor,
+        params.spatialDim,
+        params.spatialBounds,
         params.addrWidth
       )
     )

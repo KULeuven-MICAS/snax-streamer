@@ -37,11 +37,11 @@ trait HasStreamerCoreParams {
 }
 
 /** trait for Streamer inferred parameters
-  * @param temporalLoopDim
+  * @param temporalDim
   *   the dimension of the temporal loop
-  * @param temporalLoopBoundWidth
+  * @param temporalBoundWidth
   *   the register width for storing the temporal loop bound
-  * @param unrollingDim
+  * @param spatialDim
   *   a Seq contains the unrolling dimensions for both data reader and data
   *   writer
   * @param tcdmDataWidth
@@ -68,11 +68,11 @@ trait HasStreamerCoreParams {
   */
 trait HasStreamerInferredParams extends HasStreamerCoreParams {
 
-  val temporalLoopDim: Int = temporalAddrGenUnitParams.loopDim
-  val temporalLoopBoundWidth: Int = temporalAddrGenUnitParams.loopBoundWidth
+  val temporalDim: Int = temporalAddrGenUnitParams.loopDim
+  val temporalBoundWidth: Int = temporalAddrGenUnitParams.loopBoundWidth
 
-  val unrollingDim: Seq[Int] =
-    dataReaderParams.map(_.unrollingDim) ++ dataWriterParams.map(_.unrollingDim)
+  val spatialDim: Seq[Int] =
+    dataReaderParams.map(_.spatialDim) ++ dataWriterParams.map(_.spatialDim)
 
   val tcdmDataWidth: Int = dataReaderParams(0).tcdmDataWidth
   val addrWidth: Int = temporalAddrGenUnitParams.addrWidth
@@ -139,17 +139,17 @@ class StreamerCsrIO(
 
   // configurations interface for a new data operation
   val loopBounds_i =
-    Vec(params.temporalLoopDim, UInt(params.temporalLoopBoundWidth.W))
+    Vec(params.temporalDim, UInt(params.temporalBoundWidth.W))
 
   val temporalStrides_csr_i =
     Vec(
       params.dataMoverNum,
-      Vec(params.temporalLoopDim, UInt(params.addrWidth.W))
+      Vec(params.temporalDim, UInt(params.addrWidth.W))
     )
 
   val spatialStrides_csr_i =
-    MixedVec((0 until params.unrollingDim.length).map { i =>
-      Vec(params.unrollingDim(i), UInt(params.addrWidth.W))
+    MixedVec((0 until params.spatialDim.length).map { i =>
+      Vec(params.spatialDim(i), UInt(params.addrWidth.W))
     })
 
   val ptr_i =
@@ -296,7 +296,7 @@ class Streamer(
   // address generation units csr configuration interface <> streamer IO
   for (i <- 0 until params.dataMoverNum) {
     if (params.stationarity(i) == 1) {
-      for (j <- 0 until params.temporalLoopDim) {
+      for (j <- 0 until params.temporalDim) {
         if (j == 0) {
           address_gen_unit(i).io.loopBounds_i.bits(j) := 1.U
         } else {

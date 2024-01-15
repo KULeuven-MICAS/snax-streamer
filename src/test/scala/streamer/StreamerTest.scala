@@ -20,7 +20,7 @@ class StreamerTest
 
         // give valid transaction config
         dut.io.csr.valid.poke(1.B)
-        for (i <- 0 until StreamerParams().temporalLoopDim) {
+        for (i <- 0 until StreamerParams().temporalDim) {
           dut.io.csr.bits.loopBounds_i(i).poke(2)
         }
 

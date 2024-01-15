@@ -30,13 +30,6 @@ object DataMoverTestParameters {
 
 }
 
-trait CommonParams {
-
-  def addrWidth = 32
-  def tcdmDataWidth = 64
-
-}
-
 object StreamerTestConstant extends CommonParams {
 
   def MacScalingFactor = 4

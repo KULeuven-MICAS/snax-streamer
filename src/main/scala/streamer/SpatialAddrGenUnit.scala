@@ -21,21 +21,6 @@ import chisel3.util._
   * design time. The loop strides are programmable at run time.
   */
 
-/** This class represents all the parameters for the Spatial Address Generation
-  * Unit.
-  * @param loopDim
-  *   The number of nested for loops.
-  * @param loopBounds
-  *   The bounds of each loop dimension.
-  * @param addrWidth
-  *   The bit width of the address.
-  */
-case class SpatialAddrGenUnitParams(
-    loopDim: Int = SpatialAddrGenUnitTestParameters.loopDim,
-    loopBounds: Seq[Int] = SpatialAddrGenUnitTestParameters.loopBounds,
-    addrWidth: Int = SpatialAddrGenUnitTestParameters.addrWidth
-)
-
 /** This class represents the input and output ports of the SpatialAddrGenUnit
   * module.
   *

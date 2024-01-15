@@ -3,30 +3,6 @@ package streamer
 import chisel3._
 import chisel3.util._
 
-/** This class represents all the parameters for the Data Mover (including Data
-  * Reader and Data Writer).
-  *
-  * @param tcdmPortsNum
-  *   the number of TCDM ports connected to each data mover
-  * @param spatialBounds
-  *   spatial unrolling factors (your parfor) for each data mover
-  * @param spatialDim
-  *   the dimension of spatial unrolling factors (your parfor) for each data
-  *   mover
-  * @param elementWidth
-  *   single data element width for each data mover, useful for generating
-  *   unrolling addresses
-  * @param fifoWidth
-  *   FIFO width
-  */
-case class DataMoverParams(
-    tcdmPortsNum: Int = DataMoverTestParameters.tcdmPortsNum,
-    spatialBounds: Seq[Int] = DataMoverTestParameters.spatialBounds,
-    spatialDim: Int = DataMoverTestParameters.spatialDim,
-    elementWidth: Int = DataMoverTestParameters.elementWidth,
-    fifoWidth: Int = DataMoverTestParameters.fifoWidth
-) extends CommonParams
-
 // input and output for data reader (data mover in read mode)
 class DataReaderIO(
     params: DataMoverParams

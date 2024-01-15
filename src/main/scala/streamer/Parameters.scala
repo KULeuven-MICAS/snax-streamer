@@ -6,7 +6,7 @@ import chisel3.util._
 /** This class represents some common parameters used in several modules
   * @param addrWidth
   *   The bit width of the address.
-  *   @param tcdmDataWidth
+  * @param tcdmDataWidth
   *   data width for each TCDm port
   */
 trait CommonParams {
@@ -31,7 +31,6 @@ case class TemporalAddrGenUnitParams(
     addrWidth: Int = TemporalAddrGenUnitTestParameters.addrWidth
 )
 
-
 /** This class represents all the parameters for the Spatial Address Generation
   * Unit.
   * @param loopDim
@@ -46,7 +45,6 @@ case class SpatialAddrGenUnitParams(
     loopBounds: Seq[Int] = SpatialAddrGenUnitTestParameters.loopBounds,
     addrWidth: Int = SpatialAddrGenUnitTestParameters.addrWidth
 )
-
 
 /** This class represents all the parameters for the Data Mover (including Data
   * Reader and Data Writer).
@@ -72,13 +70,12 @@ case class DataMoverParams(
     fifoWidth: Int = DataMoverTestParameters.fifoWidth
 ) extends CommonParams
 
-/**
-  * FIFO parameters
+/** FIFO parameters
   *
   * @param width
-  * the width of the FIFO
+  *   the width of the FIFO
   * @param depth
-  * the depth of the FIFO
+  *   the depth of the FIFO
   */
 case class FIFOParams(width: Int, depth: Int)
 

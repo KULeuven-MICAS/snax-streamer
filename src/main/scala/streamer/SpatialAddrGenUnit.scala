@@ -94,7 +94,7 @@ trait WithSpatialLoopIndices {
   *   The bit width of the address.
   */
 class SpatialAddrGenUnit(
-    params: SpatialAddrGenUnitParams
+    params: SpatialAddrGenUnitParams = SpatialAddrGenUnitParams()
 ) extends Module
     with RequireAsyncReset
     with WithSpatialLoopIndices {

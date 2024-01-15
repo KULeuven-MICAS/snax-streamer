@@ -65,7 +65,7 @@ class DataReaderIO(
 // data reader, for sending read request to TCDM and collect data from TCDM response, pushing valid data into the queue
 // data producer from the accelerator X aspect
 class DataReader(
-    params: DataMoverParams
+    params: DataMoverParams = DataMoverParams()
 ) extends Module
     with RequireAsyncReset {
 

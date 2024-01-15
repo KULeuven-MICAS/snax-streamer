@@ -39,7 +39,7 @@ class DataWriterIO(
 // data writer, for sending write request to TCDM, getting valid data from the queue
 // data consumer from the accelerator X aspect
 class DataWriter(
-    params: DataMoverParams
+    params: DataMoverParams = DataMoverParams()
 ) extends Module
     with RequireAsyncReset {
 

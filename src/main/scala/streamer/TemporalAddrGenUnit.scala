@@ -80,7 +80,7 @@ class TemporalAddrGenUnitIO(
   *   The bit width of the addresses.
   */
 class TemporalAddrGenUnit(
-    params: TemporalAddrGenUnitParams
+    params: TemporalAddrGenUnitParams = TemporalAddrGenUnitParams()
 ) extends Module
     with RequireAsyncReset {
 

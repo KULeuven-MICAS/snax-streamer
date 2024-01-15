@@ -3,42 +3,23 @@ package streamer
 import chisel3._
 import chisel3.util._
 
-/** This trait add the parameters for the CsrManager module based on the streamer parameters
-  *
-  * @param CsrNum
-  *   the number of csr registers
-  * @param addrWidth
-  *   the width of the address
-  */
-trait HasCsrInferredParams extends HasStreamerInferredParams {
-  val CsrNum: Int =
-    temporalDim + dataMoverNum * temporalDim + spatialDim.sum + dataMoverNum + 1
-  val csrAddrWidth: Int = log2Up(CsrNum)
-}
-
-/**
-  * This class constructs the new parameters for streamer top module which contains the streamer and the csrManager
-  */
-class StreamerTopParams() extends StreamerParams with HasCsrInferredParams
-
-/**
-  * This class represents the csr input and output ports of the streamer top module
+/** This class represents the csr input and output ports of the streamer top
+  * module
   *
   * @param csrAddrWidth
-  * csr registers address width
+  *   csr registers address width
   */
-class StreamerTopCsrIO(csrAddrWidth:Int) extends Bundle {
+class StreamerTopCsrIO(csrAddrWidth: Int) extends Bundle {
 
   val req = Flipped(Decoupled(new CsrReq(csrAddrWidth)))
   val rsp = Decoupled(new CsrRsp)
 
 }
 
-/**
-  * This class represents the input and output ports of the streamer top module
+/** This class represents the input and output ports of the streamer top module
   *
   * @param params
-  * the parameters class instantiation for the streamer top module
+  *   the parameters class instantiation for the streamer top module
   */
 class StreamerTopIO(
     params: StreamerTopParams = new StreamerTopParams()
@@ -53,11 +34,11 @@ class StreamerTopIO(
   )
 }
 
-/**
-  * This class represents the streamer top module which adds the csr registers as well as csr read and write logic based on the streamer
+/** This class represents the streamer top module which adds the csr registers
+  * as well as csr read and write logic based on the streamer
   *
   * @param params
-  * the parameters class instantiation for the streamer top module
+  *   the parameters class instantiation for the streamer top module
   */
 class StreamerTop(
     params: StreamerTopParams = new StreamerTopParams()

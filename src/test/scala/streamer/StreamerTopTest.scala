@@ -7,6 +7,7 @@ import scala.math.BigInt
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.Tag
 
+// simple test for streamer top module, mimic the csr write process (config streamer process)
 class StreamerTopTest
     extends AnyFlatSpec
     with ChiselScalatestTester
@@ -18,8 +19,10 @@ class StreamerTopTest
       ) { dut =>
         dut.clock.step(5)
 
+        // write csr function for better code reuse
         def write_csr(addr: Int, data: Int) = {
 
+          // give the data and address to the right ports
           dut.io.csr.req.bits.write.poke(1.B)
           dut.io.csr.req.bits.data.poke(data.U)
           dut.io.csr.req.bits.addr.poke(addr.U)
@@ -34,6 +37,31 @@ class StreamerTopTest
 
           dut.io.csr.req.valid.poke(0.B)
 
+        }
+
+        // read csr function for better code reuse
+        def read_csr(addr: Int, data: Int) = {
+
+          // give the data and address to the right ports
+          dut.io.csr.req.bits.write.poke(0.B)
+          dut.io.csr.req.bits.data.poke(data.U)
+          dut.io.csr.req.bits.addr.poke(addr.U)
+          dut.io.csr.req.valid.poke(1.B)
+
+          // wait for grant
+          while (dut.io.csr.req.ready.peekBoolean() == false) {
+            dut.clock.step(1)
+          }
+
+          dut.clock.step(1)
+
+          dut.io.csr.req.valid.poke(0.B)
+
+          // wait for valid signal
+          while (dut.io.csr.rsp.valid.peekBoolean() == false) {
+            dut.clock.step(1)
+          }
+          dut.io.csr.rsp.bits.data.peekInt()
         }
 
         // give valid transaction config
@@ -106,6 +134,12 @@ class StreamerTopTest
 
         // wait until finish
         write_csr(13, 0)
+
+        dut.clock.step(10)
+
+        // csr read test and check the result
+        val read_csr_value = read_csr(0, 0)
+        assert(read_csr_value == temporal_loop_bound)
 
         dut.clock.step(10)
 

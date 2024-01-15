@@ -22,6 +22,15 @@ import chisel3.util._
   * bounds and strides are programmable at run time.
   */
 
+/** This class represents all the parameters for the Temporal Address Generation
+  * Unit.
+  * @param loopDim
+  *   The dimension of the temporal loops = the number of for loops.
+  * @param loopBoundWidth
+  *   The bit width of the loop bounds.
+  * @param addrWidth
+  *   The bit width of the address.
+  */
 case class TemporalAddrGenUnitParams(
     loopDim: Int = TemporalAddrGenUnitTestParameters.loopDim,
     loopBoundWidth: Int = TemporalAddrGenUnitTestParameters.loopBoundWidth,

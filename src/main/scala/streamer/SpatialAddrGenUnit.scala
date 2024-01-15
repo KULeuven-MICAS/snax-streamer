@@ -21,6 +21,15 @@ import chisel3.util._
   * design time. The loop strides are programmable at run time.
   */
 
+/** This class represents all the parameters for the Spatial Address Generation
+  * Unit.
+  * @param loopDim
+  *   The number of nested for loops.
+  * @param loopBounds
+  *   The bounds of each loop dimension.
+  * @param addrWidth
+  *   The bit width of the address.
+  */
 case class SpatialAddrGenUnitParams(
     loopDim: Int = SpatialAddrGenUnitTestParameters.loopDim,
     loopBounds: Seq[Int] = SpatialAddrGenUnitTestParameters.loopBounds,
@@ -52,14 +61,15 @@ class SpatialAddrGenUnitIO(
   )
 }
 
-trait WithSpatialLoopIndeces {
+// a trait other class can extend to have the genSpatialLoopIndices function
+trait WithSpatialLoopIndices {
 
   // a scala function to generate the nested indices of the unrolled loop counter for generating unrolling addresses
   // for instance:
-  // genSpatialLoopIndeces(2,Seq(8,8),0) returns (0,0)
-  // genSpatialLoopIndeces(2,Seq(8,8),1) returns (1,0)
-  // genSpatialLoopIndeces(2,Seq(8,8),10) returns (2,1)
-  def genSpatialLoopIndeces(
+  // genSpatialLoopIndices(2,Seq(8,8),0) returns (0,0)
+  // genSpatialLoopIndices(2,Seq(8,8),1) returns (1,0)
+  // genSpatialLoopIndices(2,Seq(8,8),10) returns (2,1)
+  def genSpatialLoopIndices(
       loopDim: Int,
       loopBounds: Seq[Int],
       i: Int
@@ -87,7 +97,7 @@ class SpatialAddrGenUnit(
     params: SpatialAddrGenUnitParams
 ) extends Module
     with RequireAsyncReset
-    with WithSpatialLoopIndeces {
+    with WithSpatialLoopIndices {
 
   // the input/output ports
   val io = IO(
@@ -136,7 +146,7 @@ class SpatialAddrGenUnit(
       for (i <- 0 until loopBounds.product) {
 
         // indices for each nested unrolling loop
-        val indices = genSpatialLoopIndeces(loopDim, loopBounds, i)
+        val indices = genSpatialLoopIndices(loopDim, loopBounds, i)
 
         // address generation with affine mapping definition
         spatial_addr(i) := ((0 until loopDim)

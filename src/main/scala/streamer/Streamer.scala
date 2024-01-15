@@ -5,60 +5,68 @@ import chisel3.util._
 
 case class FIFOParams(width: Int, depth: Int)
 
-/** Parameter definitions
-  * @param fifoWidthReader
-  *   FIFO width for the data readers
-  * @param fifoDepthReader
-  *   FIFO depth for the data readers
-  * @param fifoWidthWriter
-  *   FIFO width for the data writers
-  * @param fifoDepthWriter
-  *   FIFO depth for the data writers
-  * @param dataReaderNum
-  *   number of data readers
-  * @param dataWriterNum
-  *   number of data writers
-  * @param dataReaderTcdmPorts
-  *   the number of connections to TCDM ports for each data reader
-  * @param dataWriterTcdmPorts
-  *   the number of connections to TCDM ports for each data writer
-  * @param readElementWidth
-  *   single data element width for each data reader, useful for generating
-  *   unrolling addresses
-  * @param writeElementWidth
-  *   single data element width for each data writer, useful for generating
-  *   unrolling addresses
-  * @param tcdmDataWidth
-  *   data width for each TCDm port
-  * @param unrollingFactorReader
-  *   spatial unrolling factors (your parfor) for each data reader
-  * @param unrollingFactorWriter
-  *   spatial unrolling factors (your parfor) for each data writer
-  * @param temporalLoopDim
-  *   the dimension of the temporal loop
-  * @param temporalLoopBoundWidth
-  *   the register width for storing the temporal loop bound
-  * @param addrWidth
-  *   the address width
+/** trait for Streamer parameters
+  * @param temporalAddrGenUnitParams
+  *   a parameters case class instantiation for temporal address generation unit
   * @param stationarity
   *   accelerator stationarity feature for each data mover (data reader and data
   *   writer)
+  * @param dataReaderParams
+  *   a seq of case class DataMoverParams instantiation for the Data Readers
+  * @param dataWriterParams
+  *   a seq of case class DataMoverParams instantiation for the Data Writers
+  * @param fifoReaderParams
+  *   a seq of case class FIFOParams instantiation for the FIFO connected to
+  *   Data Readers
+  * @param fifoReaderParams
+  *   a seq of case class FIFOParams instantiation for the FIFO connected to
+  *   Data Writers
   */
-
-trait HasStreamerParams {
+trait HasStreamerCoreParams {
 
   val temporalAddrGenUnitParams: TemporalAddrGenUnitParams
-
-  val fifoReaderParams: Seq[FIFOParams]
-  val fifoWriterParams: Seq[FIFOParams]
 
   val stationarity: Seq[Int]
 
   val dataReaderParams: Seq[DataMoverParams]
   val dataWriterParams: Seq[DataMoverParams]
 
-  val tcdmDataWidth: Int = dataReaderParams(0).tcdmDataWidth
-  val addrWidth: Int = temporalAddrGenUnitParams.addrWidth
+  val fifoReaderParams: Seq[FIFOParams]
+  val fifoWriterParams: Seq[FIFOParams]
+
+}
+
+/** trait for Streamer inferred parameters
+  * @param temporalLoopDim
+  *   the dimension of the temporal loop
+  * @param temporalLoopBoundWidth
+  *   the register width for storing the temporal loop bound
+  * @param unrollingDim
+  *   a Seq contains the unrolling dimensions for both data reader and data
+  *   writer
+  * @param tcdmDataWidth
+  *   data width for each TCDm port
+  * @param addrWidth
+  *   the address width
+  * @param dataReaderNum
+  *   number of data readers
+  * @param dataWriterNum
+  *   number of data writers
+  * @param dataMoverNum
+  *   the number of data movers (including data reader and writer)
+  * @param dataReaderTcdmPorts
+  *   a Seq contains the number of TCDM ports connected to each data reader
+  * @param dataWriterTcdmPorts
+  *   a Seq contains the number of TCDM ports connected to each data writer
+  * @param tcdmPortsNum
+  *   the total number of TCDM ports connected the data movers (including data
+  *   reader and writer)
+  * @param fifoWidthReader
+  *   FIFO width for the data readers
+  * @param fifoWidthWriter
+  *   FIFO width for the data writers
+  */
+trait HasStreamerInferredParams extends HasStreamerCoreParams {
 
   val temporalLoopDim: Int = temporalAddrGenUnitParams.loopDim
   val temporalLoopBoundWidth: Int = temporalAddrGenUnitParams.loopBoundWidth
@@ -66,30 +74,43 @@ trait HasStreamerParams {
   val unrollingDim: Seq[Int] =
     dataReaderParams.map(_.unrollingDim) ++ dataWriterParams.map(_.unrollingDim)
 
+  val tcdmDataWidth: Int = dataReaderParams(0).tcdmDataWidth
+  val addrWidth: Int = temporalAddrGenUnitParams.addrWidth
+
   val dataReaderNum: Int = dataReaderParams.length
   val dataWriterNum: Int = dataWriterParams.length
   val dataMoverNum: Int = dataReaderNum + dataWriterNum
-
-  val fifoWidthReader: Seq[Int] = fifoReaderParams.map(_.width)
-  val fifoWidthWriter: Seq[Int] = fifoWriterParams.map(_.width)
   val dataReaderTcdmPorts: Seq[Int] = dataReaderParams.map(_.tcdmPortsNum)
   val dataWriterTcdmPorts: Seq[Int] = dataWriterParams.map(_.tcdmPortsNum)
   val tcdmPortsNum: Int = dataReaderTcdmPorts.sum + dataWriterTcdmPorts.sum
 
+  val fifoWidthReader: Seq[Int] = fifoReaderParams.map(_.width)
+  val fifoWidthWriter: Seq[Int] = fifoWriterParams.map(_.width)
+
 }
 
-//
+/** This case class represents all the parameters for the Streamer
+  * @param temporalAddrGenUnitParams
+  * @param stationarity
+  * @param dataReaderParams
+  * @param dataWriterParams
+  * @param fifoReaderParams
+  * @param fifoWriterParams
+  *   the meaning of these parameters can be found at the top of this file the
+  *   default value of these parameters is from the StreamerTestConstant object
+  */
 case class StreamerParams(
     temporalAddrGenUnitParams: TemporalAddrGenUnitParams =
       StreamerTestConstant.temporalAddrGenUnitParams,
-    fifoReaderParams: Seq[FIFOParams] = StreamerTestConstant.fifoReaderParams,
-    fifoWriterParams: Seq[FIFOParams] = StreamerTestConstant.fifoWriterParams,
     stationarity: Seq[Int] = StreamerTestConstant.stationarity,
     dataReaderParams: Seq[DataMoverParams] =
       StreamerTestConstant.dataReaderParams,
     dataWriterParams: Seq[DataMoverParams] =
-      StreamerTestConstant.dataWriterParams
-) extends HasStreamerParams
+      StreamerTestConstant.dataWriterParams,
+    fifoReaderParams: Seq[FIFOParams] = StreamerTestConstant.fifoReaderParams,
+    fifoWriterParams: Seq[FIFOParams] = StreamerTestConstant.fifoWriterParams
+) extends HasStreamerCoreParams
+    with HasStreamerInferredParams
 
 // data to accelerator interface generator
 // a vector of decoupled interface with configurable number and configurable width for each port

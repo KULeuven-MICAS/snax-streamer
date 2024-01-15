@@ -17,3 +17,14 @@ class TcdmRsp(tcdmDataWidth: Int = StreamerTestConstant.tcdmDataWidth)
     extends Bundle {
   val data = UInt(tcdmDataWidth.W)
 }
+
+// simplified csr read/write cmd
+class CsrReq(addrWidth: Int = StreamerTestConstant.addrWidth) extends Bundle {
+  val data = UInt(32.W)
+  val addr = UInt(addrWidth.W)
+  val write = Bool()
+}
+
+class CsrRsp extends Bundle {
+  val data = UInt(32.W)
+}

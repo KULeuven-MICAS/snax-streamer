@@ -5,33 +5,31 @@ import chisel3.util._
 
 // input and output for data writer (data mover in write mode)
 class DataWriterIO(
-    dataWriterTcdmPorts: Int = DataWriterTestParameters.dataWriterTcdmPorts,
-    tcdmDataWidth: Int = DataWriterTestParameters.tcdmDataWidth,
-    unrollingDim: Int = DataWriterTestParameters.unrollingDim,
-    addrWidth: Int = DataWriterTestParameters.addrWidth,
-    fifoWidth: Int = DataWriterTestParameters.fifoWidth
+    params: DataMoverParams
 ) extends Bundle {
 
   // signals for write request address generation
-  val ptr_agu_i = Flipped(Decoupled(UInt(addrWidth.W)))
+  val ptr_agu_i = Flipped(Decoupled(UInt(params.addrWidth.W)))
   val spatialStrides_csr_i = Flipped(
-    Decoupled(Vec(unrollingDim, UInt(addrWidth.W)))
+    Decoupled(Vec(params.spatialDim, UInt(params.addrWidth.W)))
   )
 
   // valid data from the queue
-  val data_fifo_i = Flipped(Decoupled(UInt(fifoWidth.W)))
+  val data_fifo_i = Flipped(Decoupled(UInt(params.fifoWidth.W)))
 
   assert(
-    fifoWidth == dataWriterTcdmPorts * tcdmDataWidth,
-    "fifoWidth should match with TCDM datawidth for now!"
+    params.fifoWidth == params.tcdmPortsNum * params.tcdmDataWidth,
+    "params.fifoWidth should match with TCDM datawidth for now!"
   )
 
   // tcdm write req signals
-  val tcdm_req_addr = Output(Vec(dataWriterTcdmPorts, UInt(addrWidth.W)))
-  val write_tcmd_valid_o = Output(Vec(dataWriterTcdmPorts, Bool()))
-  val tcdm_req_data = Output(Vec(dataWriterTcdmPorts, UInt(tcdmDataWidth.W)))
+  val tcdm_req_addr = Output(Vec(params.tcdmPortsNum, UInt(params.addrWidth.W)))
+  val write_tcmd_valid_o = Output(Vec(params.tcdmPortsNum, Bool()))
+  val tcdm_req_data = Output(
+    Vec(params.tcdmPortsNum, UInt(params.tcdmDataWidth.W))
+  )
 
-  val tcdm_ready_i = Input(Vec(dataWriterTcdmPorts, Bool()))
+  val tcdm_ready_i = Input(Vec(params.tcdmPortsNum, Bool()))
 
   // from temporal address generation unit to indicate if the transaction is done
   val done = Input(Bool())
@@ -41,51 +39,43 @@ class DataWriterIO(
 // data writer, for sending write request to TCDM, getting valid data from the queue
 // data consumer from the accelerator X aspect
 class DataWriter(
-    dataWriterTcdmPorts: Int = DataWriterTestParameters.dataWriterTcdmPorts,
-    tcdmDataWidth: Int = DataWriterTestParameters.tcdmDataWidth,
-    unrollingDim: Int = DataWriterTestParameters.unrollingDim,
-    unrollingFactor: Seq[Int] = DataWriterTestParameters.unrollingFactor,
-    addrWidth: Int = DataWriterTestParameters.addrWidth,
-    fifoWidth: Int = DataWriterTestParameters.fifoWidth,
-    elementWidth: Int = DataWriterTestParameters.elementWidth
+    params: DataMoverParams = DataMoverParams()
 ) extends Module
     with RequireAsyncReset {
 
   val io = IO(
     new DataWriterIO(
-      dataWriterTcdmPorts,
-      tcdmDataWidth,
-      unrollingDim,
-      addrWidth,
-      fifoWidth
+      params
     )
   )
 
   // storing the temporal start address when it is valid
-  val ptr_agu = RegInit(0.U(addrWidth.W))
-  val start_ptr = WireInit(0.U(addrWidth.W))
+  val ptr_agu = RegInit(0.U(params.addrWidth.W))
+  val start_ptr = WireInit(0.U(params.addrWidth.W))
 
   // config valid signal for unrolling strides
   // storing the config when it is valid
   val config_valid = WireInit(0.B)
   val unrollingStrides = RegInit(
-    VecInit(Seq.fill(unrollingDim)(0.U(addrWidth.W)))
+    VecInit(Seq.fill(params.spatialDim)(0.U(params.addrWidth.W)))
   )
 
   // original unrolling address for TCDM request
   val unrolling_addr = WireInit(
-    VecInit(Seq.fill(unrollingFactor.reduce(_ * _))(0.U(addrWidth.W)))
+    VecInit(
+      Seq.fill(params.spatialBounds.reduce(_ * _))(0.U(params.addrWidth.W))
+    )
   )
 
   // for selecting the real TCDM request address from the original unrolling addresses
-  // according to the tcdmDataWidth and the elementWidth relationship
-  // !!! warning: assuming the data granularity is one tcdmDataWidth
+  // according to the params.tcdmDataWidth and the elementWidth relationship
+  // !!! warning: assuming the data granularity is one params.tcdmDataWidth
   // no sub-data accessing within one TCDM bank
-  def packed_addr_num = (tcdmDataWidth / 8) / (elementWidth / 8)
+  def packed_addr_num = (params.tcdmDataWidth / 8) / (params.elementWidth / 8)
 
-  val tcdm_rsp_i_q_ready = WireInit(VecInit(Seq.fill(dataWriterTcdmPorts)(0.B)))
+  val tcdm_rsp_i_q_ready = WireInit(VecInit(Seq.fill(params.tcdmPortsNum)(0.B)))
   val tcdm_rsp_i_q_ready_reg = RegInit(
-    VecInit(Seq.fill(dataWriterTcdmPorts)(0.B))
+    VecInit(Seq.fill(params.tcdmPortsNum)(0.B))
   )
   val wait_for_q_ready_write = WireInit(0.B)
 
@@ -139,7 +129,13 @@ class DataWriter(
 
   // generating original unrolling address for TCDM request
   val spatial_addr_gen_unit = Module(
-    new SpatialAddrGenUnit(unrollingDim, unrollingFactor, addrWidth)
+    new SpatialAddrGenUnit(
+      SpatialAddrGenUnitParams(
+        params.spatialDim,
+        params.spatialBounds,
+        params.addrWidth
+      )
+    )
   )
 
   spatial_addr_gen_unit.io.valid_i := cstate =/= sIDLE
@@ -149,7 +145,7 @@ class DataWriter(
 
   // address constraint check
   when(cstate === sBUSY) {
-    for (i <- 0 until dataWriterTcdmPorts) {
+    for (i <- 0 until params.tcdmPortsNum) {
       for (j <- 0 until packed_addr_num - 1) {
         assert(
           unrolling_addr(i * packed_addr_num + j + 1) === unrolling_addr(
@@ -164,13 +160,13 @@ class DataWriter(
   can_send_tcdm_write_req := io.data_fifo_i.valid && cstate === sBUSY
 
   // assuming addresses are packed in one tcmd request
-  for (i <- 0 until dataWriterTcdmPorts) {
+  for (i <- 0 until params.tcdmPortsNum) {
     io.tcdm_req_addr(i) := unrolling_addr(i * packed_addr_num)
   }
 
   // deal with contention
   // ensure all the write request are sent successfully
-  for (i <- 0 until dataWriterTcdmPorts) {
+  for (i <- 0 until params.tcdmPortsNum) {
     when(can_send_tcdm_write_req) {
       when(io.ptr_agu_i.fire) {
         io.write_tcmd_valid_o(i) := 1.B
@@ -178,8 +174,8 @@ class DataWriter(
         io.write_tcmd_valid_o(i) := ~tcdm_rsp_i_q_ready_reg(i)
       }
       io.tcdm_req_data(i) := io.data_fifo_i.bits(
-        (i + 1) * tcdmDataWidth - 1,
-        i * tcdmDataWidth
+        (i + 1) * params.tcdmDataWidth - 1,
+        i * params.tcdmDataWidth
       )
     }.otherwise {
       io.write_tcmd_valid_o(i) := 0.B
@@ -187,7 +183,7 @@ class DataWriter(
     }
   }
 
-  for (i <- 0 until dataWriterTcdmPorts) {
+  for (i <- 0 until params.tcdmPortsNum) {
     when(can_send_tcdm_write_req && !tcdm_write_mem_all_ready) {
       wait_for_q_ready_write := 1.B
     }.otherwise {
@@ -196,7 +192,7 @@ class DataWriter(
   }
 
   // ensure getting all the grants
-  for (i <- 0 until dataWriterTcdmPorts) {
+  for (i <- 0 until params.tcdmPortsNum) {
     when(wait_for_q_ready_write && !tcdm_write_mem_all_ready) {
       when(io.tcdm_ready_i(i)) {
         tcdm_rsp_i_q_ready_reg(i) := io.tcdm_ready_i(i)
@@ -206,7 +202,7 @@ class DataWriter(
     }
   }
 
-  for (i <- 0 until dataWriterTcdmPorts) {
+  for (i <- 0 until params.tcdmPortsNum) {
     tcdm_rsp_i_q_ready(i) := io.tcdm_ready_i(i) || tcdm_rsp_i_q_ready_reg(i)
   }
 
@@ -227,7 +223,7 @@ class DataWriter(
 // Scala main function for generating system verilog file for the DataWriter module
 object DataWriter extends App {
   emitVerilog(
-    new (DataWriter),
+    new DataWriter(DataMoverParams()),
     Array("--target-dir", "generated/streamer")
   )
 }

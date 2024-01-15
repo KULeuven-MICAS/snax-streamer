@@ -3,172 +3,185 @@ package streamer
 import chisel3._
 import chisel3.util._
 
-/** Parameter definitions
-  * @param fifoWidthReader
-  *   FIFO width for the data readers
-  * @param fifoDepthReader
-  *   FIFO depth for the data readers
-  * @param fifoWidthWriter
-  *   FIFO width for the data writers
-  * @param fifoDepthWriter
-  *   FIFO depth for the data writers
+/** This class represents some common parameters used in several modules
+  * @param addrWidth
+  *   The bit width of the address.
+  * @param tcdmDataWidth
+  *   data width for each TCDm port
+  */
+trait CommonParams {
+
+  def addrWidth = 32
+  def tcdmDataWidth = 64
+
+}
+
+/** This class represents all the parameters for the Temporal Address Generation
+  * Unit.
+  * @param loopDim
+  *   The dimension of the temporal loops = the number of for loops.
+  * @param loopBoundWidth
+  *   The bit width of the loop bounds.
+  * @param addrWidth
+  *   The bit width of the address.
+  */
+case class TemporalAddrGenUnitParams(
+    loopDim: Int = TemporalAddrGenUnitTestParameters.loopDim,
+    loopBoundWidth: Int = TemporalAddrGenUnitTestParameters.loopBoundWidth,
+    addrWidth: Int = TemporalAddrGenUnitTestParameters.addrWidth
+)
+
+/** This class represents all the parameters for the Spatial Address Generation
+  * Unit.
+  * @param loopDim
+  *   The number of nested for loops.
+  * @param loopBounds
+  *   The bounds of each loop dimension.
+  * @param addrWidth
+  *   The bit width of the address.
+  */
+case class SpatialAddrGenUnitParams(
+    loopDim: Int = SpatialAddrGenUnitTestParameters.loopDim,
+    loopBounds: Seq[Int] = SpatialAddrGenUnitTestParameters.loopBounds,
+    addrWidth: Int = SpatialAddrGenUnitTestParameters.addrWidth
+)
+
+/** This class represents all the parameters for the Data Mover (including Data
+  * Reader and Data Writer).
+  *
+  * @param tcdmPortsNum
+  *   the number of TCDM ports connected to each data mover
+  * @param spatialBounds
+  *   spatial unrolling factors (your parfor) for each data mover
+  * @param spatialDim
+  *   the dimension of spatial unrolling factors (your parfor) for each data
+  *   mover
+  * @param elementWidth
+  *   single data element width for each data mover, useful for generating
+  *   unrolling addresses
+  * @param fifoWidth
+  *   FIFO width
+  */
+case class DataMoverParams(
+    tcdmPortsNum: Int = DataMoverTestParameters.tcdmPortsNum,
+    spatialBounds: Seq[Int] = DataMoverTestParameters.spatialBounds,
+    spatialDim: Int = DataMoverTestParameters.spatialDim,
+    elementWidth: Int = DataMoverTestParameters.elementWidth,
+    fifoWidth: Int = DataMoverTestParameters.fifoWidth
+) extends CommonParams
+
+/** FIFO parameters
+  *
+  * @param width
+  *   the width of the FIFO
+  * @param depth
+  *   the depth of the FIFO
+  */
+case class FIFOParams(width: Int, depth: Int)
+
+/** trait for Streamer core parameters
+  * @param temporalAddrGenUnitParams
+  *   a parameters case class instantiation for temporal address generation unit
+  * @param stationarity
+  *   accelerator stationarity feature for each data mover (data reader and data
+  *   writer)
+  * @param dataReaderParams
+  *   a seq of case class DataMoverParams instantiation for the Data Readers
+  * @param dataWriterParams
+  *   a seq of case class DataMoverParams instantiation for the Data Writers
+  * @param fifoReaderParams
+  *   a seq of case class FIFOParams instantiation for the FIFO connected to
+  *   Data Readers
+  * @param fifoReaderParams
+  *   a seq of case class FIFOParams instantiation for the FIFO connected to
+  *   Data Writers
+  */
+trait HasStreamerCoreParams {
+
+  val temporalAddrGenUnitParams: TemporalAddrGenUnitParams
+
+  val stationarity: Seq[Int]
+
+  val dataReaderParams: Seq[DataMoverParams]
+  val dataWriterParams: Seq[DataMoverParams]
+
+  val fifoReaderParams: Seq[FIFOParams]
+  val fifoWriterParams: Seq[FIFOParams]
+
+}
+
+/** trait for Streamer inferred parameters
+  * @param temporalDim
+  *   the dimension of the temporal loop
+  * @param temporalBoundWidth
+  *   the register width for storing the temporal loop bound
+  * @param spatialDim
+  *   a Seq contains the unrolling dimensions for both data reader and data
+  *   writer
+  * @param tcdmDataWidth
+  *   data width for each TCDm port
+  * @param addrWidth
+  *   the address width
   * @param dataReaderNum
   *   number of data readers
   * @param dataWriterNum
   *   number of data writers
+  * @param dataMoverNum
+  *   the number of data movers (including data reader and writer)
   * @param dataReaderTcdmPorts
-  *   the number of connections to TCDM ports for each data reader
+  *   a Seq contains the number of TCDM ports connected to each data reader
   * @param dataWriterTcdmPorts
-  *   the number of connections to TCDM ports for each data writer
-  * @param readElementWidth
-  *   single data element width for each data reader, useful for generating
-  *   unrolling addresses
-  * @param writeElementWidth
-  *   single data element width for each data writer, useful for generating
-  *   unrolling addresses
-  * @param tcdmDataWidth
-  *   data width for each TCDm port
-  * @param unrollingFactorReader
-  *   spatial unrolling factors (your parfor) for each data reader
-  * @param unrollingFactorWriter
-  *   spatial unrolling factors (your parfor) for each data writer
-  * @param temporalLoopDim
-  *   the dimension of the temporal loop
-  * @param temporalLoopBoundWidth
-  *   the register width for storing the temporal loop bound
-  * @param addrWidth
-  *   the address width
-  * @param stationarity
-  *   accelerator stationarity feature for each data mover (data reader and data
-  *   writer)
+  *   a Seq contains the number of TCDM ports connected to each data writer
+  * @param tcdmPortsNum
+  *   the total number of TCDM ports connected the data movers (including data
+  *   reader and writer)
+  * @param fifoWidthReader
+  *   FIFO width for the data readers
+  * @param fifoWidthWriter
+  *   FIFO width for the data writers
   */
+trait HasStreamerInferredParams extends HasStreamerCoreParams {
 
-// streamer parameters for the GEMM Accelerator
-object GeMMStreamerParameters {
-  def fifoWidthReader = Seq(512, 512)
-  def fifoDepthReader = Seq(4, 4)
+  val temporalDim: Int = temporalAddrGenUnitParams.loopDim
+  val temporalBoundWidth: Int = temporalAddrGenUnitParams.loopBoundWidth
 
-  def fifoWidthWriter = Seq(2048)
-  def fifoDepthWriter = Seq(4)
+  val spatialDim: Seq[Int] =
+    dataReaderParams.map(_.spatialDim) ++ dataWriterParams.map(_.spatialDim)
 
-  def dataReaderNum = 2
-  def dataWriterNum = 1
-  def dataReaderTcdmPorts = Seq(8, 8)
-  def dataWriterTcdmPorts = Seq(32)
-  def readElementWidth = Seq(8, 8)
-  def writeElementWidth = Seq(32)
+  val tcdmDataWidth: Int = dataReaderParams(0).tcdmDataWidth
+  val addrWidth: Int = temporalAddrGenUnitParams.addrWidth
 
-  def tcdmDataWidth = 64
+  val dataReaderNum: Int = dataReaderParams.length
+  val dataWriterNum: Int = dataWriterParams.length
+  val dataMoverNum: Int = dataReaderNum + dataWriterNum
+  val dataReaderTcdmPorts: Seq[Int] = dataReaderParams.map(_.tcdmPortsNum)
+  val dataWriterTcdmPorts: Seq[Int] = dataWriterParams.map(_.tcdmPortsNum)
+  val tcdmPortsNum: Int = dataReaderTcdmPorts.sum + dataWriterTcdmPorts.sum
 
-  def unrollingFactorReader = Seq(Seq(8, 8), Seq(8, 8))
+  val fifoWidthReader: Seq[Int] = fifoReaderParams.map(_.width)
+  val fifoWidthWriter: Seq[Int] = fifoWriterParams.map(_.width)
 
-  def unrollingFactorWriter = Seq(Seq(8, 8))
-
-  def temporalLoopDim = 3
-  def temporalLoopBoundWidth = 8
-
-  def addrWidth = 32
-
-  def stationarity = Seq(0, 0, 1)
-
-  // inferenced parameters
-  def dataMoverNum = dataReaderNum + dataWriterNum
-  def tcdmPortsNum = dataReaderTcdmPorts.sum + dataWriterTcdmPorts.sum
-  def unrollingDimReader = (0 until unrollingFactorReader.length).map(i =>
-    unrollingFactorReader(i).length
-  )
-  def unrollingDimWriter = (0 until unrollingFactorWriter.length).map(i =>
-    unrollingFactorWriter(i).length
-  )
-  def unrollingDim: Seq[Int] = (0 until unrollingFactorReader.length).map(i =>
-    unrollingFactorReader(i).length
-  ) ++ (0 until unrollingFactorWriter.length).map(i =>
-    unrollingFactorWriter(i).length
-  )
 }
 
-// streamer parameters for the Post-processing SIMD Accelerator
-object PostProcessingStreamerParameters {
-  def fifoWidthReader = Seq(2048)
-  def fifoDepthReader = Seq(2)
-
-  def fifoWidthWriter = Seq(512)
-  def fifoDepthWriter = Seq(2)
-
-  def dataReaderNum = 1
-  def dataWriterNum = 1
-  def dataReaderTcdmPorts = Seq(32)
-  def dataWriterTcdmPorts = Seq(8)
-  def readElementWidth = Seq(32)
-  def writeElementWidth = Seq(8)
-
-  def tcdmDataWidth = 64
-
-  def unrollingFactorReader = Seq(Seq(64))
-  def unrollingFactorWriter = Seq(Seq(64))
-
-  def temporalLoopDim = 1
-  def temporalLoopBoundWidth = 8
-
-  def addrWidth = 32
-
-  def stationarity = Seq(0, 0)
-
-  // inferenced parameters
-  def dataMoverNum = dataReaderNum + dataWriterNum
-  def tcdmPortsNum = dataReaderTcdmPorts.sum + dataWriterTcdmPorts.sum
-  def unrollingDimReader = (0 until unrollingFactorReader.length).map(i =>
-    unrollingFactorReader(i).length
-  )
-  def unrollingDimWriter = (0 until unrollingFactorWriter.length).map(i =>
-    unrollingFactorWriter(i).length
-  )
-  def unrollingDim: Seq[Int] = (0 until unrollingFactorReader.length).map(i =>
-    unrollingFactorReader(i).length
-  ) ++ (0 until unrollingFactorWriter.length).map(i =>
-    unrollingFactorWriter(i).length
-  )
-}
-
-// streamer parameters for the MAC Engine Accelerator
-object MACStreamerParameters {
-  def fifoWidthReader = Seq(64, 64, 64)
-  def fifoDepthReader = Seq(2, 2, 2)
-
-  def fifoWidthWriter = Seq(64)
-  def fifoDepthWriter = Seq(2)
-
-  def dataReaderNum = 3
-  def dataWriterNum = 1
-  def dataReaderTcdmPorts = Seq(1, 1, 1)
-  def dataWriterTcdmPorts = Seq(1)
-  def readElementWidth = Seq(32, 32, 32)
-  def writeElementWidth = Seq(32)
-
-  def tcdmDataWidth = 64
-
-  def unrollingFactorReader = Seq(Seq(2), Seq(2), Seq(2))
-  def unrollingFactorWriter = Seq(Seq(2))
-
-  def temporalLoopDim = 1
-  def temporalLoopBoundWidth = 8
-
-  def addrWidth = 32
-
-  def stationarity = Seq(0, 0, 1, 1)
-
-  // inferenced parameters
-  def dataMoverNum = dataReaderNum + dataWriterNum
-  def tcdmPortsNum = dataReaderTcdmPorts.sum + dataWriterTcdmPorts.sum
-  def unrollingDimReader = (0 until unrollingFactorReader.length).map(i =>
-    unrollingFactorReader(i).length
-  )
-  def unrollingDimWriter = (0 until unrollingFactorWriter.length).map(i =>
-    unrollingFactorWriter(i).length
-  )
-  def unrollingDim: Seq[Int] = (0 until unrollingFactorReader.length).map(i =>
-    unrollingFactorReader(i).length
-  ) ++ (0 until unrollingFactorWriter.length).map(i =>
-    unrollingFactorWriter(i).length
-  )
-}
+/** This case class represents all the parameters for the Streamer
+  * @param temporalAddrGenUnitParams
+  * @param stationarity
+  * @param dataReaderParams
+  * @param dataWriterParams
+  * @param fifoReaderParams
+  * @param fifoWriterParams
+  *   the meaning of these parameters can be found at the top of this file the
+  *   default value of these parameters is from the StreamerTestConstant object
+  */
+case class StreamerParams(
+    temporalAddrGenUnitParams: TemporalAddrGenUnitParams =
+      StreamerTestConstant.temporalAddrGenUnitParams,
+    stationarity: Seq[Int] = StreamerTestConstant.stationarity,
+    dataReaderParams: Seq[DataMoverParams] =
+      StreamerTestConstant.dataReaderParams,
+    dataWriterParams: Seq[DataMoverParams] =
+      StreamerTestConstant.dataWriterParams,
+    fifoReaderParams: Seq[FIFOParams] = StreamerTestConstant.fifoReaderParams,
+    fifoWriterParams: Seq[FIFOParams] = StreamerTestConstant.fifoWriterParams
+) extends HasStreamerCoreParams
+    with HasStreamerInferredParams

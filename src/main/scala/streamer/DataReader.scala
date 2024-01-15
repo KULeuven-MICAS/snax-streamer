@@ -5,35 +5,31 @@ import chisel3.util._
 
 // input and output for data reader (data mover in read mode)
 class DataReaderIO(
-    dataReaderTcdmPorts: Int = DataReaderTestParameters.dataReaderTcdmPorts,
-    tcdmDataWidth: Int = DataReaderTestParameters.tcdmDataWidth,
-    unrollingDim: Int = DataReaderTestParameters.unrollingDim,
-    addrWidth: Int = DataReaderTestParameters.addrWidth,
-    fifoWidth: Int = DataReaderTestParameters.fifoWidth
+    params: DataMoverParams
 ) extends Bundle {
 
   // signals for read request address generation
-  val ptr_agu_i = Flipped(Decoupled(UInt(addrWidth.W)))
+  val ptr_agu_i = Flipped(Decoupled(UInt(params.addrWidth.W)))
   val spatialStrides_csr_i = Flipped(
-    Decoupled(Vec(unrollingDim, UInt(addrWidth.W)))
+    Decoupled(Vec(params.spatialDim, UInt(params.addrWidth.W)))
   )
 
   // tcdm read req
-  val tcdm_req_addr = Output(Vec(dataReaderTcdmPorts, UInt(addrWidth.W)))
-  val read_tcmd_valid_o = Output(Vec(dataReaderTcdmPorts, Bool()))
+  val tcdm_req_addr = Output(Vec(params.tcdmPortsNum, UInt(params.addrWidth.W)))
+  val read_tcmd_valid_o = Output(Vec(params.tcdmPortsNum, Bool()))
 
-  val tcdm_ready_i = Input(Vec(dataReaderTcdmPorts, Bool()))
+  val tcdm_ready_i = Input(Vec(params.tcdmPortsNum, Bool()))
 
   // tcdm rsp
   val data_tcdm_i = Flipped(
-    (Vec(dataReaderTcdmPorts, Valid(UInt(tcdmDataWidth.W))))
+    (Vec(params.tcdmPortsNum, Valid(UInt(params.tcdmDataWidth.W))))
   )
 
   // data pushed into the queue
-  val data_fifo_o = Decoupled(UInt(fifoWidth.W))
+  val data_fifo_o = Decoupled(UInt(params.fifoWidth.W))
 
   assert(
-    fifoWidth == dataReaderTcdmPorts * tcdmDataWidth,
+    params.fifoWidth == params.tcdmPortsNum * params.tcdmDataWidth,
     "fifoWidth should match with TCDM datawidth for now!"
   )
 
@@ -45,50 +41,42 @@ class DataReaderIO(
 // data reader, for sending read request to TCDM and collect data from TCDM response, pushing valid data into the queue
 // data producer from the accelerator X aspect
 class DataReader(
-    dataReaderTcdmPorts: Int = DataReaderTestParameters.dataReaderTcdmPorts,
-    tcdmDataWidth: Int = DataReaderTestParameters.tcdmDataWidth,
-    unrollingDim: Int = DataReaderTestParameters.unrollingDim,
-    unrollingFactor: Seq[Int] = DataReaderTestParameters.unrollingFactor,
-    addrWidth: Int = DataReaderTestParameters.addrWidth,
-    fifoWidth: Int = DataReaderTestParameters.fifoWidth,
-    elementWidth: Int = DataReaderTestParameters.elementWidth
+    params: DataMoverParams = DataMoverParams()
 ) extends Module
     with RequireAsyncReset {
 
   val io = IO(
     new DataReaderIO(
-      dataReaderTcdmPorts,
-      tcdmDataWidth,
-      unrollingDim,
-      addrWidth,
-      fifoWidth
+      params
     )
   )
 
   // storing the temporal start address when it is valid
-  val ptr_agu = RegInit(0.U(addrWidth.W))
-  val start_ptr = WireInit(0.U(addrWidth.W))
+  val ptr_agu = RegInit(0.U(params.addrWidth.W))
+  val start_ptr = WireInit(0.U(params.addrWidth.W))
 
   // config valid signal for unrolling strides
   // storing the config when it is valid
   val config_valid = WireInit(0.B)
   val unrollingStrides = RegInit(
-    VecInit(Seq.fill(unrollingDim)(0.U(addrWidth.W)))
+    VecInit(Seq.fill(params.spatialDim)(0.U(params.addrWidth.W)))
   )
 
   // original unrolling address for TCDM request
   val unrolling_addr = WireInit(
-    VecInit(Seq.fill(unrollingFactor.reduce(_ * _))(0.U(addrWidth.W)))
+    VecInit(
+      Seq.fill(params.spatialBounds.reduce(_ * _))(0.U(params.addrWidth.W))
+    )
   )
 
   // for selecting the real TCDM request address from the original unrolling addresses
   // according to the tcdmDataWidth and the elementWidth relationship
   // !!! warning: assuming the data granularity is one tcdmDataWidth
   // no sub-data accessing within one TCDM bank
-  def packed_addr_num = (tcdmDataWidth / 8) / (elementWidth / 8)
+  def packed_addr_num = (params.tcdmDataWidth / 8) / (params.elementWidth / 8)
 
   // Fifo input signals
-  val fifo_input_bits = WireInit(0.U(fifoWidth.W))
+  val fifo_input_bits = WireInit(0.U(params.fifoWidth.W))
   val fifo_input_valid = WireInit(0.B)
 
   // not in the busy with sending current request process
@@ -99,23 +87,23 @@ class DataReader(
   val tcdm_read_mem_all_ready = WireInit(0.B)
 
   // signals for dealing with contention
-  val tcdm_rsp_i_p_valid = WireInit(VecInit(Seq.fill(dataReaderTcdmPorts)(0.B)))
+  val tcdm_rsp_i_p_valid = WireInit(VecInit(Seq.fill(params.tcdmPortsNum)(0.B)))
   val tcdm_rsp_i_p_valid_reg = RegInit(
-    VecInit(Seq.fill(dataReaderTcdmPorts)(0.B))
+    VecInit(Seq.fill(params.tcdmPortsNum)(0.B))
   )
-  val tcdm_rsp_i_q_ready = WireInit(VecInit(Seq.fill(dataReaderTcdmPorts)(0.B)))
+  val tcdm_rsp_i_q_ready = WireInit(VecInit(Seq.fill(params.tcdmPortsNum)(0.B)))
   val tcdm_rsp_i_q_ready_reg = RegInit(
-    VecInit(Seq.fill(dataReaderTcdmPorts)(0.B))
+    VecInit(Seq.fill(params.tcdmPortsNum)(0.B))
   )
   val wait_for_q_ready_read = WireInit(0.B)
   val wait_for_p_valid_read = WireInit(0.B)
 
   // storing response data (part of whole transaction) when waiting for other part
   val data_reg = RegInit(
-    VecInit(Seq.fill(dataReaderTcdmPorts)(0.U(tcdmDataWidth.W)))
+    VecInit(Seq.fill(params.tcdmPortsNum)(0.U(params.tcdmDataWidth.W)))
   )
   val data_fifo_input = WireInit(
-    VecInit(Seq.fill(dataReaderTcdmPorts)(0.U(tcdmDataWidth.W)))
+    VecInit(Seq.fill(params.tcdmPortsNum)(0.U(params.tcdmDataWidth.W)))
   )
 
   // State declaration
@@ -164,7 +152,13 @@ class DataReader(
 
   // generating original unrolling address for TCDM request
   val spatial_addr_gen_unit = Module(
-    new SpatialAddrGenUnit(unrollingDim, unrollingFactor, addrWidth)
+    new SpatialAddrGenUnit(
+      SpatialAddrGenUnitParams(
+        params.spatialDim,
+        params.spatialBounds,
+        params.addrWidth
+      )
+    )
   )
 
   spatial_addr_gen_unit.io.valid_i := cstate =/= sIDLE
@@ -174,7 +168,7 @@ class DataReader(
 
   // simulation time address constraint check
   when(cstate === sBUSY) {
-    for (i <- 0 until dataReaderTcdmPorts) {
+    for (i <- 0 until params.tcdmPortsNum) {
       for (j <- 0 until packed_addr_num - 1) {
         assert(
           unrolling_addr(i * packed_addr_num + j + 1) === unrolling_addr(
@@ -190,13 +184,13 @@ class DataReader(
 
   // assuming addresses are packed in one tcmd request
   // the data granularity constrain
-  for (i <- 0 until dataReaderTcdmPorts) {
+  for (i <- 0 until params.tcdmPortsNum) {
     io.tcdm_req_addr(i) := unrolling_addr(i * packed_addr_num)
   }
 
   // deal with contention
   // ensure all the read request are sent successfully
-  for (i <- 0 until dataReaderTcdmPorts) {
+  for (i <- 0 until params.tcdmPortsNum) {
     when(can_send_tcdm_read_req) {
       when(io.ptr_agu_i.fire) {
         io.read_tcmd_valid_o(i) := 1.B
@@ -208,7 +202,7 @@ class DataReader(
     }
   }
 
-  for (i <- 0 until dataReaderTcdmPorts) {
+  for (i <- 0 until params.tcdmPortsNum) {
     when(can_send_tcdm_read_req && !tcdm_read_mem_all_ready) {
       wait_for_q_ready_read := 1.B
     }.otherwise {
@@ -216,7 +210,7 @@ class DataReader(
     }
   }
 
-  for (i <- 0 until dataReaderTcdmPorts) {
+  for (i <- 0 until params.tcdmPortsNum) {
     when(wait_for_q_ready_read && !tcdm_read_mem_all_ready) {
       when(io.tcdm_ready_i(i)) {
         tcdm_rsp_i_q_ready_reg(i) := io.tcdm_ready_i(i)
@@ -226,7 +220,7 @@ class DataReader(
     }
   }
 
-  for (i <- 0 until dataReaderTcdmPorts) {
+  for (i <- 0 until params.tcdmPortsNum) {
     tcdm_rsp_i_q_ready(i) := io.tcdm_ready_i(i) || tcdm_rsp_i_q_ready_reg(i)
   }
 
@@ -234,7 +228,7 @@ class DataReader(
   ready_for_new_tcdm_reqs := !wait_for_q_ready_read && can_send_tcdm_read_req
 
   // check and wait for all the response valid
-  for (i <- 0 until dataReaderTcdmPorts) {
+  for (i <- 0 until params.tcdmPortsNum) {
     when(can_send_tcdm_read_req && !fifo_input_valid) {
       wait_for_p_valid_read := 1.B
     }.otherwise {
@@ -242,7 +236,7 @@ class DataReader(
     }
   }
 
-  for (i <- 0 until dataReaderTcdmPorts) {
+  for (i <- 0 until params.tcdmPortsNum) {
     when(wait_for_p_valid_read && !fifo_input_valid) {
       when(io.data_tcdm_i(i).valid) {
         tcdm_rsp_i_p_valid_reg(i) := io.data_tcdm_i(i).valid
@@ -254,7 +248,7 @@ class DataReader(
   }
 
   // fifo data
-  for (i <- 0 until dataReaderTcdmPorts) {
+  for (i <- 0 until params.tcdmPortsNum) {
     when(fifo_input_valid) {
       when(io.data_tcdm_i(i).valid) {
         data_fifo_input(i) := io.data_tcdm_i(i).bits
@@ -267,7 +261,7 @@ class DataReader(
   io.data_fifo_o.bits := fifo_input_bits
 
   // fifo valid
-  for (i <- 0 until dataReaderTcdmPorts) {
+  for (i <- 0 until params.tcdmPortsNum) {
     tcdm_rsp_i_p_valid(i) := io.data_tcdm_i(i).valid || tcdm_rsp_i_p_valid_reg(
       i
     )
@@ -286,7 +280,7 @@ class DataReader(
 // Scala main function for generating system verilog file for the DataReader module
 object DataReader extends App {
   emitVerilog(
-    new (DataReader),
+    new DataReader(DataMoverParams()),
     Array("--target-dir", "generated/streamer")
   )
 }

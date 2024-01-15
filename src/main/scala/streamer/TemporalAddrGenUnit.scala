@@ -33,18 +33,20 @@ import chisel3.util._
   *   The bit width of the address.
   */
 class TemporalAddrGenUnitIO(
-    loopDim: Int = TemporalAddrGenUnitTestParameters.loopDim,
-    loopBoundWidth: Int = TemporalAddrGenUnitTestParameters.loopBoundWidth,
-    addrWidth: Int = TemporalAddrGenUnitTestParameters.addrWidth
+    params: TemporalAddrGenUnitParams
 ) extends Bundle {
 
   // input configuration signals to program the temporal address generation unit
-  val loopBounds_i = Flipped(Decoupled(Vec(loopDim, UInt(loopBoundWidth.W))))
-  val strides_i = Flipped(Decoupled(Vec(loopDim, UInt(addrWidth.W))))
-  val ptr_i = Flipped(Decoupled(UInt(addrWidth.W)))
+  val loopBounds_i = Flipped(
+    Decoupled(Vec(params.loopDim, UInt(params.loopBoundWidth.W)))
+  )
+  val strides_i = Flipped(
+    Decoupled(Vec(params.loopDim, UInt(params.addrWidth.W)))
+  )
+  val ptr_i = Flipped(Decoupled(UInt(params.addrWidth.W)))
 
   // generated output address
-  val ptr_o = Decoupled(UInt(addrWidth.W))
+  val ptr_o = Decoupled(UInt(params.addrWidth.W))
 
   // done signal indicating current transaction is done, ready for next config and transaction
   val done = Output(Bool())
@@ -63,18 +65,14 @@ class TemporalAddrGenUnitIO(
   *   The bit width of the addresses.
   */
 class TemporalAddrGenUnit(
-    loopDim: Int = TemporalAddrGenUnitTestParameters.loopDim,
-    loopBoundWidth: Int = TemporalAddrGenUnitTestParameters.loopBoundWidth,
-    addrWidth: Int = TemporalAddrGenUnitTestParameters.addrWidth
+    params: TemporalAddrGenUnitParams = TemporalAddrGenUnitParams()
 ) extends Module
     with RequireAsyncReset {
 
   // the input/output interface of the module
   val io = IO(
     new TemporalAddrGenUnitIO(
-      loopDim,
-      loopBoundWidth,
-      addrWidth
+      params
     )
   )
 
@@ -86,9 +84,13 @@ class TemporalAddrGenUnit(
   val addr_gen_finish = WireInit(0.B)
 
   // registers to store the programmable configuration
-  val loopBounds = RegInit(VecInit(Seq.fill(loopDim)(0.U(loopBoundWidth.W))))
-  val strides = RegInit(VecInit(Seq.fill(loopDim)(0.U(addrWidth.W))))
-  val ptr = RegInit(0.U((loopBoundWidth).W))
+  val loopBounds = RegInit(
+    VecInit(Seq.fill(params.loopDim)(0.U(params.loopBoundWidth.W)))
+  )
+  val strides = RegInit(
+    VecInit(Seq.fill(params.loopDim)(0.U(params.addrWidth.W)))
+  )
+  val ptr = RegInit(0.U((params.loopBoundWidth).W))
 
   /** The following code is the FSM for the TemporalAddrGenUnit module.
     *
@@ -141,15 +143,15 @@ class TemporalAddrGenUnit(
     */
 
   val loop_counters = RegInit(
-    VecInit(Seq.fill(loopDim)(0.U(loopBoundWidth.W)))
+    VecInit(Seq.fill(params.loopDim)(0.U(params.loopBoundWidth.W)))
   )
   val loop_counters_next = WireInit(
-    VecInit(Seq.fill(loopDim)(0.U(loopBoundWidth.W)))
+    VecInit(Seq.fill(params.loopDim)(0.U(params.loopBoundWidth.W)))
   )
-  val loop_counters_valid = WireInit(VecInit(Seq.fill(loopDim)(0.B)))
-  val loop_counters_last = WireInit(VecInit(Seq.fill(loopDim)(0.B)))
+  val loop_counters_valid = WireInit(VecInit(Seq.fill(params.loopDim)(0.B)))
+  val loop_counters_last = WireInit(VecInit(Seq.fill(params.loopDim)(0.B)))
 
-  for (i <- 0 until loopDim) {
+  for (i <- 0 until params.loopDim) {
     // the next loop counter is the current loop counter plus 1
     loop_counters_next(i) := loop_counters(i) + 1.U
     // the loop counter reaches the last value when the
@@ -158,7 +160,7 @@ class TemporalAddrGenUnit(
   }
 
   loop_counters_valid(0) := io.ptr_o.fire
-  for (i <- 1 until loopDim) {
+  for (i <- 1 until params.loopDim) {
     // every loop counter must be incremented when the previous loop counter
     // reaches the last value and is incremented
     loop_counters_valid(i) := loop_counters_last(
@@ -167,7 +169,7 @@ class TemporalAddrGenUnit(
   }
 
   when(cstate === sBUSY) {
-    for (i <- 0 until loopDim) {
+    for (i <- 0 until params.loopDim) {
       when(loop_counters_valid(i)) {
         loop_counters(i) := Mux(
           loop_counters_last(i),
@@ -179,7 +181,7 @@ class TemporalAddrGenUnit(
       }
     }
   }.otherwise {
-    for (i <- 0 until loopDim) {
+    for (i <- 0 until params.loopDim) {
       loop_counters(i) := 0.U
     }
   }
@@ -205,7 +207,7 @@ class TemporalAddrGenUnit(
 // Scala main function for generating system verilog file for the TemporalAddrGenUnit module
 object TemporalAddrGenUnit extends App {
   emitVerilog(
-    new TemporalAddrGenUnit(),
+    new TemporalAddrGenUnit(TemporalAddrGenUnitParams()),
     Array("--target-dir", "generated/streamer")
   )
 }

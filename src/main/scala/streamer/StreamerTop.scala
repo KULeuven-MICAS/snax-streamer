@@ -63,7 +63,7 @@ class StreamerTop(
   // io.csr and csrManager input connection
   csr_manager.io.csr_config_in <> io.csr
 
-  // below does streamer and csrManager output connection
+  // connect the streamer and csrManager output
   // control signals
   streamer.io.csr.valid := csr_manager.io.csr_config_out.valid
   csr_manager.io.csr_config_out.ready := streamer.io.csr.ready

@@ -19,7 +19,7 @@ class StreamerTopTest
       ) { dut =>
         dut.clock.step(5)
 
-        // write csr function for better code reuse
+        // write csr helper function
         def write_csr(addr: Int, data: Int) = {
 
           // give the data and address to the right ports
@@ -39,7 +39,7 @@ class StreamerTopTest
 
         }
 
-        // read csr function for better code reuse
+        // read csr helper function
         def read_csr(addr: Int, data: Int) = {
 
           // give the data and address to the right ports

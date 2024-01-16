@@ -69,6 +69,20 @@ class StreamerTop(
   csr_manager.io.csr_config_out.ready := streamer.io.csr.ready
 
   // splitting csrManager data ports to the streamer components
+  // Total number of csr is temporalDim + dataMoverNum * temporalDim + spatialDim.sum + dataMoverNum + 1.
+
+  // lowest temporalDim address (0 to temporalDim - 1) is for temporal loop bound.
+  //  0 is for innermost loop, temporalDim - 1 is for outermost loop
+
+  // Then address (temporalDim, temporalDim +  dataMoverNum * temporalDim) is for temporal strides.
+  // lowest address (temporalDim, temporalDim + temporalDim) is for the first data reader, with address temporalDim for the innermost loop.
+  // address (temporalDim + (dataMoverNum - 1) * temporalDim, temporalDim + dataMoverNum * temporalDim -1) is for the first data reader.
+
+  // Then address (temporalDim +  dataMoverNum * temporalDim, temporalDim + dataMoverNum * temporalDim + spatialDim.sum - 1)  is for spatial loop strides. The order is the same as temporal strides.
+
+  // Then address (temporalDim +  dataMoverNum * temporalDim, temporalDim + dataMoverNum * temporalDim + spatialDim.sum + dataMoverNum - 1) is for the base pointers for each data mover.
+  // the lowest address for teh first data mover.
+
   // temporal loop bounds
   for (i <- 0 until params.temporalDim) {
     streamer.io.csr.bits

@@ -44,6 +44,13 @@ class CsrManager(
   // a register to store the read request response data until the request is successful
   val csr_rsp_data_reg = RegInit(0.U(32.W))
 
+  // store the csr data for later output because the address only valid when io.csr.fire
+  csr_rsp_data_reg := Mux(
+    read_csr,
+    csr(io.csr_config_in.req.bits.addr),
+    csr_rsp_data_reg
+  )
+
   // streamer configuration valid signal
   val config_valid = WireInit(0.B)
 
@@ -74,17 +81,10 @@ class CsrManager(
     io.csr_config_in.rsp.bits.data := 0.U
   }
 
-  // store the csr data for later output because the address only valid when io.csr.fire
-  csr_rsp_data_reg := Mux(
-    read_csr,
-    csr(io.csr_config_in.req.bits.addr),
-    csr_rsp_data_reg
-  )
-
   // we are ready for a new request if two conditions hold:
   // if we write to the config_valid register (the last one), the streamer must not be busy (io.csr_config_out.ready)
   // if there is a read request in progress, we only accept new write requests
-  io.csr_config_in.req.ready := (io.csr_config_out.ready || ! (io.csr_config_in.req.bits.addr === params.csrNum.U - 1.U)) && (!keep_sending_csr_rsp || io.csr_config_in.req.bits.write)
+  io.csr_config_in.req.ready := (io.csr_config_out.ready || !(io.csr_config_in.req.bits.addr === params.csrNum.U - 1.U)) && (!keep_sending_csr_rsp || io.csr_config_in.req.bits.write)
 
   // a write/read to the last csr means the config is valid
   config_valid := io.csr_config_in.req.fire && (io.csr_config_in.req.bits.addr === params.csrNum.U - 1.U)

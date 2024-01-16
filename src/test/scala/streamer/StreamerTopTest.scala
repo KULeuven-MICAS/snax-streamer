@@ -77,16 +77,16 @@ class StreamerTopTest
 
         // spatial loop strides
         // warning!!! give the proper unrolling strides so that is a aligned in one TCDM bank
-        write_csr(5, 1)
-        write_csr(6, 1)
-        write_csr(7, 1)
-        write_csr(8, 1)
+        write_csr(5, 4)
+        write_csr(6, 4)
+        write_csr(7, 4)
+        write_csr(8, 4)
 
         // base ptr
-        write_csr(9, 10)
-        write_csr(10, 20)
-        write_csr(11, 30)
-        write_csr(12, 40)
+        write_csr(9, 0x100)
+        write_csr(10, 0x200)
+        write_csr(11, 0x300)
+        write_csr(12, 0x400)
 
         dut.clock.step(5)
 

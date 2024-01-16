@@ -89,7 +89,7 @@ class StreamerTop(
       .loopBounds_i(i) := csr_manager.io.csr_config_out.bits(i)
   }
 
-  // temporal loop strides
+  // Connect configuration registers for temporal loop strides
   for (i <- 0 until params.dataMoverNum) {
     for (j <- 0 until params.temporalDim) {
       streamer.io.csr.bits
@@ -99,7 +99,7 @@ class StreamerTop(
     }
   }
 
-  // spatial loop strides
+  // Connect configuration registers for spatial loop strides
   for (i <- 0 until params.spatialDim.length) {
     for (j <- 0 until params.spatialDim(i)) {
       streamer.io.csr.bits

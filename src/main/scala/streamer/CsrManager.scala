@@ -30,7 +30,7 @@ class CsrManager(
 
   val io = IO(new CsrManagerIO(params))
 
-  // generate a vector of registers
+  // generate a vector of registers to store the csr state
   val csr = RegInit(VecInit(Seq.fill(params.csrNum)(0.U(32.W))))
 
   // read and write csr cmd

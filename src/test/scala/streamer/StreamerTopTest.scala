@@ -70,22 +70,33 @@ class StreamerTopTest
         write_csr(0, temporal_loop_bound)
 
         // temporal loop strides
+        // address 1 configs the temporal loop stride for first data reader, which is a for mac engine.
         write_csr(1, 2)
+        // address 2 configs the temporal loop stride for second data reader, which is b for mac engine.
         write_csr(2, 2)
+        // address 3 configs the temporal loop stride for third data reader, which is c for mac engine.
         write_csr(3, 2)
+        // address 4 configs the temporal loop stride for first data writer, which is d for mac engine.
         write_csr(4, 2)
 
         // spatial loop strides
-        // warning!!! give the proper unrolling strides so that is a aligned in one TCDM bank
+        // warning!!! give the proper unrolling strides so that is a aligned in one TCDM bank.
+        // address 5 configs the spatial loop stride for first data reader, which is a_u for mac engine.
         write_csr(5, 4)
+        // address 6 configs the spatial loop stride for second data reader, which is b_u for mac engine.
         write_csr(6, 4)
+        // address 7 configs the spatial loop stride for third data reader, which is c_u for mac engine.
         write_csr(7, 4)
+        // address 8 configs the spatial loop stride for first data writer, which is d_u for mac engine.
         write_csr(8, 4)
 
         // base ptr
+        // the order is the same as temporal loop strides.
+        // address 9 configs the base ptr for first data reader.
         write_csr(9, 0x100)
         write_csr(10, 0x200)
         write_csr(11, 0x300)
+        // address 12 configs the base ptr for first data writer.
         write_csr(12, 0x400)
 
         dut.clock.step(5)

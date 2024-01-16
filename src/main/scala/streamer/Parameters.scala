@@ -185,3 +185,22 @@ case class StreamerParams(
     fifoWriterParams: Seq[FIFOParams] = StreamerTestConstant.fifoWriterParams
 ) extends HasStreamerCoreParams
     with HasStreamerInferredParams
+
+/** This trait add the parameters for the CsrManager module based on the
+  * streamer parameters
+  *
+  * @param csrNum
+  *   the number of csr registers
+  * @param addrWidth
+  *   the width of the address
+  */
+trait HasCsrInferredParams extends HasStreamerInferredParams {
+  val csrNum: Int =
+    temporalDim + dataMoverNum * temporalDim + spatialDim.sum + dataMoverNum + 1
+  val csrAddrWidth: Int = log2Up(csrNum)
+}
+
+/** This class constructs the new parameters for streamer top module which
+  * contains the streamer and the csrManager
+  */
+class StreamerTopParams() extends StreamerParams with HasCsrInferredParams

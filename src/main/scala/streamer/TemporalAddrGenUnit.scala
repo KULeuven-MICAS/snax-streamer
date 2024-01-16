@@ -90,7 +90,7 @@ class TemporalAddrGenUnit(
   val strides = RegInit(
     VecInit(Seq.fill(params.loopDim)(0.U(params.addrWidth.W)))
   )
-  val ptr = RegInit(0.U((params.loopBoundWidth).W))
+  val ptr = RegInit(0.U((params.addrWidth).W))
 
   /** The following code is the FSM for the TemporalAddrGenUnit module.
     *

@@ -47,7 +47,9 @@ object StreamerTestConstant extends CommonParams {
     FIFOParams(64, 2)
   )
 
-  def fifoWriterParams: Seq[FIFOParams] = Seq(FIFOParams(64, 2))
+  def fifoWriterParams: Seq[FIFOParams] = Seq(
+    FIFOParams(64 * MacScalingFactor, 2)
+  )
 
   def stationarity = Seq(0, 0, 1, 1)
 
@@ -77,8 +79,8 @@ object StreamerTestConstant extends CommonParams {
 
   def dataWriterParams: Seq[DataMoverParams] = Seq(
     DataMoverParams(
-      tcdmPortsNum = 1,
-      spatialBounds = Seq(2),
+      tcdmPortsNum = 1 * MacScalingFactor,
+      spatialBounds = Seq(2 * MacScalingFactor),
       spatialDim = 1,
       elementWidth = 32,
       fifoWidth = fifoWriterParams(0).width

@@ -117,15 +117,7 @@ class DataWriter(
 
   config_valid := io.spatialStrides_csr_i.fire
 
-  when(io.ptr_agu_i.fire) {
-    ptr_agu := io.ptr_agu_i.bits
-  }
-
-  when(io.ptr_agu_i.fire) {
-    start_ptr := io.ptr_agu_i.bits
-  }.otherwise {
-    start_ptr := ptr_agu
-  }
+  start_ptr := io.ptr_agu_i.bits
 
   // generating original unrolling address for TCDM request
   val spatial_addr_gen_unit = Module(
@@ -150,7 +142,7 @@ class DataWriter(
         assert(
           unrolling_addr(i * packed_addr_num + j + 1) === unrolling_addr(
             i * packed_addr_num + j
-          ) + 1.U,
+          ) + ((params.tcdmDataWidth / 8) / packed_addr_num).U,
           "write address in not consecutive in the same bank!"
         )
       }

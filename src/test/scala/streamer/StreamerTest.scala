@@ -26,7 +26,7 @@ class StreamerTest
 
         // give the proper unrolling strides so that is a aligned in one TCDM bank
         for (i <- 0 until StreamerParams().dataMoverNum) {
-          dut.io.csr.bits.spatialStrides_csr_i(i)(0).poke(1)
+          dut.io.csr.bits.spatialStrides_csr_i(i)(0).poke(4)
         }
 
         dut.clock.step(1)

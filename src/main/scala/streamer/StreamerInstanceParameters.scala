@@ -91,7 +91,6 @@ object PostProcessingStreamerParameters extends CommonParams {
 
 }
 
-
 object MacStreamerParameters extends CommonParams {
 
   def MacScalingFactor = 4

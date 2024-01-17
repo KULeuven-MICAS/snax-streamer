@@ -22,11 +22,12 @@ class StreamerTopCsrIO(csrAddrWidth: Int) extends Bundle {
   *   the parameters class instantiation for the streamer top module
   */
 class StreamerTopIO(
-    params: StreamerTopParams = new StreamerTopParams()
+    params: StreamerParams = StreamerParams(),
+    csrAddrWidth: Int
 ) extends Bundle {
 
   // ports for csr configuration
-  val csr = new StreamerTopCsrIO(params.csrAddrWidth)
+  val csr = new StreamerTopCsrIO(csrAddrWidth)
 
   // ports for data in and out
   val data = new StreamerDataIO(
@@ -41,17 +42,23 @@ class StreamerTopIO(
   *   the parameters class instantiation for the streamer top module
   */
 class StreamerTop(
-    params: StreamerTopParams = new StreamerTopParams()
+    params: StreamerParams = StreamerParams()
 ) extends Module
     with RequireAsyncReset {
+
+  val csrNum: Int =
+    params.temporalDim + params.dataMoverNum * params.temporalDim + params.spatialDim.sum + params.dataMoverNum + 1
+  val csrAddrWidth: Int = log2Up(csrNum)
+
   val io = IO(
     new StreamerTopIO(
-      params
+      params,
+      csrNum
     )
   )
 
   // csrManager instantiation
-  val csr_manager = Module(new CsrManager(params))
+  val csr_manager = Module(new CsrManager(csrNum, csrAddrWidth))
 
   // streamer instantiation
   val streamer = Module(
@@ -127,7 +134,71 @@ class StreamerTop(
 // Scala main function for generating test streamerTop system verilog file
 object StreamerTopTester extends App {
   emitVerilog(
-    new StreamerTop(new StreamerTopParams()),
+    new StreamerTop(
+      StreamerParams(
+        temporalAddrGenUnitParams =
+          StreamerTestConstant.temporalAddrGenUnitParams,
+        fifoReaderParams = StreamerTestConstant.fifoReaderParams,
+        fifoWriterParams = StreamerTestConstant.fifoWriterParams,
+        stationarity = StreamerTestConstant.stationarity,
+        dataReaderParams = StreamerTestConstant.dataReaderParams,
+        dataWriterParams = StreamerTestConstant.dataWriterParams
+      )
+    ),
+    Array("--target-dir", "generated/streamertop/tester")
+  )
+}
+
+// streamertop for GEMM
+object GeMMStreamerTop extends App {
+  emitVerilog(
+    new StreamerTop(
+      StreamerParams(
+        temporalAddrGenUnitParams =
+          GeMMStreamerParameters.temporalAddrGenUnitParams,
+        fifoReaderParams = GeMMStreamerParameters.fifoReaderParams,
+        fifoWriterParams = GeMMStreamerParameters.fifoWriterParams,
+        stationarity = GeMMStreamerParameters.stationarity,
+        dataReaderParams = GeMMStreamerParameters.dataReaderParams,
+        dataWriterParams = GeMMStreamerParameters.dataWriterParams
+      )
+    ),
+    Array("--target-dir", "generated/streamertop/tester")
+  )
+}
+
+// streamertop for PP-SIMD
+object PostProcessingTopTester extends App {
+  emitVerilog(
+    new StreamerTop(
+      StreamerParams(
+        temporalAddrGenUnitParams =
+          PostProcessingStreamerParameters.temporalAddrGenUnitParams,
+        fifoReaderParams = PostProcessingStreamerParameters.fifoReaderParams,
+        fifoWriterParams = PostProcessingStreamerParameters.fifoWriterParams,
+        stationarity = PostProcessingStreamerParameters.stationarity,
+        dataReaderParams = PostProcessingStreamerParameters.dataReaderParams,
+        dataWriterParams = PostProcessingStreamerParameters.dataWriterParams
+      )
+    ),
+    Array("--target-dir", "generated/streamertop/tester")
+  )
+}
+
+// streamertop for MAC
+object MacStreamerTop extends App {
+  emitVerilog(
+    new StreamerTop(
+      StreamerParams(
+        temporalAddrGenUnitParams =
+          MacStreamerParameters.temporalAddrGenUnitParams,
+        fifoReaderParams = MacStreamerParameters.fifoReaderParams,
+        fifoWriterParams = MacStreamerParameters.fifoWriterParams,
+        stationarity = MacStreamerParameters.stationarity,
+        dataReaderParams = MacStreamerParameters.dataReaderParams,
+        dataWriterParams = MacStreamerParameters.dataWriterParams
+      )
+    ),
     Array("--target-dir", "generated/streamertop/tester")
   )
 }

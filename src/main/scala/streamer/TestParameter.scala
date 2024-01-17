@@ -88,3 +88,8 @@ object StreamerTestConstant extends CommonParams {
   )
 
 }
+
+object csrManagerTestParameters {
+  def csrNum = 20
+  def csrAddrWidth = log2Up(csrNum)
+}

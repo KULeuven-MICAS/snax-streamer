@@ -6,32 +6,38 @@ import chisel3.util._
 /** This class represents the input and output ports of the CsrManager module.
   * The input is connected to the SNAX CSR port. The output is connected to the
   * streamer configuration port.
-  * @param params
-  *   It shares the same parameters as streamer top module.
+  * @param csrNum
+  *   the number of csr registers
+  * @param addrWidth
+  *   the width of the address
   */
 class CsrManagerIO(
-    params: StreamerTopParams
+    csrNum: Int,
+    csrAddrWidth: Int
 ) extends Bundle {
 
-  val csr_config_in = new StreamerTopCsrIO(params.csrAddrWidth)
-  val csr_config_out = Decoupled(Vec(params.csrNum, UInt(32.W)))
+  val csr_config_in = new StreamerTopCsrIO(csrAddrWidth)
+  val csr_config_out = Decoupled(Vec(csrNum, UInt(32.W)))
 
 }
 
 /** This class represents the CsrManager module. It contains the csr registers
   * and the read and write control logic.
-  * @param params
-  *   It shares the same parameters as streamer top module.
+  * @param csrNum
+  *   the number of csr registers
+  * @param addrWidth
+  *   the width of the address
   */
 class CsrManager(
-    params: StreamerTopParams
+    csrNum: Int,
+    csrAddrWidth: Int
 ) extends Module
     with RequireAsyncReset {
 
-  val io = IO(new CsrManagerIO(params))
+  val io = IO(new CsrManagerIO(csrNum, csrAddrWidth))
 
   // generate a vector of registers to store the csr state
-  val csr = RegInit(VecInit(Seq.fill(params.csrNum)(0.U(32.W))))
+  val csr = RegInit(VecInit(Seq.fill(csrNum)(0.U(32.W))))
 
   // read and write csr cmd
   val read_csr = io.csr_config_in.req.fire && !io.csr_config_in.req.bits.write
@@ -55,10 +61,12 @@ class CsrManager(
   val config_valid = WireInit(0.B)
 
   // check if the csr address overflow (access certain csr that doesn't exist)
+  def startCsrAddr = (csrNum - 1).U
+
   when(io.csr_config_in.req.fire) {
 
     assert(
-      io.csr_config_in.req.bits.addr <= params.csrNum.U,
+      io.csr_config_in.req.bits.addr <= startCsrAddr,
       "csr address overflow!"
     )
 
@@ -84,10 +92,10 @@ class CsrManager(
   // we are ready for a new request if two conditions hold:
   // if we write to the config_valid register (the last one), the streamer must not be busy (io.csr_config_out.ready)
   // if there is a read request in progress, we only accept new write requests
-  io.csr_config_in.req.ready := (io.csr_config_out.ready || !(io.csr_config_in.req.bits.addr === params.csrNum.U - 1.U)) && (!keep_sending_csr_rsp || io.csr_config_in.req.bits.write)
+  io.csr_config_in.req.ready := (io.csr_config_out.ready || !(io.csr_config_in.req.bits.addr === startCsrAddr)) && (!keep_sending_csr_rsp || io.csr_config_in.req.bits.write)
 
   // a write/read to the last csr means the config is valid
-  config_valid := io.csr_config_in.req.fire && (io.csr_config_in.req.bits.addr === params.csrNum.U - 1.U)
+  config_valid := io.csr_config_in.req.fire && (io.csr_config_in.req.bits.addr === startCsrAddr)
 
   // signals connected to the output ports
   io.csr_config_out.bits <> csr
@@ -98,7 +106,10 @@ class CsrManager(
 // Scala main function for generating CsrManager system verilog file
 object CsrManager extends App {
   emitVerilog(
-    new CsrManager(new StreamerTopParams()),
+    new CsrManager(
+      csrManagerTestParameters.csrNum,
+      csrManagerTestParameters.csrAddrWidth
+    ),
     Array("--target-dir", "generated/csr_manager")
   )
 }

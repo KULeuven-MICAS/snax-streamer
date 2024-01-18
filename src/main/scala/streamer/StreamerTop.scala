@@ -53,7 +53,7 @@ class StreamerTop(
   val io = IO(
     new StreamerTopIO(
       params,
-      csrNum
+      csrAddrWidth
     )
   )
 

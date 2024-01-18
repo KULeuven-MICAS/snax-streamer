@@ -3,9 +3,15 @@ package streamer
 import chisel3._
 import chisel3.util._
 
-/** */
+/** This Data Mover module is a common base class for Data Reader and Data
+  * Writer. It has the common IO and common function that Data Reader and Data
+  * Writer both has, including interface with temporal address generation unit
+  * and state machine, sending tcmd req etc.
+  */
 
-/** @param params
+/** This class represents the input/output interface for Data Mover module
+  * @param params
+  *   The parameter class contains all the parameters of a data mover module
   */
 class DataMoverIO(params: DataMoverParams = DataMoverParams()) extends Bundle {
   // signals for write request address generation
@@ -25,6 +31,13 @@ class DataMoverIO(params: DataMoverParams = DataMoverParams()) extends Bundle {
 
 }
 
+/** DataMover is a base class for Data Reader and Data Writer. It contains the
+  * logic of getting temporal address from the TemporalAddrGenUnit, generating
+  * spatial address and sending request to the tcdm.
+  *
+  * @param params
+  *   The parameter class contains all the parameters of a data mover module
+  */
 class DataMover(params: DataMoverParams = DataMoverParams())
     extends Module
     with RequireAsyncReset {
@@ -60,7 +73,7 @@ class DataMover(params: DataMoverParams = DataMoverParams())
 
   // not in the busy with sending current request process
   val ready_for_new_tcdm_reqs = WireInit(0.B)
-  // data fifo isn't full
+  // reader data fifo isn't full or writer data fifo isn't empty
   val can_send_tcdm_req = WireInit(0.B)
   // tcdm req ready signals
   val tcdm_req_ready = WireInit(VecInit(Seq.fill(params.tcdmPortsNum)(0.B)))
@@ -108,7 +121,7 @@ class DataMover(params: DataMoverParams = DataMoverParams())
 
   start_ptr := io.ptr_agu_i.bits
 
-  // generating original spatial address for TCDM request
+  // instantiate a spatial address generation module for generating original spatial address for TCDM request
   val spatial_addr_gen_unit = Module(
     new SpatialAddrGenUnit(
       SpatialAddrGenUnitParams(
@@ -124,7 +137,7 @@ class DataMover(params: DataMoverParams = DataMoverParams())
   spatial_addr_gen_unit.io.strides_i := spatialStrides
   spatial_addr := spatial_addr_gen_unit.io.ptr_o
 
-  // simulation time address constraint check
+  // simulation time address constraint check. The addresses in one tcdm bank should be continuous
   when(cstate === sBUSY) {
     for (i <- 0 until params.tcdmPortsNum) {
       for (j <- 0 until packed_addr_num - 1) {
@@ -140,17 +153,18 @@ class DataMover(params: DataMoverParams = DataMoverParams())
 
   done := io.done
 
-  // needs to be override in extended class!
-  can_send_tcdm_req := cstate === sBUSY
-
   // assuming addresses are packed in one tcmd request
   // the data granularity constrain
   for (i <- 0 until params.tcdmPortsNum) {
     io.tcdm_req(i).bits.addr := spatial_addr(i * packed_addr_num)
   }
 
+  // asserting means time to send new request. can read or can write new data. needs to be override in extended class!
+  can_send_tcdm_req := cstate === sBUSY
+
   // deal with contention
-  // ensure all the read request are sent successfully
+  // ensure all the read request are sent successfully (get ready signal)
+  // if not, keep sending valid request
   for (i <- 0 until params.tcdmPortsNum) {
     when(can_send_tcdm_req) {
       when(io.ptr_agu_i.fire) {
@@ -163,6 +177,26 @@ class DataMover(params: DataMoverParams = DataMoverParams())
     }
   }
 
+  // store partial request ready signals
+  for (i <- 0 until params.tcdmPortsNum) {
+    when(wait_for_tcdm_req_all_ready && !tcdm_req_all_ready) {
+      when(io.tcdm_req(i).ready) {
+        tcdm_req_ready_reg(i) := io.tcdm_req(i).ready
+      }
+    }.otherwise {
+      // clear all the ready bits before a new transaction
+      tcdm_req_ready_reg(i) := 0.B
+    }
+  }
+
+  // indicating obtained request ready signal when ready previously or currently
+  for (i <- 0 until params.tcdmPortsNum) {
+    tcdm_req_ready(i) := io.tcdm_req(i).ready || tcdm_req_ready_reg(i)
+  }
+
+  tcdm_req_all_ready := tcdm_req_ready.reduce(_ & _)
+
+  // when can_send_tcdm_req and current request isn't all ready means wait_for_tcdm_req_all_ready
   for (i <- 0 until params.tcdmPortsNum) {
     when(can_send_tcdm_req && !tcdm_req_all_ready) {
       wait_for_tcdm_req_all_ready := 1.B
@@ -171,21 +205,6 @@ class DataMover(params: DataMoverParams = DataMoverParams())
     }
   }
 
-  for (i <- 0 until params.tcdmPortsNum) {
-    when(wait_for_tcdm_req_all_ready && !tcdm_req_all_ready) {
-      when(io.tcdm_req(i).ready) {
-        tcdm_req_ready_reg(i) := io.tcdm_req(i).ready
-      }
-    }.otherwise {
-      tcdm_req_ready_reg(i) := 0.B
-    }
-  }
-
-  for (i <- 0 until params.tcdmPortsNum) {
-    tcdm_req_ready(i) := io.tcdm_req(i).ready || tcdm_req_ready_reg(i)
-  }
-
-  tcdm_req_all_ready := tcdm_req_ready.reduce(_ & _)
   ready_for_new_tcdm_reqs := !wait_for_tcdm_req_all_ready && can_send_tcdm_req
 
   // signal indicating a new address data transaction is ready

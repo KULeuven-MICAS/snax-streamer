@@ -24,8 +24,8 @@ class DataReaderTest
       dut.io.spatialStrides_csr_i.valid.poke(1)
       dut.io.data_fifo_o.ready.poke(1)
       for (i <- 0 until DataMoverTestParameters.tcdmPortsNum) {
-        dut.io.tcdm_ready_i(i).poke(1)
-        dut.io.data_tcdm_i(i).valid.poke(1)
+        dut.io.tcdm_req(i).ready.poke(1)
+        dut.io.tcdm_rsp(i).bits.data.poke(1)
       }
       dut.clock.step(5)
       dut.io.spatialStrides_csr_i.valid.poke(0)

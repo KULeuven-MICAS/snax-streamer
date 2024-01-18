@@ -3,6 +3,10 @@ package streamer
 import chisel3._
 import chisel3.util._
 
+/** */
+
+/** @param params
+  */
 class DataMoverIO(params: DataMoverParams = DataMoverParams()) extends Bundle {
   // signals for write request address generation
   val ptr_agu_i = Flipped(Decoupled(UInt(params.addrWidth.W)))
@@ -31,24 +35,24 @@ class DataMover(params: DataMoverParams = DataMoverParams())
   val ptr_agu = RegInit(0.U(params.addrWidth.W))
   val start_ptr = WireInit(0.U(params.addrWidth.W))
 
-  // config valid signal for unrolling strides
+  // config valid signal for spatial strides
   // storing the config when it is valid
   val config_valid = WireInit(0.B)
 
-  val unrollingStrides = RegInit(
+  val spatialStrides = RegInit(
     VecInit(Seq.fill(params.spatialDim)(0.U(params.addrWidth.W)))
   )
 
   val done = WireInit(0.B)
 
-  // original unrolling address for TCDM request
-  val unrolling_addr = WireInit(
+  // original spatial address for TCDM request
+  val spatial_addr = WireInit(
     VecInit(
       Seq.fill(params.spatialBounds.reduce(_ * _))(0.U(params.addrWidth.W))
     )
   )
 
-  // for selecting the real TCDM request address from the original unrolling addresses
+  // for selecting the real TCDM request address from the original spatial addresses
   // according to the tcdmDataWidth and the elementWidth relationship
   // !!! warning: assuming the data granularity is one tcdmDataWidth
   // no sub-data accessing within one TCDM bank
@@ -99,12 +103,12 @@ class DataMover(params: DataMoverParams = DataMoverParams())
 
   // store them for later use
   when(config_valid) {
-    unrollingStrides := io.spatialStrides_csr_i.bits
+    spatialStrides := io.spatialStrides_csr_i.bits
   }
 
   start_ptr := io.ptr_agu_i.bits
 
-  // generating original unrolling address for TCDM request
+  // generating original spatial address for TCDM request
   val spatial_addr_gen_unit = Module(
     new SpatialAddrGenUnit(
       SpatialAddrGenUnitParams(
@@ -117,15 +121,15 @@ class DataMover(params: DataMoverParams = DataMoverParams())
 
   spatial_addr_gen_unit.io.valid_i := cstate =/= sIDLE
   spatial_addr_gen_unit.io.ptr_i := start_ptr
-  spatial_addr_gen_unit.io.strides_i := unrollingStrides
-  unrolling_addr := spatial_addr_gen_unit.io.ptr_o
+  spatial_addr_gen_unit.io.strides_i := spatialStrides
+  spatial_addr := spatial_addr_gen_unit.io.ptr_o
 
   // simulation time address constraint check
   when(cstate === sBUSY) {
     for (i <- 0 until params.tcdmPortsNum) {
       for (j <- 0 until packed_addr_num - 1) {
         assert(
-          unrolling_addr(i * packed_addr_num + j + 1) === unrolling_addr(
+          spatial_addr(i * packed_addr_num + j + 1) === spatial_addr(
             i * packed_addr_num + j
           ) + ((params.tcdmDataWidth / 8) / packed_addr_num).U,
           "read address in not consecutive in the same bank!"
@@ -142,7 +146,7 @@ class DataMover(params: DataMoverParams = DataMoverParams())
   // assuming addresses are packed in one tcmd request
   // the data granularity constrain
   for (i <- 0 until params.tcdmPortsNum) {
-    io.tcdm_req(i).bits.addr := unrolling_addr(i * packed_addr_num)
+    io.tcdm_req(i).bits.addr := spatial_addr(i * packed_addr_num)
   }
 
   // deal with contention

@@ -3,27 +3,19 @@ package streamer
 import chisel3._
 import chisel3.util._
 
-// input and output for data reader (data mover in read mode)
+/** This class is input and output for data reader (data mover in read mode). It
+  * is extended from DataMoverIO. It adds tcdm_rsp input ports and fifo output
+  * ports.
+  * @param params
+  *   The parameter class contains all the parameters of a data mover module
+  */
 class DataReaderIO(
-    params: DataMoverParams
-) extends Bundle {
-
-  // signals for read request address generation
-  val ptr_agu_i = Flipped(Decoupled(UInt(params.addrWidth.W)))
-  val spatialStrides_csr_i = Flipped(
-    Decoupled(Vec(params.spatialDim, UInt(params.addrWidth.W)))
-  )
-
-  // tcdm read req
-  val tcdm_req_addr = Output(Vec(params.tcdmPortsNum, UInt(params.addrWidth.W)))
-  val read_tcmd_valid_o = Output(Vec(params.tcdmPortsNum, Bool()))
-
-  val tcdm_ready_i = Input(Vec(params.tcdmPortsNum, Bool()))
+    params: DataMoverParams = DataMoverParams()
+) extends DataMoverIO(params) {
 
   // tcdm rsp
-  val data_tcdm_i = Flipped(
-    (Vec(params.tcdmPortsNum, Valid(UInt(params.tcdmDataWidth.W))))
-  )
+  val tcdm_rsp =
+    Vec(params.tcdmPortsNum, Flipped(Valid(new TcdmRsp(params.tcdmDataWidth))))
 
   // data pushed into the queue
   val data_fifo_o = Decoupled(UInt(params.fifoWidth.W))
@@ -33,70 +25,30 @@ class DataReaderIO(
     "fifoWidth should match with TCDM datawidth for now!"
   )
 
-  // from temporal address generation unit to indicate if the transaction is done
-  val done = Input(Bool())
-
 }
 
-// data reader, for sending read request to TCDM and collect data from TCDM response, pushing valid data into the queue
-// data producer from the accelerator X aspect
+/** This class is data reader module,.It is responsible for sending read request
+  * to TCDM and collect data from TCDM response, pushing valid data into the
+  * queue It is the data producer from the accelerator X aspect. It extends from
+  * the DataMover and add extract waiting and collecting tcdm response logic,
+  * fifo output logic.
+  * @param params
+  *   The parameter class contains all the parameters of a data mover module
+  */
 class DataReader(
     params: DataMoverParams = DataMoverParams()
-) extends Module
-    with RequireAsyncReset {
+) extends DataMover(params) {
 
-  val io = IO(
-    new DataReaderIO(
-      params
-    )
-  )
-
-  // storing the temporal start address when it is valid
-  val ptr_agu = RegInit(0.U(params.addrWidth.W))
-  val start_ptr = WireInit(0.U(params.addrWidth.W))
-
-  // config valid signal for unrolling strides
-  // storing the config when it is valid
-  val config_valid = WireInit(0.B)
-  val unrollingStrides = RegInit(
-    VecInit(Seq.fill(params.spatialDim)(0.U(params.addrWidth.W)))
-  )
-
-  // original unrolling address for TCDM request
-  val unrolling_addr = WireInit(
-    VecInit(
-      Seq.fill(params.spatialBounds.reduce(_ * _))(0.U(params.addrWidth.W))
-    )
-  )
-
-  // for selecting the real TCDM request address from the original unrolling addresses
-  // according to the tcdmDataWidth and the elementWidth relationship
-  // !!! warning: assuming the data granularity is one tcdmDataWidth
-  // no sub-data accessing within one TCDM bank
-  def packed_addr_num = (params.tcdmDataWidth / 8) / (params.elementWidth / 8)
-
-  // Fifo input signals
-  val fifo_input_bits = WireInit(0.U(params.fifoWidth.W))
-  val fifo_input_valid = WireInit(0.B)
-
-  // not in the busy with sending current request process
-  val ready_for_new_tcdm_reqs = WireInit(0.B)
-  // data fifo isn't full
-  val can_send_tcdm_read_req = WireInit(0.B)
-  // means transaction success
-  val tcdm_read_mem_all_ready = WireInit(0.B)
+  // override the IO of DataMover
+  override lazy val io = IO(new DataReaderIO(params))
+  io.suggestName("io")
 
   // signals for dealing with contention
-  val tcdm_rsp_i_p_valid = WireInit(VecInit(Seq.fill(params.tcdmPortsNum)(0.B)))
-  val tcdm_rsp_i_p_valid_reg = RegInit(
+  val tcdm_rsp_valid = WireInit(VecInit(Seq.fill(params.tcdmPortsNum)(0.B)))
+  val tcdm_rsp_valid_reg = RegInit(
     VecInit(Seq.fill(params.tcdmPortsNum)(0.B))
   )
-  val tcdm_rsp_i_q_ready = WireInit(VecInit(Seq.fill(params.tcdmPortsNum)(0.B)))
-  val tcdm_rsp_i_q_ready_reg = RegInit(
-    VecInit(Seq.fill(params.tcdmPortsNum)(0.B))
-  )
-  val wait_for_q_ready_read = WireInit(0.B)
-  val wait_for_p_valid_read = WireInit(0.B)
+  val wait_for_tcdm_rsp_all_valid = WireInit(0.B)
 
   // storing response data (part of whole transaction) when waiting for other part
   val data_reg = RegInit(
@@ -106,166 +58,64 @@ class DataReader(
     VecInit(Seq.fill(params.tcdmPortsNum)(0.U(params.tcdmDataWidth.W)))
   )
 
-  // State declaration
-  val sIDLE :: sBUSY :: Nil = Enum(2)
-  val cstate = RegInit(sIDLE)
-  val nstate = WireInit(sIDLE)
+  // Fifo input signals
+  val fifo_input_bits = WireInit(0.U(params.fifoWidth.W))
+  val fifo_input_valid = WireInit(0.B)
 
-  // Changing states
-  cstate := nstate
+  // when read data fifo isn't full means can send tcdm request to read (prefetch) more data
+  can_send_tcdm_req := io.data_fifo_o.ready && cstate === sBUSY
 
-  chisel3.dontTouch(cstate)
-  switch(cstate) {
-    is(sIDLE) {
-      when(config_valid) {
-        nstate := sBUSY
-      }.otherwise {
-        nstate := sIDLE
-      }
-
-    }
-    is(sBUSY) {
-      when(io.done) {
-        nstate := sIDLE
-      }.otherwise {
-        nstate := sBUSY
-      }
-    }
-  }
-
-  // store them for later use
-  when(config_valid) {
-    unrollingStrides := io.spatialStrides_csr_i.bits
-  }
-
-  config_valid := io.spatialStrides_csr_i.fire
-
-  start_ptr := io.ptr_agu_i.bits
-
-  // generating original unrolling address for TCDM request
-  val spatial_addr_gen_unit = Module(
-    new SpatialAddrGenUnit(
-      SpatialAddrGenUnitParams(
-        params.spatialDim,
-        params.spatialBounds,
-        params.addrWidth
-      )
-    )
-  )
-
-  spatial_addr_gen_unit.io.valid_i := cstate =/= sIDLE
-  spatial_addr_gen_unit.io.ptr_i := start_ptr
-  spatial_addr_gen_unit.io.strides_i := unrollingStrides
-  unrolling_addr := spatial_addr_gen_unit.io.ptr_o
-
-  // simulation time address constraint check
-  when(cstate === sBUSY) {
-    for (i <- 0 until params.tcdmPortsNum) {
-      for (j <- 0 until packed_addr_num - 1) {
-        assert(
-          unrolling_addr(i * packed_addr_num + j + 1) === unrolling_addr(
-            i * packed_addr_num + j
-          ) + ((params.tcdmDataWidth / 8) / packed_addr_num).U,
-          "read address in not consecutive in the same bank!"
-        )
-      }
-    }
-  }
-
-  can_send_tcdm_read_req := io.data_fifo_o.ready && cstate === sBUSY
-
-  // assuming addresses are packed in one tcmd request
-  // the data granularity constrain
+  // data and write signal is 0 for read request
   for (i <- 0 until params.tcdmPortsNum) {
-    io.tcdm_req_addr(i) := unrolling_addr(i * packed_addr_num)
+    io.tcdm_req(i).bits.data := 0.U
+    io.tcdm_req(i).bits.write := 0.B
   }
 
-  // deal with contention
-  // ensure all the read request are sent successfully
+  // check and wait for all the response valid (similar as checking request ready)
   for (i <- 0 until params.tcdmPortsNum) {
-    when(can_send_tcdm_read_req) {
-      when(io.ptr_agu_i.fire) {
-        io.read_tcmd_valid_o(i) := 1.B
-      }.otherwise {
-        io.read_tcmd_valid_o(i) := ~tcdm_rsp_i_q_ready_reg(i)
+    when(can_send_tcdm_req && !fifo_input_valid) {
+      wait_for_tcdm_rsp_all_valid := 1.B
+    }.otherwise {
+      wait_for_tcdm_rsp_all_valid := 0.B
+    }
+  }
+
+  for (i <- 0 until params.tcdmPortsNum) {
+    when(wait_for_tcdm_rsp_all_valid && !fifo_input_valid) {
+      when(io.tcdm_rsp(i).valid) {
+        tcdm_rsp_valid_reg(i) := io.tcdm_rsp(i).valid
+        data_reg(i) := io.tcdm_rsp(i).bits.data
       }
     }.otherwise {
-      io.read_tcmd_valid_o(i) := 0.B
-    }
-  }
-
-  for (i <- 0 until params.tcdmPortsNum) {
-    when(can_send_tcdm_read_req && !tcdm_read_mem_all_ready) {
-      wait_for_q_ready_read := 1.B
-    }.otherwise {
-      wait_for_q_ready_read := 0.B
-    }
-  }
-
-  for (i <- 0 until params.tcdmPortsNum) {
-    when(wait_for_q_ready_read && !tcdm_read_mem_all_ready) {
-      when(io.tcdm_ready_i(i)) {
-        tcdm_rsp_i_q_ready_reg(i) := io.tcdm_ready_i(i)
-      }
-    }.otherwise {
-      tcdm_rsp_i_q_ready_reg(i) := 0.B
-    }
-  }
-
-  for (i <- 0 until params.tcdmPortsNum) {
-    tcdm_rsp_i_q_ready(i) := io.tcdm_ready_i(i) || tcdm_rsp_i_q_ready_reg(i)
-  }
-
-  tcdm_read_mem_all_ready := tcdm_rsp_i_q_ready.reduce(_ & _)
-  ready_for_new_tcdm_reqs := !wait_for_q_ready_read && can_send_tcdm_read_req
-
-  // check and wait for all the response valid
-  for (i <- 0 until params.tcdmPortsNum) {
-    when(can_send_tcdm_read_req && !fifo_input_valid) {
-      wait_for_p_valid_read := 1.B
-    }.otherwise {
-      wait_for_p_valid_read := 0.B
-    }
-  }
-
-  for (i <- 0 until params.tcdmPortsNum) {
-    when(wait_for_p_valid_read && !fifo_input_valid) {
-      when(io.data_tcdm_i(i).valid) {
-        tcdm_rsp_i_p_valid_reg(i) := io.data_tcdm_i(i).valid
-        data_reg(i) := io.data_tcdm_i(i).bits
-      }
-    }.otherwise {
-      tcdm_rsp_i_p_valid_reg(i) := 0.B
+      // clear all the valid bits before a new transaction
+      tcdm_rsp_valid_reg(i) := 0.B
     }
   }
 
   // fifo data
+  // getting data directly from the response ports or the data register depends on
+  // if response valid at the all response is valid moment
   for (i <- 0 until params.tcdmPortsNum) {
     when(fifo_input_valid) {
-      when(io.data_tcdm_i(i).valid) {
-        data_fifo_input(i) := io.data_tcdm_i(i).bits
+      when(io.tcdm_rsp(i).valid) {
+        data_fifo_input(i) := io.tcdm_rsp(i).bits.data
       }.otherwise {
         data_fifo_input(i) := data_reg(i)
       }
     }
   }
+
+  // gether all the response data
   fifo_input_bits := Cat(data_fifo_input)
   io.data_fifo_o.bits := fifo_input_bits
 
   // fifo valid
   for (i <- 0 until params.tcdmPortsNum) {
-    tcdm_rsp_i_p_valid(i) := io.data_tcdm_i(i).valid || tcdm_rsp_i_p_valid_reg(
-      i
-    )
+    tcdm_rsp_valid(i) := io.tcdm_rsp(i).valid || tcdm_rsp_valid_reg(i)
   }
-  fifo_input_valid := tcdm_rsp_i_p_valid.reduce(_ & _)
+  // write the responded data to the fifo when all the data is valid
+  fifo_input_valid := tcdm_rsp_valid.reduce(_ & _)
   io.data_fifo_o.valid := fifo_input_valid
-
-  // signal indicating a new address data transaction is ready
-  io.ptr_agu_i.ready := cstate === sBUSY && ready_for_new_tcdm_reqs
-
-  // signal for indicating ready for new config
-  io.spatialStrides_csr_i.ready := cstate === sIDLE
 
 }
 

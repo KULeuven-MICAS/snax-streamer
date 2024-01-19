@@ -58,7 +58,7 @@ case class SpatialAddrGenUnitParams(
   *   mover
   * @param elementWidth
   *   single data element width for each data mover, useful for generating
-  *   unrolling addresses
+  *   spatial addresses
   * @param fifoWidth
   *   FIFO width
   */
@@ -116,8 +116,7 @@ trait HasStreamerCoreParams {
   * @param temporalBoundWidth
   *   the register width for storing the temporal loop bound
   * @param spatialDim
-  *   a Seq contains the unrolling dimensions for both data reader and data
-  *   writer
+  *   a Seq contains the spatial dimensions for both data reader and data writer
   * @param tcdmDataWidth
   *   data width for each TCDm port
   * @param addrWidth

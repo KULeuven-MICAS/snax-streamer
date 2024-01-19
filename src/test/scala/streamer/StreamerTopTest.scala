@@ -80,7 +80,7 @@ class StreamerTopTest
         write_csr(4, 2)
 
         // spatial loop strides
-        // warning!!! give the proper unrolling strides so that is a aligned in one TCDM bank.
+        // warning!!! give the proper spatial strides so that is a aligned in one TCDM bank.
         // address 5 configs the spatial loop stride for first data reader, which is a_u for mac engine.
         write_csr(5, 4)
         // address 6 configs the spatial loop stride for second data reader, which is b_u for mac engine.

@@ -237,14 +237,14 @@ class Streamer(
   for (i <- 0 until params.dataMoverNum) {
     if (i < params.dataReaderNum) {
       address_gen_unit(i).io.ptr_o <> data_reader(i).io.ptr_agu_i
-      address_gen_unit(i).io.done <> data_reader(i).io.done
+      data_reader(i).io.done := address_gen_unit(i).io.done
     } else {
       address_gen_unit(i).io.ptr_o <> data_writer(
         i - params.dataReaderNum
       ).io.ptr_agu_i
-      address_gen_unit(i).io.done <> data_writer(
+      data_writer(
         i - params.dataReaderNum
-      ).io.done
+      ).io.done := address_gen_unit(i).io.done
     }
   }
 
@@ -290,53 +290,24 @@ class Streamer(
   val read_flatten_seq = flattenSeq(params.dataReaderTcdmPorts)
   for ((dimIndex, innerIndex, flattenedIndex) <- read_flatten_seq) {
     // read request to TCDM
-    io.data.tcdm_req(flattenedIndex).valid := data_reader(dimIndex).io
-      .read_tcmd_valid_o(innerIndex)
-    io.data.tcdm_req(flattenedIndex).bits.addr := data_reader(dimIndex).io
-      .tcdm_req_addr(innerIndex)
-    io.data.tcdm_req(flattenedIndex).bits.data := 0.U
-    io.data.tcdm_req(flattenedIndex).bits.write := 0.B
-
-    // request ready signals from TCDM
-    data_reader(dimIndex).io
-      .tcdm_ready_i(innerIndex) := io.data.tcdm_req(flattenedIndex).ready
+    io.data.tcdm_req(flattenedIndex) <> data_reader(dimIndex).io.tcdm_req(
+      innerIndex
+    )
 
     // signals from TCDM responses
-    data_reader(dimIndex).io.data_tcdm_i(innerIndex).valid := io.data
-      .tcdm_rsp(flattenedIndex)
-      .valid
-    data_reader(dimIndex).io
-      .data_tcdm_i(innerIndex)
-      .bits := io.data.tcdm_rsp(flattenedIndex).bits.data
+    data_reader(dimIndex).io.tcdm_rsp(innerIndex) <> io.data.tcdm_rsp(
+      flattenedIndex
+    )
   }
 
   // data writer <> TCDM write ports
   // TCDM request port bias based on the read TCDM ports number
   val write_flatten_seq = flattenSeq(params.dataWriterTcdmPorts)
   for ((dimIndex, innerIndex, flattenedIndex) <- write_flatten_seq) {
-
     // write request to TCDM
-    io.data.tcdm_req(flattenedIndex + tcdm_read_ports_num).valid := data_writer(
+    io.data.tcdm_req(flattenedIndex + tcdm_read_ports_num) <> data_writer(
       dimIndex
-    ).io.write_tcmd_valid_o(innerIndex)
-    io.data
-      .tcdm_req(flattenedIndex + tcdm_read_ports_num)
-      .bits
-      .addr := data_writer(
-      dimIndex
-    ).io.tcdm_req_addr(innerIndex)
-    io.data
-      .tcdm_req(flattenedIndex + tcdm_read_ports_num)
-      .bits
-      .data := data_writer(
-      dimIndex
-    ).io.tcdm_req_data(innerIndex)
-    io.data.tcdm_req(flattenedIndex + tcdm_read_ports_num).bits.write := 1.B
-
-    // request ready signals from TCDM
-    data_writer(dimIndex).io.tcdm_ready_i(innerIndex) := io.data
-      .tcdm_req(flattenedIndex + tcdm_read_ports_num)
-      .ready
+    ).io.tcdm_req(innerIndex)
   }
 
 }

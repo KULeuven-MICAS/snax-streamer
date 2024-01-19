@@ -18,14 +18,14 @@ class DataReaderTest
       Seq(WriteVcdAnnotation)
     ) { dut =>
       dut.clock.step(5)
-      // give valid config, give the proper unrolling strides so that is a aligned in one TCDM bank
+      // give valid config, give the proper spatial strides so that is a aligned in one TCDM bank
       dut.io.spatialStrides_csr_i.bits(0).poke(1)
       dut.io.spatialStrides_csr_i.bits(1).poke(8)
       dut.io.spatialStrides_csr_i.valid.poke(1)
       dut.io.data_fifo_o.ready.poke(1)
       for (i <- 0 until DataMoverTestParameters.tcdmPortsNum) {
-        dut.io.tcdm_ready_i(i).poke(1)
-        dut.io.data_tcdm_i(i).valid.poke(1)
+        dut.io.tcdm_req(i).ready.poke(1)
+        dut.io.tcdm_rsp(i).bits.data.poke(1)
       }
       dut.clock.step(5)
       dut.io.spatialStrides_csr_i.valid.poke(0)

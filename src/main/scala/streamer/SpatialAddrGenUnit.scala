@@ -35,7 +35,7 @@ class SpatialAddrGenUnitIO(
     params: SpatialAddrGenUnitParams
 ) extends Bundle {
 
-  // configurations for unrolling address generation
+  // configurations for spatial address generation
   val valid_i = Input(Bool())
   val ptr_i = Input(UInt(params.addrWidth.W))
   val strides_i = Input(Vec(params.loopDim, UInt(params.addrWidth.W)))
@@ -49,7 +49,7 @@ class SpatialAddrGenUnitIO(
 // a trait other class can extend to have the genSpatialLoopIndices function
 trait WithSpatialLoopIndices {
 
-  // a scala function to generate the nested indices of the unrolled loop counter for generating unrolling addresses
+  // a scala function to generate the nested indices of the unrolled loop counter for generating spatial addresses
   // for instance:
   // genSpatialLoopIndices(2,Seq(8,8),0) returns (0,0)
   // genSpatialLoopIndices(2,Seq(8,8),1) returns (1,0)
@@ -126,11 +126,11 @@ class SpatialAddrGenUnit(
     )
 
     when(valid) {
-      // address generation for each unrolling data element
+      // address generation for each spatial data element
       // will ignore some later to be aligned with bank width
       for (i <- 0 until loopBounds.product) {
 
-        // indices for each nested unrolling loop
+        // indices for each nested spatial loop
         val indices = genSpatialLoopIndices(loopDim, loopBounds, i)
 
         // address generation with affine mapping definition

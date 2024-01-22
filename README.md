@@ -1,21 +1,21 @@
 # Flexible Streamer Generator for SNAX
 
-The Flexible Streamer Generator is built to alleviate the data layout concern of an accelerator. It decouples the the accelerator with the real memory system. It simplifies the data interface of the accelerator. The accelerator don't need to consider the complicate request and response to/from the real memory system. The accelerator's data interface is simply valid-ready decoupled handshake interface. Besides, the pre-fetch mechanism inside the Streamer also helps to relieve the data contention problem.
+The Flexible Streamer Generator is built to alleviate the data layout concern of an accelerator. It decouples the the accelerator with the real memory system. It simplifies the data interface of the accelerator. The accelerator doesn't need to consider the complicated request and response to/from the real memory system. The accelerator's data interface is simply a valid-ready decoupled handshake interface. Besides, the pre-fetch mechanism inside the Streamer also helps to relieve the data contention problem.
 
 The Streamer has a compatible interface with the [SNAX core](https://github.com/KULeuven-micas/snitch_cluster) and can be integrated into it as a data streaming engine. This repository contains the chisel sources and unit tests for the Flexible Streamer Generator.
 
 It is written in CHISEL 5.0.0 and is intended to be connected to the SNAX accelerator RISC-V manager core through a SystemVerilog wrapper.
 
-Thanks to strong expresion power of Chisel, the Flexible Streamer Generator has the capability of dealing with any number of temporal loops and any number of parallel loops for the data address generation. More importantly, the Streamre generator is accelerator agnostic and highly flexible and parameterizable which means it is suitable for a range of accelerators with [tiled-strided-layout](https://github.com/KULeuven-MICAS/snax-mlir/tree/main/compiler/ir/tsl). We have generated Streamers for three accelerators, including the SNAX-GEMM, SNAX-PostProcessing-SIMD, and MAC Engine.
+Thanks to the strong expression power of Chisel, the Flexible Streamer Generator has the capability of dealing with any number of temporal loops and any number of parallel loops for data address generation. More importantly, the Streamre generator is accelerator agnostic, highly flexible, and parameterizable which means it is suitable for a range of accelerators with [tiled-strided-layout](https://github.com/KULeuven-MICAS/snax-mlir/tree/main/compiler/ir/tsl). We have generated Streamers for three accelerators, including the SNAX-GEMM, SNAX-PostProcessing-SIMD, and MAC Engine.
 
 ## Microarchitecture
 The microarchitecture of the Flexible Streamer Generator is shown below.
 
-The main module of the Streamer is the data mover, including data reader (read data from the real memory system and act as the producer for the accelerator) and data writer (write data to the real memory system and act as consumer for the accelerator). Each data mover has its own address generation unit and works independently so that each data mover can do the data transfer as quick as possible.
+The main module of the Streamer is the data mover, including the data reader (reads data from the real memory system and acts as the producer for the accelerator) and data writer (writes data to the real memory system and acts as the consumer for the accelerator). Each data mover has its own address generation unit and works independently so that each data mover can do the data transfer as quickly as possible.
 
-The data reader gives read request to the memory system (the address, and read signal, etc.) and get the response. When all the responses of one transaction are obtained, it push the valid data into a FIFO for accelerator to consume. If the accelerator consumed successfully, the FIFO will pop the data. The data reader wll keep get new data from the real memory system (pre-fetch) until the FIFO is full or all the input data has been fetched.
+The data reader gives read requests to the memory system (the address, and read signal, etc.) and gets the response. When all the responses of one transaction are obtained, it pushes the valid data into a FIFO for the accelerator to consume. If the accelerator is consumed successfully, the FIFO will pop the data. The data reader will keep getting new data from the real memory system (pre-fetch) until the FIFO is full or all the input data has been fetched.
 
-The data writer obtains valid data from the FIFO output (written by the accelerator) and send write request to the memory system. When there is a valid output from the accelerator (and the FIFO is not full), the valid output will be pushed to the FIFO. When the FIFO is not empty, the data writer will keep sending write request. When one write transaction is success, the data will be pop from the FIFO.
+The data writer obtains valid data from the FIFO output (written by the accelerator) and sends write request to the memory system. When there is a valid output from the accelerator (and the FIFO is not full), the valid output will be pushed to the FIFO. When the FIFO is not empty, the data writer will keep sending write requests. When one write transaction is successful, the data will be pop from the FIFO.
 
 The StreamerTop module has a csrManage to manage the CSR read/write operations from the SNAX core. The Streamer has its own CSRs to store the configuration for the address generation and transaction number etc. The configuration, such as the temporal loop bound and strides, is written in the CSRs via a CsrManager when all the CSR configurations are valid. When doing the current transaction, the configuration for the next transaction operation can already be written into the CsrManager. When the current transaction finishes, the SNAX core can send the configuration valid signal then the CSR value in the CsrManager will be loaded in to the Streamer.
 
@@ -24,7 +24,7 @@ The StreamerTop module has a csrManage to manage the CSR read/write operations f
 </p>
 
 ## Parameters
-All the parameters for the Streamer is listed at `Parameters.scala`. Each hardware module has its own parameter class. A description of all the parameter class and the parameter format for the Streamer is listed at the below table.
+All the parameters for the Streamer are listed at `Parameters.scala`. Each hardware module has its own parameter class. A description of all the parameter classes and the parameter format for the Streamer is listed in the below table.
 
 |Class| Parameters | Description |
 | - | - | - |
@@ -50,8 +50,8 @@ All the parameters for the Streamer is listed at `Parameters.scala`. Each hardwa
 
 *TCDM is the memory that the Streamer interacts to.
 
-### Instantiate Streamer for there accelerators
-`StreamerInstanceParameters.scala` lists three Streamer parameter configuration for three different accelerators.
+### Instantiate Streamer for three accelerators
+`StreamerInstanceParameters.scala` lists three Streamer parameter configurations for three different accelerators.
 
 #### Example: Streamer parameter configuration for a simple MAC Engine
 ```
@@ -116,9 +116,9 @@ object MacStreamerParameters extends CommonParams {
 ```
 ## Functional description
 
-Based on the definition of [tiled-strided-layout](https://github.com/KULeuven-MICAS/snax-mlir/tree/main/compiler/ir/tsl), the address generation is base on two parts, the temporal address and spatial address. The temporal address is based on the temporal loop counters and the temporal strides configuration. The spatial address is based on the spatial unrolling factor of the accelerator and the spatial strides configuration. As the accelerator has spatial unrolling, the address generation unit will generate the address for each data element. But when sending the request to the real memory system, these addresses will be merged for data alignment for the memory bank width.
+Based on the definition of [tiled-strided-layout](https://github.com/KULeuven-MICAS/snax-mlir/tree/main/compiler/ir/tsl), the address generation is based on two parts, the temporal address and spatial address. The temporal address is based on the temporal loop counters and the temporal strides configuration. The spatial address is based on the spatial unrolling factor of the accelerator and the spatial strides configuration. As the accelerator has spatial unrolling, the address generation unit will generate the address for each data element. But when sending the request to the real memory system, these addresses will be merged for data alignment for the memory bank width.
 
-When formulate the address generation formula below:
+We formulate the address generation formula below:
 ```
 for(;;temporalbound_n-1)
  for(;;temporalbound_n-2)
@@ -180,11 +180,11 @@ addr_o[Mu-1][Ku-1] = ptr_o + m1*t_str_m1 + n1*t_str_n1 + k1*t_str_k1 + [Mu-1]*s_
 
 
 ## IO ports
-The input and output ports of the Streamer is shown at the table below.
+The input and output ports of the Streamer are shown in the table below.
 
-The Streamer uses simplified CSR request/response interface for CSR write/read operation. A more detailed description of the CSR operation interface can be found at [here](https://kuleuven-micas.github.io/snitch_cluster/rm/snax_cluster.html).
+The Streamer uses a simplified CSR request/response interface for CSR write/read operation. A more detailed description of the CSR operation interface can be found at [here](https://kuleuven-micas.github.io/snitch_cluster/rm/snax_cluster.html).
 
-The Streamer uses simplified TCDM request/response interface to read and write data from/to the TCDM. A more detailed description of the TCDM request/response interface can be found at [here](https://kuleuven-micas.github.io/snitch_cluster/rm/snax_cluster.html).
+The Streamer uses a simplified TCDM request/response interface to read and write data from/to the TCDM. A more detailed description of the TCDM request/response interface can be found at [here](https://kuleuven-micas.github.io/snitch_cluster/rm/snax_cluster.html).
 
 The Streamer uses the Decoupled interface for accelerator input and output data. A more detailed description of the Decoupled interface can be found at [here](https://www.chisel-lang.org/docs/explanations/interfaces-and-connections#the-standard-ready-valid-interface-readyvalidio--decoupled).
 
@@ -193,14 +193,14 @@ The simplified interface for the CSR and TCDM request/response contains the core
 |Signal bundle| Signals | Signal name in generated SV | Width | Dir | Description |
 | - | - | - | - | - | - |
 | csr.req | data | io_csr_req_bits_data | 32| In| The write data from CSR request. |
-|  | addr | io_csr_req_bits_addr | 32| In| The address indicating which CSR to be wrote or read. |
+|  | addr | io_csr_req_bits_addr | 32| In| The address indicates which CSR to be wrote or read. |
 |  | write | io_csr_req_bits_write | 32| In| The signal indicates this request is for CSR write or read. |
 |  | valid | io_csr_req_valid | 32| In| The signal indicates if this request is valid. |
 |  | ready | io_csr_req_ready | 32| Out| The signal indicates if the accelerator is ready for this CSR operation.|
 | csr.rsp | data | io_csr_rsp_bits_data | 32| Out| The response data for CSR read operation. |
 |  | valid | io_csr_rsp_valid | 32| Out| The signal indicates if this response is valid. |
 |  | ready | io_csr_rsp_ready | 32| In| The signal indicates if the SNAX core is ready for this CSR response. |
-| tcdm_req | data | io_data_tcdm_req_0_bits_data | 64| Out| The data from TCDM request. This data only valuable when it is a write request. |
+| tcdm_req | data | io_data_tcdm_req_0_bits_data | 64| Out| The data from TCDM request. This data is only valuable when it is a write request. |
 | tcdm_req | addr | io_data_tcdm_req_0_bits_addr | 32| Out| The address from TCDM request. |
 | tcdm_req | write | io_data_tcdm_req_0_bits_write | 1| Out| The signal indicates this request is for CSR write or read. |
 | tcdm_req | valid | io_data_tcdm_req_0_valid | 1| Out| The signal indicates if this request is valid. |
@@ -224,10 +224,10 @@ The simplified interface for the CSR and TCDM request/response contains the core
 |---------|--------------------------|-------------------------------------|
 | offset* + [0..temporalDim - 1]   |    temporalLoopBoundCSRs     | temporal loop bound for each temporal dimension.           |
 | offset + temporalDim + [0..temdataMoverNum * temporalDimporalDim - 1]   |    temporalLoopSrtidesCSRs     | temporal loop strides for each temporal dimension and for each data mover.          |
-| offset + temporalDim +  dataMoverNum * temporalDim + [0..spatialDim.sum - 1]   |    spatialLoopSrtidesCSRs     | spatial loop strides for each data mover  and for corresponding spatial dimension. The  spatial dimension for each data mover can be different. It depends on the accelerator.        |
+| offset + temporalDim +  dataMoverNum * temporalDim + [0..spatialDim.sum - 1]   |    spatialLoopSrtidesCSRs     | spatial loop strides for each data mover and for corresponding spatial dimension. The spatial dimension for each data mover can be different. It depends on the accelerator.        |
 | offset + temporalDim +  dataMoverNum * temporalDim + spatialDim.sum + [0..dataMoverNum - 1]   |    basePtrCSRs     |  base pointers for each data mover.          |
 
-*offset is defined by the SNAX core. More detailed explanation of what are these configurations can be found at `StreamerTop.scala`.
+*offset is defined by the SNAX core. A more detailed explanation of what are these configurations can be found at `StreamerTop.scala`.
 
 ## Quick start
 ### Set up Chisel environment
@@ -240,7 +240,7 @@ To run all the Streamer accelerator tests, use:
 ```
 sbt test
 ```
-To run specific test, use:
+To run a specific test, use:
 
 ```
 sbt "testOnly streamer.${chisel_test_name}"
@@ -249,13 +249,13 @@ where `chisel_test_name` is the class name of the specific test. For instance, u
 ```
 sbt "testOnly streamer.StreamerTopTest"
 ```
-to run the unit test for Streamer top module.
+to run the unit test for the Streamer top module.
 ## Generate System Verilog file
-To generate the corresponding system verilog file for specific Chisel module, use:
+To generate the corresponding system verilog file for a specific Chisel module, use:
 ```
 sbt "runMain streamer.${chisel_module_name}"
 ```
-For instance, to generate the system verilog file for Streamer top module with the testing parameters, use:
+For instance, to generate the system verilog file for the Streamer top module with the testing parameters, use:
 ```
 sbt "runMain streamer.StreamerTopTester"
 ```

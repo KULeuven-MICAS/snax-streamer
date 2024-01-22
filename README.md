@@ -194,12 +194,12 @@ The simplified interface for the CSR and TCDM request/response contains the core
 | - | - | - | - | - | - |
 | csr.req | data | io_csr_req_bits_data | 32| In| The write data from CSR request. |
 |  | addr | io_csr_req_bits_addr | 32| In| The address indicates which CSR to be wrote or read. |
-|  | write | io_csr_req_bits_write | 32| In| The signal indicates this request is for CSR write or read. |
-|  | valid | io_csr_req_valid | 32| In| The signal indicates if this request is valid. |
-|  | ready | io_csr_req_ready | 32| Out| The signal indicates if the accelerator is ready for this CSR operation.|
+|  | write | io_csr_req_bits_write | 1| In| The signal indicates this request is for CSR write or read. |
+|  | valid | io_csr_req_valid | 1 | In| The signal indicates if this request is valid. |
+|  | ready | io_csr_req_ready | 1 | Out| The signal indicates if the accelerator is ready for this CSR operation.|
 | csr.rsp | data | io_csr_rsp_bits_data | 32| Out| The response data for CSR read operation. |
-|  | valid | io_csr_rsp_valid | 32| Out| The signal indicates if this response is valid. |
-|  | ready | io_csr_rsp_ready | 32| In| The signal indicates if the SNAX core is ready for this CSR response. |
+|  | valid | io_csr_rsp_valid | 1 | Out| The signal indicates if this response is valid. |
+|  | ready | io_csr_rsp_ready | 1 | In| The signal indicates if the SNAX core is ready for this CSR response. |
 | tcdm_req | data | io_data_tcdm_req_0_bits_data | 64| Out| The data from TCDM request. This data is only valuable when it is a write request. |
 | tcdm_req | addr | io_data_tcdm_req_0_bits_addr | 32| Out| The address from TCDM request. |
 | tcdm_req | write | io_data_tcdm_req_0_bits_write | 1| Out| The signal indicates this request is for CSR write or read. |
@@ -215,7 +215,7 @@ The simplified interface for the CSR and TCDM request/response contains the core
 | | . | . | . | . | The streamer2accelerator ports number is the same as data reader number. The index 0 corresponds to the first input data and 2 for second input data and so on. |
 | accelerator2streamer | data | io_data_accelerator2streamer_data_0_bits | First write FIFO width| In| The data from the acceleratorX output. |
 | accelerator2streamer | valid | io_data_accelerator2streamer_data_0_valid | 1| In| The signal indicates if this data is valid. |
-| accelerator2streamer | ready | io_data_accelerator2streamer_data_0_ready | 1| In| The signal indicates if the data writer is ready for taking in this data (not full). |
+| accelerator2streamer | ready | io_data_accelerator2streamer_data_0_ready | 1| Out| The signal indicates if the data writer is ready for taking in this data (not full). |
 | | . | . | . | . | The accelerator2streamer ports number is the same as data writer number. The index 0 corresponds to the first output data and 2 for second output data (if any) and so on.|
 | | | | | | | |
 

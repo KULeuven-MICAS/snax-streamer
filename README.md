@@ -116,7 +116,7 @@ object MacStreamerParameters extends CommonParams {
 ```
 ## Functional description
 
-Based on the definition of [tiled-strided-layout](https://github.com/KULeuven-MICAS/snax-mlir/tree/main/compiler/ir/tsl), the address generation is based on two parts, the temporal address and spatial address. The temporal address is based on the temporal loop counters and the temporal strides configuration. The spatial address is based on the spatial unrolling factor of the accelerator and the spatial strides configuration. As the accelerator has spatial unrolling, the address generation unit will generate the address for each data element. But when sending the request to the real memory system, these addresses will be merged for data alignment for the memory bank width.
+The access pattern for the Streamer is represented by a set of nested for loops. Every for loop can specify a _stride_ which we use to increment a base pointer. On top of this, some of the for loops can be _spatially unrolled_, to enable parallel data accesses by the accelerator. This splits address generation in two parts, the temporal address generation and spatial address generation. The temporal address is based on the temporal loop counters and the temporal strides configuration. The spatial address is based on the spatial unrolling factor of the accelerator and the spatial strides configuration. The spatial address generation unit will generate a unique address for each data element which is accessed in parallel. As there may be multiple data elements per memory word, these addresses are then merged for proper data alignment with the memory bank width.
 
 We formulate the address generation formula below:
 ```

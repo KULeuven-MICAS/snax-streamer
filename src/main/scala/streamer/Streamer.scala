@@ -102,15 +102,27 @@ class Streamer(
     )
   )
 
-  // bandwidth should match constrains in Streamer check
-  def fifoWidth = params.fifoWidthReader ++ params.fifoWidthWriter
-  def dataMoverWidth = params.dataReaderParams.map(_.fifoWidth) ++ params.dataWriterParams.map(_.fifoWidth)
+  // bandwidth between the tcdm, the fifo and the accelerator should match constrains in Streamer check
+
+  // the tcdmWidth and the fifoWidth in dataMover should match
+  def tcdmWidth = params.dataReaderParams.map(i =>
+    params.tcdmDataWidth * i.tcdmPortsNum
+  ) ++ params.dataWriterParams.map(i => params.tcdmDataWidth * i.tcdmPortsNum)
+  def dataMoverWidth = params.dataReaderParams.map(
+    _.fifoWidth
+  ) ++ params.dataWriterParams.map(_.fifoWidth)
+  require(tcdmWidth == dataMoverWidth)
 
   // the fifoWidth in dataMover and the FIFO width should match
+  def fifoWidth = params.fifoWidthReader ++ params.fifoWidthWriter
   require(fifoWidth == dataMoverWidth)
 
   // accelerator spatialBounds and elementWidth should match
-  def accDataWidth = params.dataReaderParams.map(i => i.spatialBounds.product * i.elementWidth) ++ params.dataWriterParams.map(i => i.spatialBounds.product * i.elementWidth)
+  def accDataWidth = params.dataReaderParams.map(i =>
+    i.spatialBounds.product * i.elementWidth
+  ) ++ params.dataWriterParams.map(i =>
+    i.spatialBounds.product * i.elementWidth
+  )
   require(fifoWidth == accDataWidth)
 
   def tcdm_read_ports_num = params.dataReaderTcdmPorts.reduce(_ + _)

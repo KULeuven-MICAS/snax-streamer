@@ -54,7 +54,7 @@ The StreamerTop module has a csrManage to manage the CSR read/write operations f
 `StreamerInstanceParameters.scala` lists three Streamer parameter configurations for three different accelerators.
 
 #### Example: Streamer parameter configuration for a simple MAC Engine
-```
+```scala
 object MacStreamerParameters extends CommonParams {
 
   def MacScalingFactor = 4

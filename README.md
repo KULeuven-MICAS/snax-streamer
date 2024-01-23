@@ -220,18 +220,18 @@ The simplified interface for the CSR and TCDM request/response contains the core
 | | | | | | | |
 
 ### CSR definition
+The offset below is defined by the SNAX core. A more detailed explanation of what are these configurations can be found at `StreamerTop.scala`.
+
 | Address | CSR name             | Notes                               |
 |---------|--------------------------|-------------------------------------|
-| offset* + [0..temporalDim - 1]   |    temporalLoopBoundCSRs     | temporal loop bound for each temporal dimension.           |
+| offset + [0..temporalDim - 1]   |    temporalLoopBoundCSRs     | temporal loop bound for each temporal dimension.           |
 | offset + temporalDim + [0..temdataMoverNum * temporalDimporalDim - 1]   |    temporalLoopSrtidesCSRs     | temporal loop strides for each temporal dimension and for each data mover.          |
 | offset + temporalDim +  dataMoverNum * temporalDim + [0..spatialDim.sum - 1]   |    spatialLoopSrtidesCSRs     | spatial loop strides for each data mover and for corresponding spatial dimension. The spatial dimension for each data mover can be different. It depends on the accelerator.        |
 | offset + temporalDim +  dataMoverNum * temporalDim + spatialDim.sum + [0..dataMoverNum - 1]   |    basePtrCSRs     |  base pointers for each data mover.          |
 
-*offset is defined by the SNAX core. A more detailed explanation of what are these configurations can be found at `StreamerTop.scala`.
-
 ## Quick start
 ### Set up Chisel environment
-The instruction for setting up Chisel compilation and simulation environment can be found [here](https://github.com/KULeuven-MICAS/snax-gemm?tab=readme-ov-file#set-up-chisel-environment).
+The instruction for setting up Chisel compilation and simulation environment can be found at [here](https://github.com/KULeuven-MICAS/snax-gemm?tab=readme-ov-file#set-up-chisel-environment).
 
 ## Run tests
 There are unit tests for each hardware generator.

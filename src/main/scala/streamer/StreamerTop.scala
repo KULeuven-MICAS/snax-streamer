@@ -168,7 +168,7 @@ object GeMMStreamerTop extends App {
 }
 
 // streamertop for PP-SIMD
-object PostProcessingTopTester extends App {
+object PostProcessingStreamerTop extends App {
   emitVerilog(
     new StreamerTop(
       StreamerParams(

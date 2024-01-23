@@ -1,6 +1,6 @@
 # Flexible Streamer Generator for SNAX
 
-The Flexible Streamer Generator is built to alleviate the data layout concern of an accelerator. It decouples the the accelerator with the real memory system. It simplifies the data interface of the accelerator. The accelerator doesn't need to consider the complicated request and response to/from the real memory system. The accelerator's data interface is simply a valid-ready decoupled handshake interface. Besides, the pre-fetch mechanism inside the Streamer also helps to relieve the data contention problem.
+Every accelerator has a specific layout for data that comes in and goes out, but the data layout in memory may not be in the same format. This causes data layout management overhead on both the accelerator side and the compiler side. The Flexible Streamer Generator is a tool to generate _Streamers_ for an accelerator. A Streamer is a reusable hardware block designed to handle the memory accesses, decoupling the accelerator from the actual memory system, and simplifying the interface to the accelerator. The streamer's accelerator and data interfaces follow the valid-ready handshake. On top of this, the pre-fetch mechanism inside the Streamer also helps to relieve data contention in the memory, maximizing an accelerator's data-compute bandwidth.
 
 The Streamer has a compatible interface with the [SNAX core](https://github.com/KULeuven-micas/snitch_cluster) and can be integrated into it as a data streaming engine.
 
@@ -9,19 +9,19 @@ It is written in CHISEL 5.0.0 and is intended to be connected to the SNAX accele
 Thanks to the strong expression power of Chisel, the Flexible Streamer Generator has the capability of dealing with any number of temporal loops and any number of parallel loops for data address generation. More importantly, the Streamer generator is accelerator agnostic, highly flexible, and parameterizable which means it is suitable for a wide range of accelerators employing a [tiled-strided-layout](https://github.com/KULeuven-MICAS/snax-mlir/tree/main/compiler/ir/tsl). We have generated Streamers for three accelerators, including the SNAX-GEMM, SNAX-PostProcessing-SIMD, and MAC Engine.
 
 ## Microarchitecture
-The figure below shows the microarchitecture of the Flexible Streamer Generator.
-
-The main module of the Streamer is the data mover.  It includes the data reader (reads data from the real memory system and acts as the producer for the accelerator), and the data writer (writes data to the real memory system and acts as the consumer for the accelerator). Each data mover has its address generation unit and works independently so that each data mover can do data transfers as quickly as possible.
-
-The data reader gives read requests to the memory system (the address, and read signal, etc.) and gets the response. When all the responses of one transaction are obtained, it pushes the valid data into a FIFO for the accelerator to consume. If the accelerator is consumes the data successfully, the FIFO will pop the data. The data reader will keep getting new data from the real memory system (pre-fetch) until the FIFO is full or all the input data has been fetched.
-
-The data writer obtains valid data from the FIFO output (written by the accelerator) and sends write request to the memory system. When there is a valid output from the accelerator (and the FIFO is not full), the valid output will be pushed to the FIFO. When the FIFO is not empty, the data writer will keep sending write requests. When one write transaction is successful, the data will be pop from the FIFO.
-
-The csrManager of the StreamerTop module manages the CSR read/write operations from the SNAX core (or any external control). The Streamer has its CSRs to store the configuration for the address generation and transaction number, etc. The CsrManager writes CSR configurations such as the temporal loop bound and strides when all the CSR configurations are valid. While there is an ongoing transaction, the CsrManager can accept and buffer the next configuration configuration. When the current transaction finishes, the SNAX core can send the configuration valid signal then the CSRManager loads the CSR values into the Streamer.
+The microarchitecture of the Flexible Streamer Generator is shown below.
 
 <p align="center">
   <img src="./docs/microarch.svg" alt="">
 </p>
+
+The main module of the Streamer is the data mover, including the data reader (reads data from the real memory system and acts as the producer for the accelerator) and data writer (writes data to the real memory system and acts as the consumer for the accelerator). Each data mover has its own address generation unit and works independently so that each data mover can do the data transfer as quickly as possible.
+
+The data reader gives read requests to the memory system (the address, and read signal, etc.) and gets the response. When all the responses of one transaction are obtained, it pushes the valid data into a FIFO for the accelerator to consume. If the accelerator is consumed successfully, the FIFO will pop the data. The data reader will keep getting new data from the real memory system (pre-fetch) until the FIFO is full or all the input data has been fetched.
+
+The data writer obtains valid data from the FIFO output (written by the accelerator) and sends write request to the memory system. When there is a valid output from the accelerator (and the FIFO is not full), the valid output will be pushed to the FIFO. When the FIFO is not empty, the data writer will keep sending write requests. When one write transaction is successful, the data will be pop from the FIFO.
+
+The StreamerTop module has a csrManage to manage the CSR read/write operations from the SNAX core. The Streamer has its own CSRs to store the configuration for the address generation and transaction number etc. The configuration, such as the temporal loop bound and strides, is written in the CSRs via a CsrManager when all the CSR configurations are valid. When doing the current transaction, the configuration for the next transaction operation can already be written into the CsrManager. When the current transaction finishes, the SNAX core can send the configuration valid signal then the CSR value in the CsrManager will be loaded in to the Streamer.
 
 ## Parameters
 `Parameters.scala` contains the list of all the parameters for the Streamer. Each hardware module has its parameter class. The table below lists the descriptions of all the parameter classes and the parameter formats for the Streamer.
@@ -114,7 +114,7 @@ object MacStreamerParameters extends CommonParams {
 
 }
 ```
-## Functional description
+## Address generation description
 
 The access pattern for the Streamer is represented by a set of nested for loops. Every for loop can specify a _stride_ which we use to increment a base pointer. On top of this, some of the for loops can be _spatially unrolled_, to enable parallel data accesses by the accelerator. This splits address generation in two parts, the temporal address generation and spatial address generation. The temporal address is based on the temporal loop counters and the temporal strides configuration. The spatial address is based on the spatial unrolling factor of the accelerator and the spatial strides configuration. The spatial address generation unit will generate a unique address for each data element which is accessed in parallel. As there may be multiple data elements per memory word, these addresses are then merged for proper data alignment with the memory bank width.
 

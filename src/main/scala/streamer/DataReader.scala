@@ -106,7 +106,7 @@ class DataReader(
   }
 
   // gether all the response data
-  fifo_input_bits := Cat(data_fifo_input)
+  fifo_input_bits := Cat(data_fifo_input.reverse)
   io.data_fifo_o.bits := fifo_input_bits
 
   // fifo valid

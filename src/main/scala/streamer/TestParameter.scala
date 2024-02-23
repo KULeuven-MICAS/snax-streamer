@@ -93,3 +93,8 @@ object csrManagerTestParameters {
   def csrNum = 20
   def csrAddrWidth = log2Up(csrNum)
 }
+
+object FIFOTestParameters {
+  def fifoWidth = 512
+  def fifoDepth = 4
+}

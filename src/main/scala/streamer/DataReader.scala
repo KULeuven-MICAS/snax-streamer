@@ -25,6 +25,8 @@ class DataReaderIO(
     "fifoWidth should match with TCDM datawidth for now!"
   )
 
+  // almost full from fifo
+  val fifo_almost_full = Input(Bool())
 }
 
 /** This class is data reader module,.It is responsible for sending read request
@@ -48,7 +50,7 @@ class DataReader(
   val tcdm_rsp_valid_reg = RegInit(
     VecInit(Seq.fill(params.tcdmPortsNum)(0.B))
   )
-  val wait_for_tcdm_rsp_all_valid = WireInit(0.B)
+  // val wait_for_tcdm_rsp_all_valid = WireInit(0.B)
 
   // storing response data (part of whole transaction) when waiting for other part
   val data_reg = RegInit(
@@ -62,8 +64,11 @@ class DataReader(
   val fifo_input_bits = WireInit(0.U(params.fifoWidth.W))
   val fifo_input_valid = WireInit(0.B)
 
+  // data_movement_done := cstate === sLAST && fifo_input_valid
+
   // when read data fifo isn't full means can send tcdm request to read (prefetch) more data
-  can_send_tcdm_req := io.data_fifo_o.ready && cstate === sBUSY
+  // can_send_new_tcdm_req := (io.data_fifo_o.ready && cstate === sBUSY && !currently_sending_request) || !(io.fifo_almost_full && cstate === sBUSY && currently_sending_request)
+  can_send_new_tcdm_req := (!io.fifo_almost_full && io.data_fifo_o.ready) && cstate === sBUSY
 
   // data and write signal is 0 for read request
   for (i <- 0 until params.tcdmPortsNum) {
@@ -71,17 +76,29 @@ class DataReader(
     io.tcdm_req(i).bits.write := 0.B
   }
 
-  // check and wait for all the response valid (similar as checking request ready)
-  for (i <- 0 until params.tcdmPortsNum) {
-    when(can_send_tcdm_req && !fifo_input_valid) {
-      wait_for_tcdm_rsp_all_valid := 1.B
-    }.otherwise {
-      wait_for_tcdm_rsp_all_valid := 0.B
-    }
-  }
+  // // check and wait for all the response valid (similar as checking request ready)
+  // val tcdm_req_counter = RegInit(0.U(32.W))
+  // val tcdm_rsp_counter = RegInit(0.U(32.W))
+
+  // val tcdm_req_once = WireInit(0.B)
+
+  // tcdm_req_once := currently_sending_request && tcdm_req_all_ready
+  // when(cstate =/= sIDLE && tcdm_req_once === 1.B) {
+  //   tcdm_req_counter := tcdm_req_counter + 1.U
+  // }.elsewhen(cstate === sIDLE) {
+  //   tcdm_req_counter := 0.U
+  // }
+
+  // when(cstate =/= sIDLE && fifo_input_valid === 1.B) {
+  //   tcdm_rsp_counter := tcdm_rsp_counter + 1.U
+  // }.elsewhen(cstate === sIDLE) {
+  //   tcdm_rsp_counter := 0.U
+  // }
+
+  // wait_for_tcdm_rsp_all_valid := tcdm_rsp_counter <= tcdm_req_counter && !fifo_input_valid
 
   for (i <- 0 until params.tcdmPortsNum) {
-    when(wait_for_tcdm_rsp_all_valid && !fifo_input_valid) {
+    when(!fifo_input_valid) {
       when(io.tcdm_rsp(i).valid) {
         tcdm_rsp_valid_reg(i) := io.tcdm_rsp(i).valid
         data_reg(i) := io.tcdm_rsp(i).bits.data

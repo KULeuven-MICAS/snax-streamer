@@ -118,7 +118,7 @@ class StreamerTopTest
         }
 
         // wait for temporal_loop_bound cycles
-        dut.clock.step(temporal_loop_bound)
+        dut.clock.step(temporal_loop_bound * 2)
         for (i <- 0 until StreamerParams().dataReaderTcdmPorts.sum) {
           dut.io.data.tcdm_req(i).ready.poke(0.B)
           dut.io.data.tcdm_rsp(i).valid.poke(0.B)
@@ -138,7 +138,7 @@ class StreamerTopTest
         }
 
         // wait for temporal_loop_bound cycles
-        dut.clock.step(temporal_loop_bound)
+        dut.clock.step(temporal_loop_bound * 2)
         for (i <- 0 until StreamerParams().dataWriterNum) {
           dut.io.data.accelerator2streamer.data(i).valid.poke(0.B)
         }

@@ -46,7 +46,7 @@ class DataReaderTest
           }
         }
       }
-      dut.io.done.poke(1.B)
+      dut.io.addr_gen_done.poke(1.B)
 
       dut.clock.step(5)
       dut.clock.step(50)

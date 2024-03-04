@@ -275,17 +275,27 @@ class Streamer(
   // with a queue between each data mover and accelerator data decoupled interface
   for (i <- 0 until params.dataMoverNum) {
     if (i < params.dataReaderNum) {
-      io.data.streamer2accelerator.data(i) <> Queue(
-        data_reader(i).io.data_fifo_o,
-        params.fifoReaderParams(i).depth
-      )
+      if (params.fifoReaderParams(i).depth > 0) {
+        io.data.streamer2accelerator.data(i) <> Queue(
+          data_reader(i).io.data_fifo_o,
+          params.fifoReaderParams(i).depth
+        )
+      } else {
+        io.data.streamer2accelerator.data(i) <> data_reader(i).io.data_fifo_o
+      }
     } else {
-      data_writer(
-        i - params.dataReaderNum
-      ).io.data_fifo_i <> Queue(
-        io.data.accelerator2streamer.data(i - params.dataReaderNum),
-        params.fifoWriterParams(i - params.dataReaderNum).depth
-      )
+      if (params.fifoWriterParams(i - params.dataReaderNum).depth > 0) {
+        data_writer(i - params.dataReaderNum).io.data_fifo_i <> Queue(
+          io.data.accelerator2streamer.data(i - params.dataReaderNum),
+          params.fifoWriterParams(i - params.dataReaderNum).depth
+        )
+      } else {
+        data_writer(
+          i - params.dataReaderNum
+        ).io.data_fifo_i <> io.data.accelerator2streamer.data(
+          i - params.dataReaderNum
+        )
+      }
     }
   }
 

@@ -1,0 +1,17 @@
+{
+  "image": "mcr.microsoft.com/devcontainers/universal:2",
+  "features": {
+    "ghcr.io/devcontainers/features/java:1": {},
+    "ghcr.io/devcontainers-contrib/features/sbt-sdkman:2": {}
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "scala-lang.scala",
+        "github.copilot",
+        "github.copilot-chat",
+        "mshr-h.veriloghdl"
+      ]
+    }
+  }
+}

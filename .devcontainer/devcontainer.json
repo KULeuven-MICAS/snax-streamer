@@ -1,7 +1,9 @@
 {
   "image": "mcr.microsoft.com/devcontainers/universal:2",
   "features": {
-    "ghcr.io/devcontainers/features/java:1": {},
+    "ghcr.io/devcontainers/features/java:1": {
+      "jdkDistro": "tem"
+    },
     "ghcr.io/ebaskoro/devcontainer-features/scala:1": {
       "installSbt": true
     }

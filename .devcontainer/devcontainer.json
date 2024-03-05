@@ -2,7 +2,9 @@
   "image": "mcr.microsoft.com/devcontainers/universal:2",
   "features": {
     "ghcr.io/devcontainers/features/java:1": {},
-    "ghcr.io/devcontainers-contrib/features/sbt-sdkman:2": {}
+    "ghcr.io/ebaskoro/devcontainer-features/scala:1": {
+      "installSbt": true
+    }
   },
   "customizations": {
     "vscode": {

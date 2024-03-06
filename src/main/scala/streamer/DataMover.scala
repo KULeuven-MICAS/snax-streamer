@@ -117,13 +117,6 @@ class DataMover(params: DataMoverParams = DataMoverParams())
         nstate := sBUSY
       }
     }
-    // is(sLAST) {
-    //   when(data_movement_done) {
-    //     nstate := sIDLE
-    //   }.otherwise {
-    //     nstate := sLAST
-    //   }
-    // }
   }
 
   config_valid := io.spatialStrides_csr_i.fire

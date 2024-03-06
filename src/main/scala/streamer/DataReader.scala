@@ -67,7 +67,6 @@ class DataReader(
   // data_movement_done := cstate === sLAST && fifo_input_valid
 
   // when read data fifo isn't full means can send tcdm request to read (prefetch) more data
-  // can_send_new_tcdm_req := (io.data_fifo_o.ready && cstate === sBUSY && !currently_sending_request) || !(io.fifo_almost_full && cstate === sBUSY && currently_sending_request)
   can_send_new_tcdm_req := (!io.fifo_almost_full && io.data_fifo_o.ready) && cstate === sBUSY
 
   // data and write signal is 0 for read request
@@ -75,27 +74,6 @@ class DataReader(
     io.tcdm_req(i).bits.data := 0.U
     io.tcdm_req(i).bits.write := 0.B
   }
-
-  // // check and wait for all the response valid (similar as checking request ready)
-  // val tcdm_req_counter = RegInit(0.U(32.W))
-  // val tcdm_rsp_counter = RegInit(0.U(32.W))
-
-  // val tcdm_req_once = WireInit(0.B)
-
-  // tcdm_req_once := currently_sending_request && tcdm_req_all_ready
-  // when(cstate =/= sIDLE && tcdm_req_once === 1.B) {
-  //   tcdm_req_counter := tcdm_req_counter + 1.U
-  // }.elsewhen(cstate === sIDLE) {
-  //   tcdm_req_counter := 0.U
-  // }
-
-  // when(cstate =/= sIDLE && fifo_input_valid === 1.B) {
-  //   tcdm_rsp_counter := tcdm_rsp_counter + 1.U
-  // }.elsewhen(cstate === sIDLE) {
-  //   tcdm_rsp_counter := 0.U
-  // }
-
-  // wait_for_tcdm_rsp_all_valid := tcdm_rsp_counter <= tcdm_req_counter && !fifo_input_valid
 
   for (i <- 0 until params.tcdmPortsNum) {
     when(!fifo_input_valid) {

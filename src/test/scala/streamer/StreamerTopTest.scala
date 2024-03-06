@@ -66,7 +66,7 @@ class StreamerTopTest
 
         // give valid transaction config
         // temporal loop bound
-        val temporal_loop_bound = 20
+        val temporal_loop_bound = 2
         write_csr(0, temporal_loop_bound)
 
         // temporal loop strides

@@ -202,3 +202,21 @@ object MacStreamerTop extends App {
     Array("--target-dir", "generated/streamertop/tester")
   )
 }
+
+// streamertop for DIMC
+object DIMCStreamerTop extends App {
+  emitVerilog(
+    new StreamerTop(
+      StreamerParams(
+        temporalAddrGenUnitParams =
+          DIMCStreamerParameters.temporalAddrGenUnitParams,
+        fifoReaderParams = DIMCStreamerParameters.fifoReaderParams,
+        fifoWriterParams = DIMCStreamerParameters.fifoWriterParams,
+        stationarity = DIMCStreamerParameters.stationarity,
+        dataReaderParams = DIMCStreamerParameters.dataReaderParams,
+        dataWriterParams = DIMCStreamerParameters.dataWriterParams
+      )
+    ),
+    Array("--target-dir", "generated/streamertop/dimc")
+  )
+}

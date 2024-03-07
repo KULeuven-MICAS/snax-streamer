@@ -183,7 +183,7 @@ class DataMover(params: DataMoverParams = DataMoverParams())
         io.tcdm_req(i).valid := 0.B
       }
     }.otherwise {
-        io.tcdm_req(i).valid := 0.B
+      io.tcdm_req(i).valid := 0.B
     }
   }
 

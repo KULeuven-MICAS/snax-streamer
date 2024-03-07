@@ -193,7 +193,7 @@ class Streamer(
   config_valid := io.csr.fire && io.csr.fire && io.csr.fire && io.csr.fire
 
   for (i <- 0 until params.dataMoverNum) {
-    when(config_valid) {
+    when(config_valid && cstate === sIDLE) {
       datamover_states(i) := 1.B
     }.elsewhen(address_gen_unit(i).io.done) {
       datamover_states(i) := 0.B

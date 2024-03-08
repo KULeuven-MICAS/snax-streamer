@@ -92,7 +92,7 @@ class DataMover(params: DataMoverParams = DataMoverParams())
   val tcdm_req_success_once = WireInit(0.B)
 
   // State declaration
-  val sIDLE :: sBUSY :: sLAST :: Nil = Enum(3)
+  val sIDLE :: sBUSY :: Nil = Enum(2)
   val cstate = RegInit(sIDLE)
   val nstate = WireInit(sIDLE)
 
@@ -111,7 +111,6 @@ class DataMover(params: DataMoverParams = DataMoverParams())
     }
     is(sBUSY) {
       when(io.addr_gen_done) {
-        // nstate := sLAST
         nstate := sIDLE
       }.otherwise {
         nstate := sBUSY
@@ -158,7 +157,6 @@ class DataMover(params: DataMoverParams = DataMoverParams())
     }
   }
 
-  // data_movement_done := (cstate === sLAST || (io.addr_gen_done && io.ptr_agu_i.fire)) && tcdm_req_all_ready
   data_movement_done := io.addr_gen_done
 
   // assuming addresses are packed in one tcmd request

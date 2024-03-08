@@ -193,10 +193,18 @@ class Streamer(
   config_valid := io.csr.fire && io.csr.fire && io.csr.fire && io.csr.fire
 
   for (i <- 0 until params.dataMoverNum) {
-    when(config_valid) {
+    when(config_valid && cstate === sIDLE) {
       datamover_states(i) := 1.B
-    }.elsewhen(address_gen_unit(i).io.done) {
-      datamover_states(i) := 0.B
+    }.otherwise {
+      if (i < params.dataReaderNum) {
+        when(data_reader(i).io.data_movement_done) {
+          datamover_states(i) := 0.B
+        }
+      } else {
+        when(data_writer(i - params.dataReaderNum).io.data_movement_done) {
+          datamover_states(i) := 0.B
+        }
+      }
     }
   }
 
@@ -260,32 +268,49 @@ class Streamer(
   for (i <- 0 until params.dataMoverNum) {
     if (i < params.dataReaderNum) {
       address_gen_unit(i).io.ptr_o <> data_reader(i).io.ptr_agu_i
-      data_reader(i).io.done := address_gen_unit(i).io.done
+      data_reader(i).io.addr_gen_done := address_gen_unit(i).io.done
     } else {
       address_gen_unit(i).io.ptr_o <> data_writer(
         i - params.dataReaderNum
       ).io.ptr_agu_i
       data_writer(
         i - params.dataReaderNum
-      ).io.done := address_gen_unit(i).io.done
+      ).io.addr_gen_done := address_gen_unit(i).io.done
     }
   }
 
   // data reader and data writer <> accelerator interface
   // with a queue between each data mover and accelerator data decoupled interface
+
+  val ReaderFifo = Seq((0 until params.dataReaderNum).map { i =>
+    Module(
+      new FIFO(
+        params.fifoReaderParams(i).depth,
+        params.fifoReaderParams(i).width
+      )
+    )
+  }: _*)
+
+  val WriterFifo = Seq((0 until params.dataWriterNum).map { i =>
+    Module(
+      new FIFO(
+        params.fifoWriterParams(i).depth,
+        params.fifoWriterParams(i).width
+      )
+    )
+  }: _*)
+
   for (i <- 0 until params.dataMoverNum) {
     if (i < params.dataReaderNum) {
-      io.data.streamer2accelerator.data(i) <> Queue(
-        data_reader(i).io.data_fifo_o,
-        params.fifoReaderParams(i).depth
-      )
+      ReaderFifo(i).io.in <> data_reader(i).io.data_fifo_o
+      ReaderFifo(i).io.out <> io.data.streamer2accelerator.data(i)
+      data_reader(i).io.fifo_almost_full := ReaderFifo(i).io.almost_full
     } else {
       data_writer(
         i - params.dataReaderNum
-      ).io.data_fifo_i <> Queue(
-        io.data.accelerator2streamer.data(i - params.dataReaderNum),
-        params.fifoWriterParams(i - params.dataReaderNum).depth
-      )
+      ).io.data_fifo_i <> WriterFifo(i - params.dataReaderNum).io.out
+      WriterFifo(i - params.dataReaderNum).io.in <> io.data.accelerator2streamer
+        .data(i - params.dataReaderNum)
     }
   }
 

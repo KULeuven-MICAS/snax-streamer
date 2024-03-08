@@ -38,11 +38,11 @@ class DataWriter(
   io.suggestName("io")
 
   // when write fifo isn't empty means there is data to be sent to the tcdm
-  can_send_tcdm_req := io.data_fifo_i.valid && cstate === sBUSY
+  can_send_new_tcdm_req := io.data_fifo_i.valid && cstate =/= sIDLE
 
   // when there is valid data, split the data to several tcdm data ports for write
   for (i <- 0 until params.tcdmPortsNum) {
-    when(can_send_tcdm_req) {
+    when(io.data_fifo_i.valid) {
       io.tcdm_req(i).bits.data := io.data_fifo_i.bits(
         (i + 1) * params.tcdmDataWidth - 1,
         i * params.tcdmDataWidth

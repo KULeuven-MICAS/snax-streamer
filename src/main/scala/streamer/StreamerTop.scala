@@ -168,7 +168,7 @@ object GeMMStreamerTop extends App {
 }
 
 // streamertop for PP-SIMD
-object PostProcessingStreamerTop{
+object PostProcessingStreamerTop {
   def main(args: Array[String]): Unit = {
     val outPath = args.headOption.getOrElse("generated/streamertop/simd")
     emitVerilog(

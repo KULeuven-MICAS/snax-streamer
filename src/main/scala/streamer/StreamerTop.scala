@@ -163,26 +163,29 @@ object GeMMStreamerTop extends App {
         dataWriterParams = GeMMStreamerParameters.dataWriterParams
       )
     ),
-    Array("--target-dir", "generated/streamertop/tester")
+    Array("--target-dir", "generated/streamertop/gemm")
   )
 }
 
 // streamertop for PP-SIMD
-object PostProcessingStreamerTop extends App {
-  emitVerilog(
-    new StreamerTop(
-      StreamerParams(
-        temporalAddrGenUnitParams =
-          PostProcessingStreamerParameters.temporalAddrGenUnitParams,
-        fifoReaderParams = PostProcessingStreamerParameters.fifoReaderParams,
-        fifoWriterParams = PostProcessingStreamerParameters.fifoWriterParams,
-        stationarity = PostProcessingStreamerParameters.stationarity,
-        dataReaderParams = PostProcessingStreamerParameters.dataReaderParams,
-        dataWriterParams = PostProcessingStreamerParameters.dataWriterParams
-      )
-    ),
-    Array("--target-dir", "generated/streamertop/tester")
-  )
+object PostProcessingStreamerTop {
+  def main(args: Array[String]): Unit = {
+    val outPath = args.headOption.getOrElse("generated/streamertop/simd")
+    emitVerilog(
+      new StreamerTop(
+        StreamerParams(
+          temporalAddrGenUnitParams =
+            PostProcessingStreamerParameters.temporalAddrGenUnitParams,
+          fifoReaderParams = PostProcessingStreamerParameters.fifoReaderParams,
+          fifoWriterParams = PostProcessingStreamerParameters.fifoWriterParams,
+          stationarity = PostProcessingStreamerParameters.stationarity,
+          dataReaderParams = PostProcessingStreamerParameters.dataReaderParams,
+          dataWriterParams = PostProcessingStreamerParameters.dataWriterParams
+        )
+      ),
+      Array("--target-dir", outPath)
+    )
+  }
 }
 
 // streamertop for MAC
@@ -199,6 +202,6 @@ object MacStreamerTop extends App {
         dataWriterParams = MacStreamerParameters.dataWriterParams
       )
     ),
-    Array("--target-dir", "generated/streamertop/tester")
+    Array("--target-dir", "generated/streamertop/mac")
   )
 }

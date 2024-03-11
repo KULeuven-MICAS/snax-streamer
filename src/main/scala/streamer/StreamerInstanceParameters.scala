@@ -56,7 +56,7 @@ object PostProcessingStreamerParameters extends CommonParams {
 
   def temporalAddrGenUnitParams: TemporalAddrGenUnitParams =
     TemporalAddrGenUnitParams(
-      loopDim = 1,
+      loopDim = 2,
       loopBoundWidth = 8,
       addrWidth
     )
@@ -70,8 +70,8 @@ object PostProcessingStreamerParameters extends CommonParams {
   def dataReaderParams: Seq[DataMoverParams] = Seq(
     DataMoverParams(
       tcdmPortsNum = 32,
-      spatialBounds = Seq(64),
-      spatialDim = 1,
+      spatialBounds = Seq(8, 8),
+      spatialDim = 2,
       elementWidth = 32,
       fifoWidth = fifoReaderParams(0).width
     )
@@ -80,8 +80,8 @@ object PostProcessingStreamerParameters extends CommonParams {
   def dataWriterParams: Seq[DataMoverParams] = Seq(
     DataMoverParams(
       tcdmPortsNum = 8,
-      spatialBounds = Seq(64),
-      spatialDim = 1,
+      spatialBounds = Seq(8, 8),
+      spatialDim = 2,
       elementWidth = 8,
       fifoWidth = fifoWriterParams(0).width
     )

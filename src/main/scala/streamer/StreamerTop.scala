@@ -205,3 +205,24 @@ object MacStreamerTop extends App {
     Array("--target-dir", "generated/streamertop/mac")
   )
 }
+
+// streamertop for PP-SIMD
+object GeMMWideStreamerTop {
+  def main(args: Array[String]): Unit = {
+    val outPath = args.headOption.getOrElse("generated/streamertop/gemmwide")
+    emitVerilog(
+      new StreamerTop(
+        StreamerParams(
+          temporalAddrGenUnitParams =
+            GeMMWideStreamerParameters.temporalAddrGenUnitParams,
+          fifoReaderParams = GeMMWideStreamerParameters.fifoReaderParams,
+          fifoWriterParams = GeMMWideStreamerParameters.fifoWriterParams,
+          stationarity = GeMMWideStreamerParameters.stationarity,
+          dataReaderParams = GeMMWideStreamerParameters.dataReaderParams,
+          dataWriterParams = GeMMWideStreamerParameters.dataWriterParams
+        )
+      ),
+      Array("--target-dir", outPath)
+    )
+  }
+}

@@ -149,3 +149,56 @@ object MacStreamerParameters extends CommonParams {
   )
 
 }
+
+object GeMMWideStreamerParameters extends CommonWideParams {
+
+  def temporalAddrGenUnitParams: TemporalAddrGenUnitParams =
+    TemporalAddrGenUnitParams(
+      loopDim = 3,
+      loopBoundWidth = 8,
+      addrWidth
+    )
+
+  def fifoReaderParams: Seq[FIFOParams] = Seq(
+    FIFOParams(512, 2),
+    FIFOParams(512, 2)
+  )
+
+  def fifoWriterParams: Seq[FIFOParams] = Seq(FIFOParams(2048, 2))
+
+  def dataReaderParams: Seq[DataMoverParams] = Seq(
+    DataMoverParams(
+      tcdmPortsNum = 1,
+      spatialBounds = Seq(64),
+      spatialDim = 1,
+      elementWidth = 8,
+      fifoWidth = fifoReaderParams(0).width,
+      addrWidth = CommonWideParams.addrWidth,
+      tcdmDataWidth = CommonWideParams.tcdmDataWidth
+    ),
+    DataMoverParams(
+      tcdmPortsNum = 1,
+      spatialBounds = Seq(64),
+      spatialDim = 1,
+      elementWidth = 8,
+      fifoWidth = fifoReaderParams(1).width,
+      addrWidth = CommonWideParams.addrWidth,
+      tcdmDataWidth = CommonWideParams.tcdmDataWidth
+    )
+  )
+
+  def dataWriterParams: Seq[DataMoverParams] = Seq(
+    DataMoverParams(
+      tcdmPortsNum = 4,
+      spatialBounds = Seq(64),
+      spatialDim = 1,
+      elementWidth = 32,
+      fifoWidth = fifoWriterParams(0).width,
+      addrWidth = CommonWideParams.addrWidth,
+      tcdmDataWidth = CommonWideParams.tcdmDataWidth
+    )
+  )
+
+  def stationarity = Seq(0, 0, 1)
+
+}

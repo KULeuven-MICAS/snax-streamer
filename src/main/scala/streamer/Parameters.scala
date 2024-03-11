@@ -16,6 +16,21 @@ trait CommonParams {
 
 }
 
+trait CommonWideParams {
+  def addrWidth = 32
+  def tcdmDataWidth = 512
+}
+
+object CommonParams {
+  val addrWidth = 32
+  val tcdmDataWidth = 64
+}
+
+object CommonWideParams {
+  val addrWidth = 32
+  val tcdmDataWidth = 512
+}
+
 /** This class represents all the parameters for the Temporal Address Generation
   * Unit.
   * @param loopDim
@@ -67,8 +82,10 @@ case class DataMoverParams(
     spatialBounds: Seq[Int] = DataMoverTestParameters.spatialBounds,
     spatialDim: Int = DataMoverTestParameters.spatialDim,
     elementWidth: Int = DataMoverTestParameters.elementWidth,
-    fifoWidth: Int = DataMoverTestParameters.fifoWidth
-) extends CommonParams
+    fifoWidth: Int = DataMoverTestParameters.fifoWidth,
+    addrWidth: Int = CommonParams.addrWidth,
+    tcdmDataWidth: Int = CommonParams.tcdmDataWidth
+)
 
 /** FIFO parameters
   *

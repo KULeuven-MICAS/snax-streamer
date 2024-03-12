@@ -1,0 +1,5 @@
+project
+!project/build.properties
+!project/plugins.sbt
+target
+test_run_dir

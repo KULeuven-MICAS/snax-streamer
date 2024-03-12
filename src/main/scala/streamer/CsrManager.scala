@@ -40,7 +40,7 @@ class CsrManager(
   // generate a vector of registers to store the csr state
   val csr = RegInit(VecInit(Seq.fill(csrNum)(0.U(32.W))))
 
-  // read write and start csr commandd
+  // read write and start csr command
   val read_csr = io.csr_config_in.req.fire && !io.csr_config_in.req.bits.write
   val write_csr = io.csr_config_in.req.fire && io.csr_config_in.req.bits.write
   val start_csr = io.csr_config_in.req.bits.write &&

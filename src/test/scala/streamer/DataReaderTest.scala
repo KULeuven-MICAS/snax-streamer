@@ -30,7 +30,7 @@ class DataReaderTest
       dut.clock.step(5)
       dut.io.spatialStrides_csr_i.valid.poke(0)
 
-      dut.io.ptr_agu_i.bits.poke(100)
+      dut.io.ptr_agu_i.bits.poke(160)
       dut.io.ptr_agu_i.valid.poke(1)
 
       // wait for getting the enough address

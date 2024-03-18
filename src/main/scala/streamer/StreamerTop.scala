@@ -150,21 +150,24 @@ object StreamerTopTester extends App {
 }
 
 // streamertop for GEMM
-object GeMMStreamerTop extends App {
-  emitVerilog(
-    new StreamerTop(
-      StreamerParams(
-        temporalAddrGenUnitParams =
-          GeMMStreamerParameters.temporalAddrGenUnitParams,
-        fifoReaderParams = GeMMStreamerParameters.fifoReaderParams,
-        fifoWriterParams = GeMMStreamerParameters.fifoWriterParams,
-        stationarity = GeMMStreamerParameters.stationarity,
-        dataReaderParams = GeMMStreamerParameters.dataReaderParams,
-        dataWriterParams = GeMMStreamerParameters.dataWriterParams
-      )
-    ),
-    Array("--target-dir", "generated/streamertop/gemm")
-  )
+object GeMMStreamerTop {
+  def main(args: Array[String]): Unit = {
+    val outPath = args.headOption.getOrElse("generated/streamertop/gemm")
+    emitVerilog(
+      new StreamerTop(
+        StreamerParams(
+          temporalAddrGenUnitParams =
+            GeMMStreamerParameters.temporalAddrGenUnitParams,
+          fifoReaderParams = GeMMStreamerParameters.fifoReaderParams,
+          fifoWriterParams = GeMMStreamerParameters.fifoWriterParams,
+          stationarity = GeMMStreamerParameters.stationarity,
+          dataReaderParams = GeMMStreamerParameters.dataReaderParams,
+          dataWriterParams = GeMMStreamerParameters.dataWriterParams
+        )
+      ),
+      Array("--target-dir", outPath)
+    )
+  }
 }
 
 // streamertop for PP-SIMD

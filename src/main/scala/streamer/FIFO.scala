@@ -18,12 +18,16 @@ class FIFO(
     with RequireAsyncReset {
 
   val io = IO(new FIFOIO(width))
-  val fifo = Module(new Queue(UInt(width.W), depth))
 
-  fifo.io.enq <> io.in
-  fifo.io.deq <> io.out
-
-  io.almost_full := fifo.io.count === (depth - 1).U
+  if (depth > 0) {
+    val fifo = Module(new Queue(UInt(width.W), depth, pipe = true))
+    fifo.io.enq <> io.in
+    fifo.io.deq <> io.out
+    io.almost_full := fifo.io.count === (depth - 1).U
+  } else {
+    io.in <> io.out
+    io.almost_full := 0.U
+  }
 
 }
 

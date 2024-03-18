@@ -37,28 +37,25 @@ class DataWriter(
   override lazy val io = IO(new DataWriterIO(params))
   io.suggestName("io")
 
-  // when write fifo isn't empty means there is data to be sent to the tcdm
-  can_send_new_tcdm_req := io.data_fifo_i.valid && cstate =/= sIDLE
-
-  // when there is valid data, split the data to several tcdm data ports for write
-  for (i <- 0 until params.tcdmPortsNum) {
-    when(io.data_fifo_i.valid) {
-      io.tcdm_req(i).bits.data := io.data_fifo_i.bits(
-        (i + 1) * params.tcdmDataWidth - 1,
-        i * params.tcdmDataWidth
-      )
-    }.otherwise {
-      io.tcdm_req(i).bits.data := 0.U
-    }
-  }
-
-  // write is 1 for all the write request
+  // For a write request, assert the write bit and assign the data
   for (i <- 0 until params.tcdmPortsNum) {
     io.tcdm_req(i).bits.write := 1.B
+    io.tcdm_req(i).bits.data := io.data_fifo_i.bits(
+      (i + 1) * params.tcdmDataWidth - 1,
+      i * params.tcdmDataWidth
+    )
   }
 
-  // ready signal for data queue
-  io.data_fifo_i.ready := tcdm_req_all_ready
+  // A valid TCDM request is overridden to also depend on the valid
+  // signal of the data queue
+  for (i <- 0 until params.tcdmPortsNum) {
+    io.tcdm_req(i).valid := io.ptr_agu_i.valid &&
+      ~tcdm_req_ready_reg(i) && io.data_fifo_i.valid
+  }
+
+  // we need to fetch a new word from the data queue simultaneously
+  // with a new TCDM request (= a new input pointer)
+  io.data_fifo_i.ready := io.ptr_agu_i.ready
 
 }
 

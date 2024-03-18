@@ -13,11 +13,11 @@ class DataReaderIO(
     params: DataMoverParams = DataMoverParams()
 ) extends DataMoverIO(params) {
 
-  // tcdm rsp
+  // tcdm response
   val tcdm_rsp =
     Vec(params.tcdmPortsNum, Flipped(Valid(new TcdmRsp(params.tcdmDataWidth))))
 
-  // data pushed into the queue
+  // output data -> going to the fifo
   val data_fifo_o = Decoupled(UInt(params.fifoWidth.W))
 
   assert(
@@ -25,7 +25,7 @@ class DataReaderIO(
     "fifoWidth should match with TCDM datawidth for now!"
   )
 
-  // almost full from fifo
+  // this signal should disappear!
   val fifo_almost_full = Input(Bool())
 }
 
@@ -45,72 +45,90 @@ class DataReader(
   override lazy val io = IO(new DataReaderIO(params))
   io.suggestName("io")
 
-  // signals for dealing with contention
-  val tcdm_rsp_valid = WireInit(VecInit(Seq.fill(params.tcdmPortsNum)(0.B)))
-  val tcdm_rsp_valid_reg = RegInit(
-    VecInit(Seq.fill(params.tcdmPortsNum)(0.B))
-  )
-  // val wait_for_tcdm_rsp_all_valid = WireInit(0.B)
-
-  // storing response data (part of whole transaction) when waiting for other part
-  val data_reg = RegInit(
-    VecInit(Seq.fill(params.tcdmPortsNum)(0.U(params.tcdmDataWidth.W)))
-  )
-  val data_fifo_input = WireInit(
-    VecInit(Seq.fill(params.tcdmPortsNum)(0.U(params.tcdmDataWidth.W)))
-  )
-
-  // Fifo input signals
-  val fifo_input_bits = WireInit(0.U(params.fifoWidth.W))
-  val fifo_input_valid = WireInit(0.B)
-
-  // data_movement_done := cstate === sLAST && fifo_input_valid
-
-  // when read data fifo isn't full means can send tcdm request to read (prefetch) more data
-  can_send_new_tcdm_req := (!io.fifo_almost_full && io.data_fifo_o.ready) && cstate === sBUSY
-
-  // data and write signal is 0 for read request
+  // For a read request, data can be set to 0, deassert write bit
   for (i <- 0 until params.tcdmPortsNum) {
     io.tcdm_req(i).bits.data := 0.U
     io.tcdm_req(i).bits.write := 0.B
   }
 
+  // ************************************************************
+  // ********** Logic for processing TCDM response **************
+  // ************************************************************
+
+  // Similar to the TCDM request, we need to keep track of the valid bits of the
+  // TCDM response
+  val tcdm_rsp_valid_reg =
+    RegInit(VecInit(Seq.fill(params.tcdmPortsNum)(0.B)))
+  val tcdm_rsp_valid_signals =
+    WireInit(VecInit(Seq.fill(params.tcdmPortsNum)(0.B)))
   for (i <- 0 until params.tcdmPortsNum) {
-    when(!fifo_input_valid) {
-      when(io.tcdm_rsp(i).valid) {
-        tcdm_rsp_valid_reg(i) := io.tcdm_rsp(i).valid
-        data_reg(i) := io.tcdm_rsp(i).bits.data
-      }
-    }.otherwise {
-      // clear all the valid bits before a new transaction
+    tcdm_rsp_valid_signals(i) := io.tcdm_rsp(i).valid || tcdm_rsp_valid_reg(i)
+  }
+  // the full request is ready if seperate ready signals are all true
+  val tcdm_rsp_valid = WireInit(0.B)
+  tcdm_rsp_valid := tcdm_rsp_valid_signals.reduce(_ && _)
+
+  // instantiate a data buffer to store the TCDM response data
+  val data_buffer =
+    RegInit(VecInit(Seq.fill(params.tcdmPortsNum)(0.U(params.tcdmDataWidth.W))))
+
+  for (i <- 0 until params.tcdmPortsNum) {
+    // valid reg logic
+    when(io.data_fifo_o.fire) {
+      // we reset the valid bit when a the data gets dispatched to the fifo
       tcdm_rsp_valid_reg(i) := 0.B
+    }.elsewhen(io.tcdm_rsp(i).valid) {
+      // we set the valid bit on a succesfull response,
+      // but not a successfull dispatch to the data fifo
+      tcdm_rsp_valid_reg(i) := 1.B
+    }.otherwise {
+      tcdm_rsp_valid_reg(i) := tcdm_rsp_valid_reg(i)
+    }
+
+    // we write to the data buffer when the response is valid
+    when(io.tcdm_rsp(i).valid) {
+      data_buffer(i) := io.tcdm_rsp(i).bits.data
+    }.otherwise {
+      data_buffer(i) := data_buffer(i)
     }
   }
 
-  // fifo data
-  // getting data directly from the response ports or the data register depends on
-  // if response valid at the all response is valid moment
+  // the output data to the fifo is connected to the data buffer if the
+  // request succeeded in a previous cycle (known from the req_ready_reg),
+  // otherwise it is directly connected to the TCDM response data
+  val data_fifo_input = WireInit(
+    VecInit(Seq.fill(params.tcdmPortsNum)(0.U(params.tcdmDataWidth.W)))
+  )
   for (i <- 0 until params.tcdmPortsNum) {
-    when(fifo_input_valid) {
-      when(io.tcdm_rsp(i).valid) {
-        data_fifo_input(i) := io.tcdm_rsp(i).bits.data
-      }.otherwise {
-        data_fifo_input(i) := data_reg(i)
-      }
-    }
+    data_fifo_input(i) := Mux(
+      tcdm_rsp_valid_reg(i),
+      data_buffer(i),
+      io.tcdm_rsp(i).bits.data
+    )
   }
 
   // gether all the response data
-  fifo_input_bits := Cat(data_fifo_input.reverse)
-  io.data_fifo_o.bits := fifo_input_bits
+  io.data_fifo_o.bits := Cat(data_fifo_input.reverse)
 
-  // fifo valid
+  // ************************************************************
+  // ********** Logic for handling fifo handshake ***************
+  // ************************************************************
+
+  // // the output data is valid when all requests are successful
+  io.data_fifo_o.valid := tcdm_rsp_valid
+
+  // new pointers can be generated only when the fifo is not full (override base class assignment)
+  io.ptr_agu_i.ready := cstate === sBUSY && tcdm_req_ready && io.data_fifo_o.ready
+
+  // override the base class assignment for tcdm req valid
+  // we cannot send a request signal if the fifo is not ready,
+  // otherwise the data in the buffer may be overwritten,
+  // we can make an exception if the buffer is empty
+  // the buffer is empty if the valid bit is not set
   for (i <- 0 until params.tcdmPortsNum) {
-    tcdm_rsp_valid(i) := io.tcdm_rsp(i).valid || tcdm_rsp_valid_reg(i)
+    io.tcdm_req(i).valid := io.ptr_agu_i.valid &&
+      ~tcdm_req_ready_reg(i) && (io.data_fifo_o.ready || ~tcdm_rsp_valid)
   }
-  // write the responded data to the fifo when all the data is valid
-  fifo_input_valid := tcdm_rsp_valid.reduce(_ & _)
-  io.data_fifo_o.valid := fifo_input_valid
 
 }
 

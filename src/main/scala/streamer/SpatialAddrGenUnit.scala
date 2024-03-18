@@ -125,6 +125,7 @@ class SpatialAddrGenUnit(
       )
     )
 
+    // TODO: why do we need to check for valid here? This is all just combinatorial logic anyway
     when(valid) {
       // address generation for each spatial data element
       // will ignore some later to be aligned with bank width

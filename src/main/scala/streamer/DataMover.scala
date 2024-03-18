@@ -58,8 +58,6 @@ class DataMover(params: DataMoverParams = DataMoverParams())
     VecInit(Seq.fill(params.spatialDim)(0.U(params.addrWidth.W)))
   )
 
-  io.data_movement_done := 0.B
-
   val config_valid = WireInit(0.B)
   config_valid := io.spatialStrides_csr_i.fire
 
@@ -78,10 +76,9 @@ class DataMover(params: DataMoverParams = DataMoverParams())
       )
     )
   )
-  spatial_addr_gen_unit.io.valid_i := 1.B // TODO set to 1 because i think valid signal is useless
+  spatial_addr_gen_unit.io.valid_i := 1.B
   spatial_addr_gen_unit.io.ptr_i := io.ptr_agu_i.bits
   spatial_addr_gen_unit.io.strides_i := spatialStrides
-  // spatial_addr := spatial_addr_gen_unit.io.ptr_o
 
   // ******************************************************************************************
   // *********** Logic for the finite sate machine ********************************************
@@ -116,7 +113,6 @@ class DataMover(params: DataMoverParams = DataMoverParams())
 
   // ready for a new config in the idle state
   io.spatialStrides_csr_i.ready := cstate === sIDLE
-  // io.spatialStrides_csr_i.ready := 1.B
 
   // ******************************************************************************************
   // *********** Logic for handling TCDM requests *********************************************
@@ -168,6 +164,7 @@ class DataMover(params: DataMoverParams = DataMoverParams())
       tcdm_req_ready_reg(i) := tcdm_req_ready_reg(i)
     }
   }
+
   // connect the tcdm request address ports to the generated spatial addresses
   // this is a bit tricky because there is a discrepancy between the data
   // width of the TCDM and the element width. For now, this discrepancy is

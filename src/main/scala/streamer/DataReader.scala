@@ -68,6 +68,9 @@ class DataReader(
   val tcdm_rsp_valid = WireInit(0.B)
   tcdm_rsp_valid := tcdm_rsp_valid_signals.reduce(_ && _)
 
+  val tcdm_rsp_valid_any = WireInit(0.B)
+  tcdm_rsp_valid_any := tcdm_rsp_valid_signals.reduce(_ || _)
+
   // instantiate a data buffer to store the TCDM response data
   val data_buffer =
     RegInit(VecInit(Seq.fill(params.tcdmPortsNum)(0.U(params.tcdmDataWidth.W))))
@@ -118,7 +121,8 @@ class DataReader(
   io.data_fifo_o.valid := tcdm_rsp_valid
 
   // new pointers can be generated only when the fifo is not full (override base class assignment)
-  io.ptr_agu_i.ready := cstate === sBUSY && tcdm_req_ready && io.data_fifo_o.ready
+  // or: when no data is buffered in the register at the moment (no valid bit set)
+  io.ptr_agu_i.ready := cstate === sBUSY && tcdm_req_ready && (io.data_fifo_o.ready || ~tcdm_rsp_valid_any)
 
   // override the base class assignment for tcdm req valid
   // we cannot send a request signal if the fifo is not ready,

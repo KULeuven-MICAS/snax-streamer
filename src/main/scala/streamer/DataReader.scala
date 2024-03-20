@@ -118,7 +118,7 @@ class DataReader(
   io.data_fifo_o.valid := tcdm_rsp_valid
 
   // new pointers can be generated only when the fifo is not full (override base class assignment)
-  io.ptr_agu_i.ready := cstate === sBUSY && tcdm_req_ready && io.data_fifo_o.ready
+  // io.ptr_agu_i.ready := cstate === sBUSY && tcdm_req_ready && io.data_fifo_o.ready
 
   // override the base class assignment for tcdm req valid
   // we can send a request signal if the input pointer is valid,

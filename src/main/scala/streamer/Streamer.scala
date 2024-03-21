@@ -92,9 +92,11 @@ class StreamerIO(
 
 // streamer generator module
 class Streamer(
-    params: StreamerParams
+    params: StreamerParams,
+    tagName: String = ""
 ) extends Module
     with RequireAsyncReset {
+  override val desiredName = tagName + "Streamer"
 
   val io = IO(
     new StreamerIO(
@@ -132,7 +134,8 @@ class Streamer(
   val data_reader = Seq((0 until params.dataReaderNum).map { i =>
     Module(
       new DataReader(
-        params.dataReaderParams(i)
+        params.dataReaderParams(i),
+        tagName
       )
     )
   }: _*)
@@ -142,7 +145,8 @@ class Streamer(
   val data_writer = Seq((0 until params.dataWriterNum).map { i =>
     Module(
       new DataWriter(
-        params.dataWriterParams(i)
+        params.dataWriterParams(i),
+        tagName
       )
     )
   }: _*)
@@ -152,7 +156,8 @@ class Streamer(
   val address_gen_unit = Seq((0 until params.dataMoverNum).map { i =>
     Module(
       new TemporalAddrGenUnit(
-        params.temporalAddrGenUnitParams
+        params.temporalAddrGenUnitParams,
+        tagName
       )
     )
   }: _*)
@@ -286,7 +291,8 @@ class Streamer(
     Module(
       new FIFO(
         params.fifoReaderParams(i).depth,
-        params.fifoReaderParams(i).width
+        params.fifoReaderParams(i).width,
+        tagName
       )
     )
   }: _*)
@@ -295,7 +301,8 @@ class Streamer(
     Module(
       new FIFO(
         params.fifoWriterParams(i).depth,
-        params.fifoWriterParams(i).width
+        params.fifoWriterParams(i).width,
+        tagName
       )
     )
   }: _*)

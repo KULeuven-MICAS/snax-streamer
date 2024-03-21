@@ -13,9 +13,11 @@ class FIFOIO(width: Int = FIFOTestParameters.fifoWidth) extends Bundle {
 
 class FIFO(
     depth: Int = FIFOTestParameters.fifoDepth,
-    width: Int = FIFOTestParameters.fifoWidth
+    width: Int = FIFOTestParameters.fifoWidth,
+    tagName: String = ""
 ) extends Module
     with RequireAsyncReset {
+  override val desiredName = tagName + "FIFO"
 
   val io = IO(new FIFOIO(width))
 

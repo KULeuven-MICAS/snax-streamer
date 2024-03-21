@@ -181,6 +181,7 @@ case class StreamerParams(
     dataWriterParams: Seq[DataMoverParams] =
       StreamerTestConstant.dataWriterParams,
     fifoReaderParams: Seq[FIFOParams] = StreamerTestConstant.fifoReaderParams,
-    fifoWriterParams: Seq[FIFOParams] = StreamerTestConstant.fifoWriterParams
+    fifoWriterParams: Seq[FIFOParams] = StreamerTestConstant.fifoWriterParams,
+    tagName: String = StreamerTestConstant.tagName
 ) extends HasStreamerCoreParams
     with HasStreamerInferredParams

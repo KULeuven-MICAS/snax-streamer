@@ -79,10 +79,12 @@ trait WithSpatialLoopIndices {
   *   The bit width of the address.
   */
 class SpatialAddrGenUnit(
-    params: SpatialAddrGenUnitParams = SpatialAddrGenUnitParams()
+    params: SpatialAddrGenUnitParams = SpatialAddrGenUnitParams(),
+    tagName: String = ""
 ) extends Module
     with RequireAsyncReset
     with WithSpatialLoopIndices {
+  override val desiredName = tagName + "SpatialAddrGenUnit"
 
   // the input/output ports
   val io = IO(

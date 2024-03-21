@@ -2,6 +2,7 @@ package streamer
 
 import chisel3._
 import chisel3.util._
+import chisel3.experimental.{prefix, noPrefix}
 
 /** This class represents the csr input and output ports of the streamer top
   * module
@@ -46,6 +47,8 @@ class StreamerTop(
 ) extends Module
     with RequireAsyncReset {
 
+  override val desiredName = params.tagName + "StreamerTop"
+
   val csrNum: Int =
     params.temporalDim + params.dataMoverNum * params.temporalDim + params.spatialDim.sum + params.dataMoverNum + 1
   val csrAddrWidth: Int = log2Up(csrNum)
@@ -58,14 +61,10 @@ class StreamerTop(
   )
 
   // csrManager instantiation
-  val csr_manager = Module(new CsrManager(csrNum, csrAddrWidth))
+  val csr_manager = Module(new CsrManager(csrNum, csrAddrWidth, params.tagName))
 
   // streamer instantiation
-  val streamer = Module(
-    new Streamer(
-      params
-    )
-  )
+  val streamer = Module(new Streamer(params, params.tagName))
 
   // io.csr and csrManager input connection
   csr_manager.io.csr_config_in <> io.csr
@@ -162,7 +161,8 @@ object GeMMStreamerTop {
           fifoWriterParams = GeMMStreamerParameters.fifoWriterParams,
           stationarity = GeMMStreamerParameters.stationarity,
           dataReaderParams = GeMMStreamerParameters.dataReaderParams,
-          dataWriterParams = GeMMStreamerParameters.dataWriterParams
+          dataWriterParams = GeMMStreamerParameters.dataWriterParams,
+          tagName = "GeMM"
         )
       ),
       Array("--target-dir", outPath)
@@ -183,7 +183,8 @@ object PostProcessingStreamerTop {
           fifoWriterParams = PostProcessingStreamerParameters.fifoWriterParams,
           stationarity = PostProcessingStreamerParameters.stationarity,
           dataReaderParams = PostProcessingStreamerParameters.dataReaderParams,
-          dataWriterParams = PostProcessingStreamerParameters.dataWriterParams
+          dataWriterParams = PostProcessingStreamerParameters.dataWriterParams,
+          tagName = "PostProcessingSIMD"
         )
       ),
       Array("--target-dir", outPath)

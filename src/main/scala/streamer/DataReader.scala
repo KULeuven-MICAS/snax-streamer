@@ -38,8 +38,10 @@ class DataReaderIO(
   *   The parameter class contains all the parameters of a data mover module
   */
 class DataReader(
-    params: DataMoverParams = DataMoverParams()
-) extends DataMover(params) {
+    params: DataMoverParams = DataMoverParams(),
+    tagName: String = ""
+) extends DataMover(params, tagName) {
+  override val desiredName = tagName + "DataReader"
 
   // override the IO of DataMover
   override lazy val io = IO(new DataReaderIO(params))

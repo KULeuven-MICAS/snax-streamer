@@ -42,9 +42,9 @@ object StreamerTestConstant extends CommonParams {
     )
 
   def fifoReaderParams: Seq[FIFOParams] = Seq(
-    FIFOParams(64 * MacScalingFactor, 2),
-    FIFOParams(64 * MacScalingFactor, 2),
-    FIFOParams(64, 2)
+    FIFOParams(64 * MacScalingFactor, 0),
+    FIFOParams(64 * MacScalingFactor, 0),
+    FIFOParams(64, 0)
   )
 
   def fifoWriterParams: Seq[FIFOParams] = Seq(

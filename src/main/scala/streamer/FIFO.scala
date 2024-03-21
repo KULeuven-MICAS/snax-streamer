@@ -29,6 +29,9 @@ class FIFO(
     io.almost_full := 0.U
   }
 
+  //slow down: (bypass FIFO)
+  io.in.ready := io.out.ready
+
 }
 
 object FIFO extends App {

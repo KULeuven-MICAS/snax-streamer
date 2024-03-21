@@ -126,7 +126,7 @@ class DataReader(
   // (or if the buffer register does not contain valid data yet)
   for (i <- 0 until params.tcdmPortsNum) {
     io.tcdm_req(i).valid := io.ptr_agu_i.valid &&
-      ~tcdm_req_ready_reg(i) && (io.data_fifo_o.ready || ~tcdm_rsp_valid) && fifo_almost_full
+      ~tcdm_req_ready_reg(i) && (io.data_fifo_o.ready || ~tcdm_rsp_valid) && io.fifo_almost_full
   }
 
 }

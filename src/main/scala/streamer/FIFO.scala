@@ -30,7 +30,6 @@ class FIFO(
   }
 
   //slow down: (bypass FIFO)
-  io.almost_full := fifo.io.count === (depth - 1).U
 }
 
 object FIFO extends App {

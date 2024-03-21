@@ -87,6 +87,7 @@ object StreamerTestConstant extends CommonParams {
     )
   )
 
+  def tagName: String = ""
 }
 
 object csrManagerTestParameters {

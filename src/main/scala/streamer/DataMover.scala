@@ -43,9 +43,12 @@ class DataMoverIO(params: DataMoverParams = DataMoverParams()) extends Bundle {
   * @param params
   *   The parameter class contains all the parameters of a data mover module
   */
-class DataMover(params: DataMoverParams = DataMoverParams())
-    extends Module
+class DataMover(
+    params: DataMoverParams = DataMoverParams(),
+    tagName: String = ""
+) extends Module
     with RequireAsyncReset {
+  override val desiredName = tagName + "DataMover"
 
   lazy val io = IO(new DataMoverIO(params))
 
@@ -73,7 +76,8 @@ class DataMover(params: DataMoverParams = DataMoverParams())
         params.spatialDim,
         params.spatialBounds,
         params.addrWidth
-      )
+      ),
+      tagName
     )
   )
   spatial_addr_gen_unit.io.valid_i := 1.B

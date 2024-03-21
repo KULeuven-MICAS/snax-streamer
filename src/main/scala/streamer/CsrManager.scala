@@ -30,9 +30,11 @@ class CsrManagerIO(
   */
 class CsrManager(
     csrNum: Int,
-    csrAddrWidth: Int
+    csrAddrWidth: Int,
+    csrModuleTagName: String = ""
 ) extends Module
     with RequireAsyncReset {
+  override val desiredName = csrModuleTagName + "CsrManager"
 
   val io = IO(new CsrManagerIO(csrNum, csrAddrWidth))
 

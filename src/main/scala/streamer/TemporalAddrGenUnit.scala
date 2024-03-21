@@ -65,9 +65,11 @@ class TemporalAddrGenUnitIO(
   *   The bit width of the addresses.
   */
 class TemporalAddrGenUnit(
-    params: TemporalAddrGenUnitParams = TemporalAddrGenUnitParams()
+    params: TemporalAddrGenUnitParams = TemporalAddrGenUnitParams(),
+    tagName: String = ""
 ) extends Module
     with RequireAsyncReset {
+  override val desiredName = tagName + "TemporalAddrGenUnit"
 
   // the input/output interface of the module
   val io = IO(

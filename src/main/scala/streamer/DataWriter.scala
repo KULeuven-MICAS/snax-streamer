@@ -30,8 +30,10 @@ class DataWriterIO(
   *   The parameter class contains all the parameters of a data mover module
   */
 class DataWriter(
-    params: DataMoverParams = DataMoverParams()
+    params: DataMoverParams = DataMoverParams(),
+    tagName: String = ""
 ) extends DataMover(params) {
+  override val desiredName = tagName + "DataWriter"
 
   // override the IO of DataMover
   override lazy val io = IO(new DataWriterIO(params))

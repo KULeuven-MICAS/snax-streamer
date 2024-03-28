@@ -88,6 +88,8 @@ class StreamerIO(
   val data = new StreamerDataIO(
     params
   )
+  
+  val busy_o = Output(Bool())
 }
 
 // streamer generator module
@@ -195,6 +197,8 @@ class Streamer(
     }
   }
 
+  io.busy_o := cstate === sBUSY
+  
   config_valid := io.csr.fire && io.csr.fire && io.csr.fire && io.csr.fire
 
   for (i <- 0 until params.dataMoverNum) {

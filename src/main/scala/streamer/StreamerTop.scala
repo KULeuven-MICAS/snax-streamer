@@ -49,8 +49,9 @@ class StreamerTop(
 
   override val desiredName = params.tagName + "StreamerTop"
 
+  // add extra performance counter
   val csrNum: Int =
-    params.temporalDim + params.dataMoverNum * params.temporalDim + params.spatialDim.sum + params.dataMoverNum + 1
+    params.temporalDim + params.dataMoverNum * params.temporalDim + params.spatialDim.sum + params.dataMoverNum + 1 + 1
   val csrAddrWidth: Int = log2Up(csrNum)
 
   val io = IO(
@@ -67,7 +68,39 @@ class StreamerTop(
   val streamer = Module(new Streamer(params, params.tagName))
 
   // io.csr and csrManager input connection
-  csr_manager.io.csr_config_in <> io.csr
+  csr_manager.io.csr_config_in.rsp <> io.csr.rsp
+
+  val csr_config_in_req_valid = WireInit(false.B)
+  val csr_config_in_req_bits = Wire(new CsrReq(csrAddrWidth))
+  val csr_config_in_req_ready = WireInit(false.B)
+
+  val streamerIdle2Busy = WireInit(false.B)
+  val streamerBusy2Idle = WireInit(false.B)
+
+  streamerIdle2Busy := streamer.io.busy_o && !RegNext(streamer.io.busy_o)    
+  streamerBusy2Idle := !streamer.io.busy_o && RegNext(streamer.io.busy_o)    
+
+  val performance_counter = RegInit(0.U(32.W))
+  when(streamer.io.busy_o){
+    performance_counter := performance_counter + 1.U
+  }.elsewhen(streamerBusy2Idle){
+    performance_counter := 0.U
+  }
+
+  csr_config_in_req_valid := io.csr.req.valid
+  when(streamerBusy2Idle){
+    csr_config_in_req_bits.addr := csrNum.U - 2.U
+    csr_config_in_req_bits.data := performance_counter
+    csr_config_in_req_bits.write := true.B
+  }.otherwise{
+    csr_config_in_req_bits := io.csr.req.bits
+  }
+
+  csr_manager.io.csr_config_in.req.valid := csr_config_in_req_valid
+  csr_manager.io.csr_config_in.req.bits := csr_config_in_req_bits
+  io.csr.req.ready := csr_manager.io.csr_config_in.req.ready
+
+  csr_manager.io.streamerBusy2Idle := streamerBusy2Idle
 
   // connect the streamer and csrManager output
   // control signals

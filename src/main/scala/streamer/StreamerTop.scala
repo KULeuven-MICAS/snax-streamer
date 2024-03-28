@@ -77,22 +77,22 @@ class StreamerTop(
   val streamerIdle2Busy = WireInit(false.B)
   val streamerBusy2Idle = WireInit(false.B)
 
-  streamerIdle2Busy := streamer.io.busy_o && !RegNext(streamer.io.busy_o)    
-  streamerBusy2Idle := !streamer.io.busy_o && RegNext(streamer.io.busy_o)    
+  streamerIdle2Busy := streamer.io.busy_o && !RegNext(streamer.io.busy_o)
+  streamerBusy2Idle := !streamer.io.busy_o && RegNext(streamer.io.busy_o)
 
   val performance_counter = RegInit(0.U(32.W))
-  when(streamer.io.busy_o){
+  when(streamer.io.busy_o) {
     performance_counter := performance_counter + 1.U
-  }.elsewhen(streamerBusy2Idle){
+  }.elsewhen(streamerBusy2Idle) {
     performance_counter := 0.U
   }
 
   csr_config_in_req_valid := io.csr.req.valid
-  when(streamerBusy2Idle){
+  when(streamerBusy2Idle) {
     csr_config_in_req_bits.addr := csrNum.U - 2.U
     csr_config_in_req_bits.data := performance_counter
     csr_config_in_req_bits.write := true.B
-  }.otherwise{
+  }.otherwise {
     csr_config_in_req_bits := io.csr.req.bits
   }
 

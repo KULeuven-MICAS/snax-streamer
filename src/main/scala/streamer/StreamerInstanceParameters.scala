@@ -149,3 +149,46 @@ object MacStreamerParameters extends CommonParams {
   )
 
 }
+
+object DIMCStreamerParameters extends CommonParams {
+
+  def DIMCScalingFactor = 1
+
+  def temporalAddrGenUnitParams: TemporalAddrGenUnitParams =
+    TemporalAddrGenUnitParams(
+      loopDim = 1,
+      loopBoundWidth = 8,
+      addrWidth
+    )
+
+  def fifoReaderParams: Seq[FIFOParams] = Seq(
+    FIFOParams(64 * DIMCScalingFactor, 2)
+  )
+
+  def fifoWriterParams: Seq[FIFOParams] = Seq(
+    FIFOParams(64 * DIMCScalingFactor, 2)
+  )
+
+  def stationarity = Seq(0, 0)
+
+  def dataReaderParams: Seq[DataMoverParams] = Seq(
+    DataMoverParams(
+      tcdmPortsNum = 1 * DIMCScalingFactor,
+      spatialBounds = Seq(DIMCScalingFactor),
+      spatialDim = 1,
+      elementWidth = 64,
+      fifoWidth = fifoReaderParams(0).width
+    )
+  )
+
+  def dataWriterParams: Seq[DataMoverParams] = Seq(
+    DataMoverParams(
+      tcdmPortsNum = 1 * DIMCScalingFactor,
+      spatialBounds = Seq(DIMCScalingFactor),
+      spatialDim = 1,
+      elementWidth = 64,
+      fifoWidth = fifoWriterParams(0).width
+    )
+  )
+
+}

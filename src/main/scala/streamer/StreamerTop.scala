@@ -100,7 +100,7 @@ class StreamerTop(
   csr_manager.io.csr_config_in.req.bits := csr_config_in_req_bits
   io.csr.req.ready := csr_manager.io.csr_config_in.req.ready
 
-  csr_manager.io.streamerBusy2Idle := streamerBusy2Idle
+  // csr_manager.io.streamerBusy2Idle := streamerBusy2Idle
 
   // connect the streamer and csrManager output
   // control signals

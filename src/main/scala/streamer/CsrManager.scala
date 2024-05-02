@@ -60,10 +60,9 @@ class CsrManager(
   // is busy (ready not asserted), store the read result in a buffer.
 
   // signal to indicate if a read request is in progress
-  val read_csr_busy = RegNext(
-    io.csr_config_in.rsp.valid && !io.csr_config_in.rsp.ready
-  )
-
+  val read_csr_busy = RegInit(0.B)
+  read_csr_busy := io.csr_config_in.rsp.valid && !io.csr_config_in.rsp.ready
+    
   // a register to buffer the read request response data until the request is finished
   val read_csr_buffer = RegInit(0.U(32.W))
   read_csr_buffer := io.csr_config_in.rsp.bits.data
